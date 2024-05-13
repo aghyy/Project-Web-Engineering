@@ -1,0 +1,87 @@
+.info-wrap {
+    display: flex;
+    flex-direction: row;
+}
+
+.info-wrap>div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 10px;
+}
+
+.info-wrap>*>input {
+    height: 20px;
+    color: #000;
+}
+
+.info-wrap>div>p {
+    margin-right: 10px;
+}
+
+.info-wrap>div:first-of-type {
+    margin-left: 0 !important;
+}
+
+.info-wrap>div:last-of-type {
+    margin-right: 0 !important;
+}
+
+#course-input {
+    text-transform: uppercase;
+    width: 150px;
+}
+
+#course-input.valid-input:focus {
+    outline-offset: 0px;
+    outline: 1px solid green;
+    color: green;
+}
+
+#course-input.invalid-input:focus {
+    outline-offset: 0px;
+    outline: 1px solid red;
+    color: red;
+}
+
+.view-options {
+    background-color: #242424;
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.view-options>div {
+    padding: 10px;
+    height: 16px;
+    width: 16px;
+}
+
+.options {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.active-view {
+    background-color: #000;
+}
+
+.today {
+    background-color: red;
+}
+
+.course-msg {
+    margin-left: 10px;
+}
+
+h1 {
+    margin: 0;
+}
+
+.ignore-click {
+    pointer-events: none;
+}

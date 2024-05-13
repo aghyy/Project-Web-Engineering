@@ -1,0 +1,32 @@
+.week-view-wrap {
+    display: none;
+}
+
+.week-view-outer-wrap {
+    background-color: #242424;
+    width: calc(100vw - 2 * 40px - 20px);
+    height: 80vh;
+    position: absolute;
+    bottom: 20px;
+    display: flex;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.week-view-inner-wrap {
+    flex: 1 1 0px;
+}
+
+.week-view-day-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3em;
+    height: 5%;
+}
+
+.week-view-time-data {
+    display: grid;
+    grid-auto-rows: 1fr;
+    height: 95%;
+}
