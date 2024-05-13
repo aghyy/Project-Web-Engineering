@@ -1,33 +1,48 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./MonthView.css";
 import { MonthViewCard } from './MonthViewCard';
 
 export const MonthView = ({ }) => {
+    const [weekDates, setWeekDates] = useState([]);
 
-    // const getMonthStruct = () => {
-    //     let todayDate = new Date();
-    //     let firstDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);
-    //     var lastDate = new Date(todayDate.getFullYear(), todayDate.getMonth() + 1, 0);
-    //     let firstDay = firstDate.getDay();
-    //     let lastDay = lastDate.getDate();
+    const isWeekday = date => date.getDay() % 6 !== 0;
 
-    //     let dates = [];
+    const getMonthStruct = () => {
+        let todayDate = new Date();
+        let firstDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);
+        var lastDate = new Date(todayDate.getFullYear(), todayDate.getMonth() + 1, 0);
+        let firstDay = firstDate.getDay();
+        let lastDay = lastDate.getDate();
 
-    //     for (let i = 1; i <= lastDay; i++) {
-            
+        let todaysDay = todayDate.getDate();
 
-    //         dates.push(i);
-    //     }
+        let month = ("0" + (todayDate.getMonth() + 1)).slice(-2);
+        let year = todayDate.getFullYear();
 
-    //     console.log(dates);
+        let dates = [];
 
-    //     // if(today.getDay() == 6 || today.getDay() == 0) alert('Weekend');
+        for (let i = 1; i < firstDay; i++) {
+            dates.push({'day': '', 'show': false, 'today': false});
+        }
 
-    // }
+        for (let i = 1; i <= lastDay; i++) {
+            let day = ("0" + i).slice(-2);
 
-    // useEffect(() => {
-    //     getMonthStruct();
-    // }, [])
+            if (isWeekday(new Date(`${year}-${month}-${day}`))) {
+                dates.push({'day': i, 'show': true, 'today': day == todaysDay ? true : false});
+            }
+        }
+
+        for (let i = dates.length; i < 25; i++) {
+            dates.push({'day': '', 'show': false, 'today': false});
+        }
+        console.log(dates);
+        setWeekDates(dates);
+    }
+
+    useEffect(() => {
+        getMonthStruct();
+    }, [])
 
     return (
         <div className="month-view-wrap">
@@ -40,10 +55,10 @@ export const MonthView = ({ }) => {
             </div>
 
             <div className="month-view-body">
-                {
-                    // arr.map((result, id) => {
-                    //     return <MonthViewCard day={result} show={true} key={id} />
-                    // })
+                {   weekDates && weekDates.length > 0 &&
+                    weekDates.map((result, id) => {
+                        return <MonthViewCard day={result.day} show={result.show} today={result.today} key={id} />
+                    })
                 }
             </div>
         </div>
