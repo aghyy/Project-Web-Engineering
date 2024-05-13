@@ -29,4 +29,9 @@
     display: grid;
     grid-auto-rows: 1fr;
     height: 95%;
+    margin-right: 10px;
+}
+
+.week-view-inner-wrap {
+    border-left: 1px solid #565656;
 }
