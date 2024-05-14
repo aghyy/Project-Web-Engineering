@@ -5,12 +5,12 @@
 .week-view-outer-wrap {
     background-color: #242424;
     width: calc(100vw - 2 * 40px - 20px);
+    min-height: 700px;
     height: 80vh;
-    position: absolute;
-    bottom: 40px;
     display: flex;
     border-radius: 10px;
     padding: 10px;
+    margin-top: 10px;
 }
 
 .week-view-inner-wrap {
