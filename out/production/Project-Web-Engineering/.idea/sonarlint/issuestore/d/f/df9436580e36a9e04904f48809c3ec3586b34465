@@ -1,8 +1,0 @@
-
->
-java:S1643"Use a StringBuilder instead.(‡Û©¯ûÿÿÿÿ8åîÎ“÷1
-G	java:S106"+Replace this use of System.out by a logger.(õªµó8„ïÎ“÷1
-H
-java:S1172"+Remove this unused method parameter "data".(‘ãòï8„ïÎ“÷1
-L
-java:S1481"/Remove this unused "weekBlocks" local variable.(–ÿ8„ïÎ“÷1
