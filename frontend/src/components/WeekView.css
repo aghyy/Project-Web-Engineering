@@ -7,7 +7,7 @@
     width: calc(100vw - 2 * 40px - 20px);
     height: 80vh;
     position: absolute;
-    bottom: 20px;
+    bottom: 40px;
     display: flex;
     border-radius: 10px;
     padding: 10px;
@@ -29,4 +29,9 @@
     display: grid;
     grid-auto-rows: 1fr;
     height: 95%;
+    margin-right: 10px;
+}
+
+.week-view-inner-wrap {
+    border-left: 1px solid #565656;
 }
