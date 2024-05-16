@@ -6,6 +6,7 @@ const xmlCalUrl = 'assets/xml/calendar-data.xml';
 const xmlMonthUrl = 'assets/xml/month-data.xml';
 const xsltWeekUrl = 'assets/xml/calendar-week-block.xslt';
 const xsltMonthUrl = 'assets/xml/calendar-month-block.xslt';
+const courseInputElem = document.getElementById('course-input');
 
 const setTitle = (title) => {
     document.querySelector('h1').textContent = title;
@@ -105,13 +106,8 @@ const checkCourseInput = () => {
 
 const setCourse = (event) => {
     if (event.key === 'Enter') {
-        let input = document.getElementById('course-input');
-        if (input.classList.contains('valid-input')) {
-            observedCourse.course = input.value.toUpperCase();
-            setTitle(`${observedCourse.course} Kalender`);
-        } else {
-            setTitle(defaultTitle);
-        }
+        observedCourse.course = courseInputElem.value.toUpperCase();
+        setTitle(courseInputElem.classList.contains('valid-input') ? `${observedCourse.course} Kalender` : defaultTitle);
 
         // get calendar for new course
     }
@@ -193,7 +189,11 @@ const handler = {
     set: function (target, property, value, receiver) {
         target[property] = value;
         if (property === 'course') {
-            onSelectedCourseChange(); // Call the function when selectedCourse changes
+            if (courseInputElem.classList.contains('valid-input')) {
+                onSelectedCourseChange(); // Call the function when selectedCourse changes
+            } else {
+                removeCalendar(); // Remove the calendar when the course is invalid
+            }
         }
         return true;
     }
@@ -209,12 +209,17 @@ const onSelectedCourseChange = () => {
     });
 }
 
+const removeCalendar = () => {
+    document.querySelectorAll('.calendar li.event').forEach((elem) => {
+        document.querySelector('.calendar').removeChild(elem);
+    });
+}
+
 setTitle(defaultTitle);
 
 document.addEventListener('keydown', handleKeyPress);
 
 document.addEventListener('DOMContentLoaded', () => {
-
     for (let i = 0; i < 225; i++) {
         let li = document.createElement('li');
         document.querySelector('.calendar').appendChild(li);
