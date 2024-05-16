@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHBW Kalender</title>
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/components/header.css">
+    <link rel="stylesheet" href="assets/css/components/month-view.css">
+    <link rel="stylesheet" href="assets/css/components/week-view.css">
+</head>
+
+<body>
+    <div class="head">
+        <h1></h1>
+
+        <div class="options">
+            <div>
+                <div class="info-wrap">
+                    <div class="date-wrap">
+                        <p>Datum anzeigen</p>
+                        <input type="date" name="date" id="date-picker" />
+                    </div>
+
+                    <div class="course-wrap">
+                        <p>Kurs</p>
+                        <input type="text" name="course" id="course-input" maxlength="8"
+                            onkeyup="checkCourseInput(); setCourse(event);" />
+                        <div class="course-msg"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="view-options">
+                <div class="month-view active-view view-option" onclick="setView(this);">
+                    <div class='ignore-click'>
+                        <img src="assets/img/calendar-outline.svg" alt="month view">
+                    </div>
+                </div>
+                <div class="week-view view-option" onclick="setView(this);">
+                    <div class='ignore-click'>
+                        <img src="assets/img/list-outline.svg" alt="week view">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="month-view-wrap">
+        <div class="month-view-head">
+            <div class="month-view-head-day" id="0"></div>
+            <div class="month-view-head-day" id="1"></div>
+            <div class="month-view-head-day" id="2"></div>
+            <div class="month-view-head-day" id="3"></div>
+            <div class="month-view-head-day" id="4"></div>
+        </div>
+
+        <div class="month-view-body"></div>
+    </div>
+
+    <div class="week-view-wrap">
+        <div class="week-view-outer-wrap">
+            <div class="week-view-data">
+                <div class="week-view-day-title"></div>
+                <div class="week-view-time-data">
+                    <div class="week-view-time">07:00</div>
+                    <div class="week-view-time">08:00</div>
+                    <div class="week-view-time">09:00</div>
+                    <div class="week-view-time">10:00</div>
+                    <div class="week-view-time">11:00</div>
+                    <div class="week-view-time">12:00</div>
+                    <div class="week-view-time">13:00</div>
+                    <div class="week-view-time">14:00</div>
+                    <div class="week-view-time">15:00</div>
+                    <div class="week-view-time">16:00</div>
+                    <div class="week-view-time">17:00</div>
+                    <div class="week-view-time">18:00</div>
+                </div>
+            </div>
+            <div class="week-view-inner-wrap">
+                <div class="week-view-day-title">Montag</div>
+                <div class="week-view-day-data"></div>
+            </div>
+            <div class="week-view-inner-wrap">
+                <div class="week-view-day-title">Dienstag</div>
+                <div class="week-view-day-data"></div>
+            </div>
+            <div class="week-view-inner-wrap">
+                <div class="week-view-day-title">Mittwoch</div>
+                <div class="week-view-day-data"></div>
+            </div>
+            <div class="week-view-inner-wrap">
+                <div class="week-view-day-title">Donnerstag</div>
+                <div class="week-view-day-data"></div>
+            </div>
+            <div class="week-view-inner-wrap">
+                <div class="week-view-day-title">Freitag</div>
+                <div class="week-view-day-data"></div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/utils.js"></script>
+</body>
+
+</html>

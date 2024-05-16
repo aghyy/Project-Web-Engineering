@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<calendar>
+    <day id="day_1">
+        <course>TINF23B6</course>
+        <lesson id="lesson_1">
+            <lesson>Mathe I Analysis</lesson>
+            <person>Ibrahim, Shivan</person>
+            <room>F488 Hörsaal</room>
+            <total_time>3h15m</total_time>
+            <qt_hours>13</qt_hours>
+            <begin>08:30</begin>
+        </lesson>
+        <lesson id="lesson_2">
+            <lesson>Labor Webengineering</lesson>
+            <person>Röthig, Jürgen</person>
+            <room>F488 Hörsaal</room>
+            <total_time>1h30m</total_time>
+            <qt_hours>6</qt_hours>
+            <begin>12:30</begin>
+        </lesson>
+        <lesson id="lesson_3">
+            <lesson>Projektmanagement 2</lesson>
+            <person>Göller, Martin</person>
+            <room>F488 Hörsaal</room>
+            <total_time>2h30m</total_time>
+            <qt_hours>10</qt_hours>
+            <begin>14:15</begin>
+        </lesson>
+    </day>
+</calendar>

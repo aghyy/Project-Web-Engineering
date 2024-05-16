@@ -1,0 +1,38 @@
+{
+  "name": "project-web-engineering",
+  "version": "1.0.0",
+  "description": "DHBW Calendar Project for Web Engineering using NodeJS, XML, XSLT",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0"
+  },
+  "devDependencies": {
+    "reload": "^3.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aghyy/Project-Web-Engineering.git"
+  },
+  "keywords": [
+    "web",
+    "engineering",
+    "project",
+    "calendar",
+    "dhbw",
+    "nodejs",
+    "xml",
+    "xslt"
+  ],
+  "author": "Andreas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aghyy/Project-Web-Engineering/issues"
+  },
+  "homepage": "https://github.com/aghyy/Project-Web-Engineering#readme"
+}
