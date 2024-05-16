@@ -2,10 +2,8 @@ var weekDates = [];
 var weekDays = {};
 const defaultTitle = 'Kurs auswählen';
 let selectedCourse = null;
-// URL zur XML-Datei mit den Stammbaumdaten
 const xmlCalUrl = 'assets/xml/calendar-data.xml';
 const xmlMonthUrl = 'assets/xml/month-data.xml';
-// URL zur XSLT-Datei
 const xsltWeekUrl = 'assets/xml/calendar-week-block.xslt';
 const xsltMonthUrl = 'assets/xml/calendar-month-block.xslt';
 
@@ -13,7 +11,6 @@ const setTitle = (title) => {
     document.querySelector('h1').textContent = title;
 }
 
-// Funktion zum Laden der XML-Datei
 const loadXML = (url, callback) => {
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
@@ -29,20 +26,11 @@ const loadXML = (url, callback) => {
     xhr.send();
 }
 
-// Funktion zum Anwenden der XSLT-Transformation und Anzeigen des Ergebnisses
 const applyXSLT = (xml, xslt, container) => {
     const xsltProcessor = new XSLTProcessor();
     xsltProcessor.importStylesheet(xslt);
     const resultDocument = xsltProcessor.transformToDocument(xml);
-
-    // resultDocument.querySelectorAll('.lesson').forEach((elem) => {
-    //     if (elem.children[0].textContent == '') {
-    //         resultDocument.body.removeChild(elem);
-    //     }
-    // });
-
     const resultHTML = new XMLSerializer().serializeToString(resultDocument);
-
     container.innerHTML += resultHTML;
 }
 
