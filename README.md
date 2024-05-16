@@ -1,4 +1,4 @@
-<div align="center" >
+<!-- <div align="center" >
 	<a href="https://github.com/TINF23B6">
 		<picture>
 			<source height="200px" media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/TINF23B6/.github/main/profile/assets/icon_dark.svg">
@@ -21,4 +21,4 @@ Zum Starten der Anwendung müssen [Node.js](https://nodejs.org/en/) (22.1+) und 
 1. Repository klonen `git clone htts://github.com/TINF23B6/Team-1-Stammbaum.git`
 2. `npm install` ausführen
 3. `npm start` bzw. `npm run dev` ausführen
-4. Anwendung ist unter `http://localhost:8080` erreichbar
+4. Anwendung ist unter `http://localhost:8080` erreichbar -->
