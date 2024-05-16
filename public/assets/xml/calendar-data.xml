@@ -1,30 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <calendar>
-    <day id="day_1">
-        <course>TINF23B6</course>
-        <lesson id="lesson_1">
-            <lesson>Mathe I Analysis</lesson>
+    <course>TINF23B6</course>
+    <day id="mon">
+        <lesson>
+            <name>Mathe I Analysis</name>
             <person>Ibrahim, Shivan</person>
             <room>F488 Hörsaal</room>
-            <total_time>3h15m</total_time>
-            <qt_hours>13</qt_hours>
-            <begin>08:30</begin>
+            <total_time>3h 15m</total_time>
+            <begin>08_30</begin>
+            <end>11_45</end>
         </lesson>
-        <lesson id="lesson_2">
-            <lesson>Labor Webengineering</lesson>
+        <lesson>
+            <name>Labor Webengineering</name>
             <person>Röthig, Jürgen</person>
             <room>F488 Hörsaal</room>
-            <total_time>1h30m</total_time>
-            <qt_hours>6</qt_hours>
-            <begin>12:30</begin>
+            <total_time>1h 30m</total_time>
+            <begin>12_30</begin>
+            <end>14_00</end>
         </lesson>
-        <lesson id="lesson_3">
-            <lesson>Projektmanagement 2</lesson>
+        <lesson>
+            <name>Projektmanagement 2</name>
             <person>Göller, Martin</person>
             <room>F488 Hörsaal</room>
-            <total_time>2h30m</total_time>
-            <qt_hours>10</qt_hours>
-            <begin>14:15</begin>
+            <total_time>2h 30m</total_time>
+            <begin>14_15</begin>
+            <end>16_45</end>
+        </lesson>
+    </day>
+    <day id="tue">
+        <lesson>
+            <name>Algorithmen und Komplexität</name>
+            <person>Li, Nuo</person>
+            <room>F488 Hörsaal</room>
+            <total_time>3h 15m</total_time>
+            <begin>08_30</begin>
+            <end>11_45</end>
+        </lesson>
+        <lesson>
+            <name>Intercultural Communication Group B</name>
+            <person>Lauer, Silvia</person>
+            <room>D421 Labor</room>
+            <total_time>1h 30m</total_time>
+            <begin>12_30</begin>
+            <end>14_00</end>
+        </lesson>
+        <lesson>
+            <name>Intercultural Communication Group B</name>
+            <person>Lauer, Silvia</person>
+            <room>D421 Labor</room>
+            <total_time>1h 30m</total_time>
+            <begin>14_15</begin>
+            <end>15_45</end>
+        </lesson>
+    </day>
+    <day id="wed">
+    </day>
+    <day id="thu">
+        <lesson>
+            <name>Marketing 1</name>
+            <person>Kimmelmann, Michael</person>
+            <room>F488 Hörsaal</room>
+            <total_time>4h 15m</total_time>
+            <begin>08_00</begin>
+            <end>12_15</end>
+        </lesson>
+        <lesson>
+            <name>Mathe I Analysis</name>
+            <person>Ibrahim, Shivan</person>
+            <room>F488 Hörsaal</room>
+            <total_time>2h</total_time>
+            <begin>13_00</begin>
+            <end>15_00</end>
+        </lesson>
+    </day>
+    <day id="fri">
+        <lesson>
+            <name>Marketing 1</name>
+            <person>Kimmelmann, Michael</person>
+            <room>F488 Hörsaal</room>
+            <total_time>4h 15m</total_time>
+            <begin>08_00</begin>
+            <end>12_15</end>
+        </lesson>
+        <lesson>
+            <name>Routing and Switching (CCNA-1/2, Z)</name>
+            <person>Brune, Ralf</person>
+            <room></room>
+            <total_time>2h 30m</total_time>
+            <begin>13_00</begin>
+            <end>15_30</end>
         </lesson>
     </day>
 </calendar>

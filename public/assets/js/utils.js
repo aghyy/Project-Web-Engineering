@@ -33,16 +33,16 @@ const applyXSLT = (xml, xslt, container) => {
     const xsltProcessor = new XSLTProcessor();
     xsltProcessor.importStylesheet(xslt);
     const resultDocument = xsltProcessor.transformToDocument(xml);
-    
-    resultDocument.querySelectorAll('.lesson').forEach((elem) => {
-        if (elem.children[0].textContent == '') {
-            resultDocument.body.removeChild(elem);
-        }
-    });
-    
+
+    // resultDocument.querySelectorAll('.lesson').forEach((elem) => {
+    //     if (elem.children[0].textContent == '') {
+    //         resultDocument.body.removeChild(elem);
+    //     }
+    // });
+
     const resultHTML = new XMLSerializer().serializeToString(resultDocument);
 
-    container.innerHTML = resultHTML;
+    container.innerHTML += resultHTML;
 }
 
 const setView = (elem) => {
@@ -198,12 +198,18 @@ setTitle(defaultTitle);
 document.addEventListener('keydown', handleKeyPress);
 
 document.addEventListener('DOMContentLoaded', () => {
+    
+    for (let i = 0; i < 225; i++) {
+        let li = document.createElement('li');
+        document.querySelector('.calendar').appendChild(li);
+    }
+
     // XML-Datei laden
     loadXML(xmlCalUrl, function (xml) {
         // XSLT-Datei laden
         loadXML(xsltWeekUrl, function (xslt) {
             // XSLT-Transformation anwenden
-            applyXSLT(xml, xslt, document.querySelector('.week-view-day-data'));
+            applyXSLT(xml, xslt, document.querySelector('.calendar'));
         });
     });
 
@@ -214,6 +220,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.querySelectorAll('.month-view-head-day').forEach((elem) => {
+        elem.textContent = determineWeekDays(elem);
+    });
+    
+    document.querySelectorAll('.day').forEach((elem) => {
         elem.textContent = determineWeekDays(elem);
     });
 });

@@ -4,7 +4,6 @@ html {
     background-color: #565656;
     font-family: Arial, Helvetica, sans-serif;
     color: #fff;
-    /* overflow: hidden; */
 }
 
 a:link,
@@ -13,4 +12,14 @@ a:hover,
 a:active {
     text-decoration: none;
     color: inherit;
+}
+
+* {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }

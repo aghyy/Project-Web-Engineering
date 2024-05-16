@@ -7,12 +7,29 @@
   </xsl:template>
   
   <xsl:template match="lesson">
-    <div class="lesson">
-      <h2><xsl:value-of select="lesson"/></h2>
-      <p><strong>Instructor:</strong> <xsl:value-of select="person"/></p>
-      <p><strong>Room:</strong> <xsl:value-of select="room"/></p>
-      <p><strong>Total Time:</strong> <xsl:value-of select="total_time"/></p>
-      <p><strong>Start Time:</strong> <xsl:value-of select="begin"/></p>
-    </div>
+    <xsl:variable name="day" select="../@id"/>
+    <xsl:variable name="begin" select="begin"/>
+    <xsl:variable name="end" select="end"/>
+    
+    <li class="event">
+      <xsl:attribute name="style">
+        <xsl:text>grid-column: </xsl:text>
+        <xsl:value-of select="$day"/>
+        <xsl:text>; grid-row: h</xsl:text>
+        <xsl:value-of select="$begin"/>
+        <xsl:text> / h</xsl:text>
+        <xsl:value-of select="$end"/>
+        <xsl:text>;</xsl:text>
+      </xsl:attribute>
+      
+      <h3><xsl:value-of select="name"/></h3>
+      <p><xsl:value-of select="person"/></p>
+      <p><xsl:value-of select="room"/></p>
+
+      <br />
+
+      <p>Dauer: <xsl:value-of select="total_time"/></p>
+      <p><xsl:value-of select="substring($begin, 1, 2)"/>:<xsl:value-of select="substring($begin, 4)"/> - <xsl:value-of select="substring($end, 1, 2)"/>:<xsl:value-of select="substring($end, 4)"/></p>
+    </li>
   </xsl:template>
 </xsl:stylesheet>
