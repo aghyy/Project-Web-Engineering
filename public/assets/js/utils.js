@@ -1,6 +1,7 @@
 var weekDates = [];
 var weekDays = {};
 const defaultTitle = 'Kurs auswählen';
+let selectedCourse = null;
 // URL zur XML-Datei mit den Stammbaumdaten
 const xmlCalUrl = 'assets/xml/calendar-data.xml';
 const xmlMonthUrl = 'assets/xml/month-data.xml';
@@ -117,10 +118,16 @@ const checkCourseInput = () => {
 const setCourse = (event) => {
     if (event.key === 'Enter') {
         let input = document.getElementById('course-input');
-        setTitle(input.classList.contains('valid-input') ? `${input.value.toUpperCase()} Kalender` : defaultTitle);
+        if (input.classList.contains('valid-input')) {
+            observedCourse.course = input.value.toUpperCase();
+            setTitle(`${observedCourse.course} Kalender`);
+        } else {
+            setTitle(defaultTitle);
+        }
+
+        // get calendar for new course
     }
 
-    // get calendar for new course
 }
 
 const isWeekday = date => date.getDay() % 6 !== 0;
@@ -193,36 +200,46 @@ const handleKeyPress = (event) => {
     }
 };
 
+// Create a proxy to observe changes to selectedCourse
+const handler = {
+    set: function (target, property, value, receiver) {
+        target[property] = value;
+        if (property === 'course') {
+            onSelectedCourseChange(); // Call the function when selectedCourse changes
+        }
+        return true;
+    }
+};
+
+const observedCourse = new Proxy({ course: selectedCourse }, handler);
+
+const onSelectedCourseChange = () => {
+    loadXML(xmlCalUrl, function (xml) {
+        loadXML(xsltWeekUrl, function (xslt) {
+            applyXSLT(xml, xslt, document.querySelector('.calendar'));
+        });
+    });
+}
+
 setTitle(defaultTitle);
 
 document.addEventListener('keydown', handleKeyPress);
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     for (let i = 0; i < 225; i++) {
         let li = document.createElement('li');
         document.querySelector('.calendar').appendChild(li);
     }
 
-    // XML-Datei laden
-    loadXML(xmlCalUrl, function (xml) {
-        // XSLT-Datei laden
-        loadXML(xsltWeekUrl, function (xslt) {
-            // XSLT-Transformation anwenden
-            applyXSLT(xml, xslt, document.querySelector('.calendar'));
-        });
-    });
-
-    // XSLT-Datei laden
     loadXML(xsltMonthUrl, function (xslt) {
-        // XSLT-Transformation anwenden
         applyXSLT(getMonthStructXML(), xslt, document.querySelector('.month-view-body'));
     });
 
     document.querySelectorAll('.month-view-head-day').forEach((elem) => {
         elem.textContent = determineWeekDays(elem);
     });
-    
+
     document.querySelectorAll('.day').forEach((elem) => {
         elem.textContent = determineWeekDays(elem);
     });
