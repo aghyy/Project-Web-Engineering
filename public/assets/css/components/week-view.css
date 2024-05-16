@@ -43,3 +43,7 @@
     padding: 10px;
     font-size: small;
 }
+
+.lesson:first-of-type {
+    margin-top: 0;
+}
