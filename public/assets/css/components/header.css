@@ -1,6 +1,7 @@
 .info-wrap {
     display: flex;
     flex-direction: row;
+    color: var(--dark-primary-color);
 }
 
 .info-wrap>div {
@@ -34,18 +35,18 @@
 
 #course-input.valid-input:focus {
     outline-offset: 0px;
-    outline: 1px solid green;
-    color: green;
+    outline: 1px solid var(--green);
+    color: var(--green);
 }
 
 #course-input.invalid-input:focus {
     outline-offset: 0px;
-    outline: 1px solid red;
-    color: red;
+    outline: 1px solid var(--red);
+    color: var(--red);
 }
 
 .view-options {
-    background-color: #242424;
+    background-color: var(--dark-tertiary-color);
     display: flex;
     flex-direction: row;
     width: fit-content;
@@ -67,7 +68,7 @@
 }
 
 .active-view {
-    background-color: #000;
+    background-color: var(--dark-primary-color);
 }
 
 .course-msg {
@@ -76,8 +77,17 @@
 
 h1 {
     margin: 0;
+    color: var(--dark-primary-color);
 }
 
 .ignore-click {
     pointer-events: none;
+}
+
+input[type="date"],
+input[type="text"] {
+    border: none;
+    border-radius: 5px;
+    background-color: var(--dark-tertiary-color);
+    color: #fff;
 }
