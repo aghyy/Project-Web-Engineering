@@ -20,6 +20,7 @@ const execute = async (inDate) => {
 
 	let date = new Date(inDate);
 	let reqDate = `${date.getDate()}.${"0" + (date.getMonth() + 1).toString().slice(-2)}.`
+	let listOfLectureCurrentWeek = [];
 
 	let html = new jsdom.JSDOM(htmlString.data).window.document;
 	if (html.body.children.length > 0) {
@@ -31,8 +32,22 @@ const execute = async (inDate) => {
 			}
 			index++;
 		}
-	}
 
+		let wholeWeek = html.querySelectorAll('.week_block');
+		for (const element of wholeWeek) {
+			let jsonObject = {
+				prof : element.querySelector('.person')?.textContent ?? "",
+				course : element.querySelector('.resource').textContent,
+				room : element.querySelectorAll('.resource')[1].textContent,
+				weekDay : element.querySelectorAll('.tooltip div')[1].textContent.slice(0, 2),
+				begin : element.querySelector('.week_block a').textContent.slice(0, 5),
+				end : element.querySelector('.week_block a').textContent.slice(7, 12),
+				quarters : element.getAttribute('rowspan')
+			};
+			listOfLectureCurrentWeek.push(jsonObject);
+		}
+		console.log(listOfLectureCurrentWeek[0]);
+	}
 }
 
-execute("2024-05-17");
+execute("2024-05-21");
