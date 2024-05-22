@@ -3,20 +3,42 @@ const jsdom = require("jsdom");
 const headers = {
 	"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
 };
+const users = new Map();
+// 2023
+users.set('TINF23B1', 'freudenmann');
+users.set('TINF23B2', 'ritterbusch');
+users.set('TINF23B3', 'vollmer');
+users.set('TINF23B4', 'eisenbiegler');
+users.set('TINF23B5', 'strand');
+users.set('TINF23B6', 'li');
 
-async function performScraping(user, courseName, day, month, year) {
+// 2022
+users.set('TINF22B1', 'freudenmann');
+users.set('TINF22B2', 'ritterbusch');
+users.set('TINF22B3', 'vollmer');
+users.set('TINF22B4', 'eisenbiegler');
+users.set('TINF22B5', 'strand');
+users.set('TINF22B6', 'eisenbiegler');
+
+// 2021
+users.set('TINF21B1', 'freudenmann');
+users.set('TINF21B2', 'ritterbusch');
+users.set('TINF21B3', 'vollmer');
+users.set('TINF21B4', 'eisenbiegler');
+users.set('TINF21B5', 'strand');
+
+async function performScraping(courseName, day, month, year) {
 	// HTTP GET request in Axios
 	const axiosResponse = await axios.request({
 		method: "GET",
-		url: 'https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=li&file=TINF23B6&day=17&month=5&year=2024&today=Heute',
-		//url: `https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=${user}&file=${courseName}&day=${day}&month=${month}&year=${year}`,
+		url: `https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=${users.get(courseName)}&file=${courseName}&day=${day}&month=${month}&year=${year}`,
 		headers: headers
 	});
 	return axiosResponse;
 }
 
 const execute = async (inDate) => {
-	const htmlString = await performScraping('li', 'TINF23B6', 17, 5, 2024);
+	const htmlString = await performScraping('TINF23B5', 17, 5, 2024);
 
 	let date = new Date(inDate);
 	let reqDate = `${date.getDate()}.${"0" + (date.getMonth() + 1).toString().slice(-2)}.`
@@ -50,4 +72,4 @@ const execute = async (inDate) => {
 	}
 }
 
-execute("2024-05-21");
+execute("2024-06-05");
