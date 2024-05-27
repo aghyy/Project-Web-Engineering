@@ -2,6 +2,21 @@ const axios = require("axios");
 const jsdom = require("jsdom");
 const js2xmlparser = require("js2xmlparser");
 const fs = require("fs");
+const express = require('express');
+
+const app = express();
+const port = 6489;
+const xml = require('xml');
+
+app.get('/api/get_week/', async (req, res) => {
+	res.set('Content-Type', 'application/xml');
+	res.send(await getXml(req.body.course, req.body.day, req.body.month, req.body.year));
+});
+
+app.listen(port, () => {
+	console.log(`Server running at http://localhost:${port}`);
+});
+
 const headers = {
 	"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
 };
@@ -95,8 +110,6 @@ const getXml = async (courseName, day, month, year) => {
 
 		let parsedOutput = parseToXml(listOfLectureCurrentWeek);
 		console.log(parsedOutput);
-		// return parsedOutput;
+		return parsedOutput;
 	}
 }
-
-getXml("TINF23B6", 13, 5, 2024);
