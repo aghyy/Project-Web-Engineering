@@ -37,39 +37,39 @@ async function performScraping(courseName, day, month, year) {
 	return axiosResponse;
 }
 
-const execute = async (inDate) => {
-	const htmlString = await performScraping('TINF23B5', 17, 5, 2024);
-
-	let date = new Date(inDate);
-	let reqDate = `${date.getDate()}.${"0" + (date.getMonth() + 1).toString().slice(-2)}.`
+const execute = async (courseName, day, month, year) => {
+	const htmlString = await performScraping(courseName, day, month, year);
 	let listOfLectureCurrentWeek = [];
 
 	let html = new jsdom.JSDOM(htmlString.data).window.document;
 	if (html.body.children.length > 0) {
-		let elems = html.querySelectorAll('.week_header>nobr');
-		let index = 0;
-		for (const element of elems) {
-			if (element.textContent.includes(reqDate)) {
-				break;
-			}
-			index++;
-		}
-
 		let wholeWeek = html.querySelectorAll('.week_block');
+
+		let course = html.querySelector('.week_block').querySelector('.resource').textContent;
+		listOfLectureCurrentWeek.push({"course": course});
+
 		for (const element of wholeWeek) {
+			let begin = element.querySelector('.week_block a').textContent.slice(0, 5);
+			let end = element.querySelector('.week_block a').textContent.slice(7, 12);
+			let first = new Date('1970-01-01 ' + begin);
+			let last = new Date('1970-01-01 ' + end);
+			let dif = last.getTime() - first.getTime();
+			let difDate = new Date(dif);
+			let timeDif = `${difDate.getHours() - 1}h ${difDate.getMinutes()}m`;
+
+			let weekDay = element.querySelectorAll('.tooltip div')[1].textContent.slice(0, 2);
 			let jsonObject = {
-				prof : element.querySelector('.person')?.textContent ?? "",
-				course : element.querySelector('.resource').textContent,
+				name : element.querySelector('a').textContent.split(/Titel:\n|\n/)[3],
+				person : element.querySelector('.person')?.textContent ?? "",
 				room : element.querySelectorAll('.resource')[1].textContent,
-				weekDay : element.querySelectorAll('.tooltip div')[1].textContent.slice(0, 2),
-				begin : element.querySelector('.week_block a').textContent.slice(0, 5),
-				end : element.querySelector('.week_block a').textContent.slice(7, 12),
-				quarters : element.getAttribute('rowspan')
+				total_time : timeDif,
+				begin : begin,
+				end : end,
 			};
 			listOfLectureCurrentWeek.push(jsonObject);
 		}
-		console.log(listOfLectureCurrentWeek[0]);
+		console.log(listOfLectureCurrentWeek);
 	}
 }
 
-execute("2024-06-05");
+execute("TINF23B6", 27, 5, 2024);
