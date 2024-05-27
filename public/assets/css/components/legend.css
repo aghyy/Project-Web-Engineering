@@ -1,0 +1,20 @@
+.calendar-legend {
+    display: flex;
+    flex-direction: row;
+    color: var(--dark-primary-color);
+    height: 25px;
+    margin: 15px 0;
+}
+
+.legend-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.legend-color {
+    width: 10px;
+    height: 10px;
+    margin-right: 10px;
+}

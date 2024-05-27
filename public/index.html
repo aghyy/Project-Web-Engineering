@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="assets/css/components/header.css">
     <link rel="stylesheet" href="assets/css/components/month-view.css">
     <link rel="stylesheet" href="assets/css/components/week-view.css">
+    <link rel="stylesheet" href="assets/css/components/legend.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
@@ -138,6 +139,22 @@
 
             <li class="corner"></li>
         </ul>
+
+    </div>
+    
+    <div class="calendar-legend">
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #007E83;"></div>
+            <p>Vorlesung</p>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--red);"></div>
+            <p>Klausur</p>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--green);"></div>
+            <p>Feiertag</p>
+        </div>
     </div>
 
     <script src="assets/js/utils.js"></script>
