@@ -4,8 +4,12 @@
   "description": "DHBW Calendar Project for Web Engineering using NodeJS, XML, XSLT",
   "main": "index.js",
   "dependencies": {
+    "axios": "^1.6.8",
     "express": "^4.19.2",
-    "nodemon": "^3.1.0"
+    "js2xmlparser": "^5.0.0",
+    "jsdom": "^24.0.0",
+    "nodemon": "^3.1.0",
+    "xml": "^1.0.1"
   },
   "devDependencies": {
     "reload": "^3.2.1"
