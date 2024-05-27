@@ -199,14 +199,28 @@ const handler = {
     }
 };
 
+const updateWeekView = async () => {
+    const dateControl = document.querySelector('input#date-picker[type="date"]');
+    const date = dateControl.value;
+    const [year, month, day] = date.split('-');
+
+    removeCalendar();
+
+    let xmlString = await loadWeek(observedCourse.course, day, month, year);
+
+    // Parse the XML string into an XML document
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+    loadXML(xsltWeekUrl, function (xslt) {
+        applyXSLT(xmlDoc, xslt, document.querySelector('.calendar'));
+    });
+}
+
 const observedCourse = new Proxy({ course: selectedCourse }, handler);
 
 const onSelectedCourseChange = () => {
-    loadXML(xmlCalUrl, function (xml) {
-        loadXML(xsltWeekUrl, function (xslt) {
-            applyXSLT(xml, xslt, document.querySelector('.calendar'));
-        });
-    });
+    updateWeekView();
 }
 
 const removeCalendar = () => {
@@ -215,9 +229,28 @@ const removeCalendar = () => {
     });
 }
 
+const loadWeek = async (course, day, month, year) => {
+    const response = await fetch('http://localhost:6059/api/get_week/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/xml',
+        },
+        body: JSON.stringify({
+            course: course,
+            day: day,
+            month: month,
+            year: year,
+        }),
+    });
+    const data = await response.text();
+    return data;
+}
+
 setTitle(defaultTitle);
 
 document.addEventListener('keydown', handleKeyPress);
+document.getElementById('date-picker').addEventListener('change', updateWeekView);
 
 document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < 225; i++) {
@@ -236,4 +269,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.day').forEach((elem) => {
         elem.textContent = determineWeekDays(elem);
     });
+
+    document.getElementById('date-picker').valueAsDate = new Date();
 });
