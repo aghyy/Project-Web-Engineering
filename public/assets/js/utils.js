@@ -1,16 +1,19 @@
+// defining global variables
 var weekDates = [];
 var weekDays = {};
+var courses = {};
+var selectedCourse;
+// setting default values
 const defaultTitle = 'Kurs auswählen';
 const defaultDocumentTitle = 'DHBW Kalender';
-let selectedCourse;
-const xmlCalUrl = 'assets/xml/calendar-data.xml';
-const xmlMonthUrl = 'assets/xml/month-data.xml';
+// setting xslt urls
 const xsltWeekUrl = 'assets/xml/calendar-week-block.xslt';
 const xsltMonthUrl = 'assets/xml/calendar-month-block.xslt';
+// getting elements
 const courseInputElem = document.getElementById('course-input');
-const datePicker = document.querySelector('#date-picker');
-var courses = {};
+const datePicker = document.getElementById('date-picker');
 
+// functions
 const setTitle = (title) => {
     document.querySelector('h1').textContent = title;
 }
@@ -229,8 +232,7 @@ const createDropdown = () => {
     }
 }
 
-setTitle(defaultTitle);
-
+// event listeners
 document.addEventListener('keydown', handleKeyPress);
 document.getElementById('date-picker').addEventListener('change', updateWeekView);
 
@@ -250,6 +252,8 @@ document.getElementById('today-btn').addEventListener('click', () => {
 
 document.addEventListener('DOMContentLoaded', async () => {
     courses = await getAvailableCourses();
+
+    setTitle(defaultTitle);
 
     for (let i = 0; i < 225; i++) {
         let li = document.createElement('li');
