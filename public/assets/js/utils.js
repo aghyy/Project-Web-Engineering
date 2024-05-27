@@ -7,6 +7,8 @@ const xmlMonthUrl = 'assets/xml/month-data.xml';
 const xsltWeekUrl = 'assets/xml/calendar-week-block.xslt';
 const xsltMonthUrl = 'assets/xml/calendar-month-block.xslt';
 const courseInputElem = document.getElementById('course-input');
+const datePicker = document.querySelector('#date-picker');
+var courses = {};
 
 const setTitle = (title) => {
     document.querySelector('h1').textContent = title;
@@ -58,39 +60,16 @@ const setView = (elem) => {
 
 const checkCourseInput = () => {
     let input = document.getElementById('course-input');
-    let val = input.value;
+    let val = input.value.toUpperCase();
 
     let msgElem = document.querySelector('.course-msg');
 
     if (val.length === 8) {
-        let regex = /TINF\d\dB\d/i;
-        let validInput = regex.test(val);
-
-        if (validInput) {
-            let maxYear = + new Date().getFullYear().toString().substr(-2);
-            let minYear = maxYear - 3;
-
-            let match;
-            let yearRegex = /\d+/;
-            match = val.match(yearRegex);
-
-            let enteredYear = + match[0];
-
-            let courseRegex = /\d$/;
-            match = val.match(courseRegex);
-
-            let enteredCourse = + match[0];
-
-            if (minYear <= enteredYear &&
-                enteredYear <= maxYear &&
-                1 <= enteredCourse &&
-                enteredCourse <= 6) {
-
-                input.classList.add('valid-input');
-                msgElem.style.color = 'var(--green)';
-                msgElem.textContent = 'Kurs gültig.';
-                return;
-            }
+        if (courses.hasOwnProperty(val)) {
+            input.classList.add('valid-input');
+            msgElem.style.color = 'var(--green)';
+            msgElem.textContent = 'Kurs gültig.';
+            return;
         }
 
         input.classList.add('invalid-input');
@@ -108,10 +87,7 @@ const setCourse = (event) => {
     if (event.key === 'Enter') {
         observedCourse.course = courseInputElem.value.toUpperCase();
         setTitle(courseInputElem.classList.contains('valid-input') ? `${observedCourse.course} Kalender` : defaultTitle);
-
-        // get calendar for new course
     }
-
 }
 
 const isWeekday = date => date.getDay() % 6 !== 0;
@@ -200,8 +176,11 @@ const handler = {
 };
 
 const updateWeekView = async () => {
-    const dateControl = document.querySelector('input#date-picker[type="date"]');
-    const date = dateControl.value;
+    if (!courseInputElem.classList.contains('valid-input')) {
+        return;
+    }
+
+    const date = datePicker.value;
     const [year, month, day] = date.split('-');
 
     removeCalendar();
@@ -247,12 +226,42 @@ const loadWeek = async (course, day, month, year) => {
     return data;
 }
 
+const changeDate = (days) => {
+    let date = new Date(datePicker.value);
+    date.setDate(date.getDate() + days);
+    datePicker.value = date.toISOString().split('T')[0];
+
+    updateWeekView();
+}
+
+const getAvailableCourses = () => {
+    return new Promise((resolve, reject) => {
+        $.getJSON("assets/json/courses.json", function (json) {
+            resolve(json);
+        });
+    });
+}
+
 setTitle(defaultTitle);
 
 document.addEventListener('keydown', handleKeyPress);
 document.getElementById('date-picker').addEventListener('change', updateWeekView);
 
-document.addEventListener('DOMContentLoaded', () => {
+document.getElementById('prev-btn').addEventListener('click', () => {
+    changeDate(-7);
+});
+
+document.getElementById('next-btn').addEventListener('click', () => {
+    changeDate(7);
+});
+
+document.getElementById('today-btn').addEventListener('click', () => {
+    datePicker.valueAsDate = new Date();
+
+    updateWeekView();
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
     for (let i = 0; i < 225; i++) {
         let li = document.createElement('li');
         document.querySelector('.calendar').appendChild(li);
@@ -271,4 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('date-picker').valueAsDate = new Date();
+
+    courses = await getAvailableCourses();
 });

@@ -20,16 +20,56 @@
         <xsl:text> / h</xsl:text>
         <xsl:value-of select="$end"/>
         <xsl:text>;</xsl:text>
+        <xsl:choose>
+          <xsl:when test="exam='true'">
+            <xsl:text> background-color: var(--red);</xsl:text>
+          </xsl:when>
+          <xsl:when test="holiday='true'">
+            <xsl:text> background-color: var(--green);</xsl:text>
+          </xsl:when>
+        </xsl:choose>
       </xsl:attribute>
       
       <h3><xsl:value-of select="name"/></h3>
-      <p><xsl:value-of select="person"/></p>
-      <p><xsl:value-of select="room"/></p>
+      
+      <xsl:if test="holiday='false'">
+        <p>
+          <xsl:call-template name="newline-to-br">
+            <xsl:with-param name="text" select="person"/>
+          </xsl:call-template>
+        </p>
 
-      <br />
-
-      <p>Dauer: <xsl:value-of select="total_time"/></p>
-      <p><xsl:value-of select="substring($begin, 1, 2)"/>:<xsl:value-of select="substring($begin, 4)"/> - <xsl:value-of select="substring($end, 1, 2)"/>:<xsl:value-of select="substring($end, 4)"/></p>
+        <br />
+        
+        <p>
+          <xsl:call-template name="newline-to-br">
+            <xsl:with-param name="text" select="room"/>
+          </xsl:call-template>
+        </p>
+        
+        <br />
+        
+        <p>Dauer: <xsl:value-of select="total_time"/></p>
+        <p><xsl:value-of select="substring($begin, 1, 2)"/>:<xsl:value-of select="substring($begin, 4)"/> - <xsl:value-of select="substring($end, 1, 2)"/>:<xsl:value-of select="substring($end, 4)"/></p>
+      </xsl:if>
+      
     </li>
   </xsl:template>
+
+  <xsl:template name="newline-to-br">
+    <xsl:param name="text"/>
+    <xsl:choose>
+      <xsl:when test="contains($text, '&#10;')">
+        <xsl:value-of select="substring-before($text, '&#10;')"/>
+        <br/>
+        <xsl:call-template name="newline-to-br">
+          <xsl:with-param name="text" select="substring-after($text, '&#10;')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
 </xsl:stylesheet>

@@ -18,8 +18,8 @@ app.get("/", (req, res) => {
 
 app.post('/api/get_week/', async (req, res) => {
 	res.set('Content-Type', 'application/xml');
-    const xmlData = await getXml(req.body.course, req.body.day, req.body.month, req.body.year);
-    res.send(xmlData);
+	const xmlData = await getXml(req.body.course, req.body.day, req.body.month, req.body.year);
+	res.send(xmlData);
 });
 
 app.listen(PORT, () => {
@@ -32,12 +32,12 @@ const headers = {
 
 const users = JSON.parse(fs.readFileSync('public/assets/json/courses.json', 'utf8'));
 
-const performScraping = async (courseName, day, month, year) => {
+const scrapeHtml = async (courseName, day, month, year) => {
 	// HTTP GET request in Axios
 	return await axios.request({
-		method : "GET",
-		url : `https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=${users[courseName]}&file=${courseName}&day=${day}&month=${month}&year=${year}`,
-		headers : headers
+		method: "GET",
+		url: `https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=${users[courseName]}&file=${courseName}&day=${day}&month=${month}&year=${year}`,
+		headers: headers
 	});
 }
 
@@ -66,7 +66,9 @@ const parseToXml = (listOfLectureCurrentWeek) => {
 			room: lesson.room,
 			total_time: lesson.total_time,
 			begin: lesson.begin,
-			end: lesson.end
+			end: lesson.end,
+			holiday: lesson.holiday,
+			exam: lesson.exam
 		}));
 	});
 
@@ -82,11 +84,11 @@ const parseToXml = (listOfLectureCurrentWeek) => {
 		day: daysXml
 	};
 
-	return js2xmlparser.parse("calendar", xmlCalendar, {'declaration': {'encoding': 'UTF-8'}});
+	return js2xmlparser.parse("calendar", xmlCalendar, { 'declaration': { 'encoding': 'UTF-8' } });
 }
 
 const getXml = async (courseName, day, month, year) => {
-	const htmlString = await performScraping(courseName, day, month, year);
+	const htmlString = await scrapeHtml(courseName, day, month, year);
 	let listOfLectureCurrentWeek = [];
 
 	let html = new jsdom.JSDOM(htmlString.data).window.document;
@@ -103,19 +105,49 @@ const getXml = async (courseName, day, month, year) => {
 			let last = new Date('1970-01-01 ' + end);
 			let dif = last.getTime() - first.getTime();
 			let difDate = new Date(dif);
-			let timeDif = `${difDate.getHours() - 1}h ${difDate.getMinutes()}m`;
+			let timeDif = `${difDate.getHours() - 1}h${difDate.getMinutes() !== 0 ? ' ' + difDate.getMinutes() + 'min' : ""}`;
+
+			let holiday = begin == '08:00' && end == '18:00' ? true : false;
+			let exam = element.style.backgroundColor == 'rgb(255, 0, 0)' ? true : false;
 
 			let weekDay = mapWeekDay(element.querySelectorAll('.tooltip div')[1].textContent.slice(0, 2));
 
+			const resources = element.querySelectorAll('.resource');
+			const personElems = element.querySelectorAll('.person');
+
+			let rooms = [];
+			let persons = [];
+
+			resources.forEach(elem => {
+				const textContent = elem.textContent.trim();
+
+				if (textContent.includes("Hörsaal") || textContent.includes("Labor")) {
+					rooms.push(textContent);
+				}
+			});
+			
+			personElems.forEach(elem => {
+				const textContent = elem.textContent.trim();
+				persons.push(textContent);
+			});
+
+			let allRooms = rooms.join('\n');
+			let allPersons = persons.join('\n');
+
+			let name = element.querySelector('a').innerHTML.split('<br>')[1].split('<span class="tooltip">')[0].replace('</span>', '');
+
 			let jsonObject = {
-				name: element.querySelector('a').textContent.split(/Titel:\n|\n/)[3],
-				person: element.querySelector('.person')?.textContent ?? "",
-				room: element.querySelectorAll('.resource')[1].textContent,
+				name: name,
+				person: allPersons ?? "",
+				room: allRooms ?? "",
 				total_time: timeDif,
 				begin: begin.replace(':', '_'),
 				end: end.replace(':', '_'),
-				week_day: weekDay
+				week_day: weekDay,
+				holiday: holiday,
+				exam: exam
 			};
+
 			listOfLectureCurrentWeek.push(jsonObject);
 		}
 

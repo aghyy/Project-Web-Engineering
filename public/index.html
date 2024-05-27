@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="assets/css/components/header.css">
     <link rel="stylesheet" href="assets/css/components/month-view.css">
     <link rel="stylesheet" href="assets/css/components/week-view.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -21,7 +22,10 @@
                 <div class="info-wrap">
                     <div class="date-wrap">
                         <p>Datum anzeigen</p>
+                        <button id="prev-btn"><img src="assets/img/chevron-back-outline.svg" alt="previous"></button>
                         <input type="date" name="date" id="date-picker" />
+                        <button id="next-btn"><img src="assets/img/chevron-forward-outline.svg" alt="next"></button>
+                        <button id="today-btn">Heute</button>
                     </div>
 
                     <div class="course-wrap">

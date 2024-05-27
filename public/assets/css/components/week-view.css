@@ -4,7 +4,7 @@
 
 .calendar {
     display: grid;
-    grid-gap: 1px;
+    grid-gap: .5px;
     position: relative;
     width: 100%;
     min-height: 700px;
@@ -41,13 +41,14 @@ li:not(.day, .corner) {
 li.day {
     text-align: center;
     padding: 20px 0;
+    font-weight: bolder;
 }
 
 li.day,
 li.corner {
     position: sticky;
     top: 0;
-    border-bottom: 1px solid var(--primary-color);
+    border-bottom: .5px solid var(--primary-color);
     margin-bottom: -1px;
     z-index: 99999;
 }
@@ -63,7 +64,9 @@ li.event {
     width: calc(100% - 10px - 20px);
     margin-right: 10px;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 7px;
+    font-size: 85%;
+    overflow-y: scroll;
 }
 
 li.event h3 {
@@ -92,6 +95,20 @@ li.event p {
 
 .fri {
     grid-area: day / fri;
+}
+
+.h07_45,
+.h08_45,
+.h09_45,
+.h10_45,
+.h11_45,
+.h12_45,
+.h13_45,
+.h14_45,
+.h15_45,
+.h16_45,
+.h17_45 {
+    margin-bottom: 1.5px;
 }
 
 .h07_00 {

@@ -16,7 +16,7 @@
     color: #000;
 }
 
-.info-wrap>div>p {
+.info-wrap>div>* {
     margin-right: 10px;
 }
 
@@ -84,10 +84,30 @@ h1 {
     pointer-events: none;
 }
 
-input[type="date"],
-input[type="text"] {
+#date-picker,
+#course-input {
     border: none;
     border-radius: 5px;
     background-color: var(--dark-tertiary-color);
     color: #fff;
+}
+
+.date-wrap > button {
+    background-color: var(--dark-tertiary-color);
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.date-wrap > button > img {
+    width: 12px;
+    height: 12px;
+}
+
+#course-input {
+    padding: 0 5px;
 }
