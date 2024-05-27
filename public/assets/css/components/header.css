@@ -109,3 +109,6 @@ h1 {
     -moz-appearance: none; /* Add vendor prefix for older browsers */
 }
 
+#course-input:focus {
+    outline: none;
+}
