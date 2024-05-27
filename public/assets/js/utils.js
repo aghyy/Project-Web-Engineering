@@ -1,7 +1,8 @@
 var weekDates = [];
 var weekDays = {};
 const defaultTitle = 'Kurs auswählen';
-let selectedCourse = null;
+const defaultDocumentTitle = 'DHBW Kalender';
+let selectedCourse;
 const xmlCalUrl = 'assets/xml/calendar-data.xml';
 const xmlMonthUrl = 'assets/xml/month-data.xml';
 const xsltWeekUrl = 'assets/xml/calendar-week-block.xslt';
@@ -58,36 +59,11 @@ const setView = (elem) => {
     }
 }
 
-const checkCourseInput = () => {
-    let input = document.getElementById('course-input');
-    let val = input.value.toUpperCase();
-
-    let msgElem = document.querySelector('.course-msg');
-
-    if (val.length === 8) {
-        if (courses.hasOwnProperty(val)) {
-            input.classList.add('valid-input');
-            msgElem.style.color = 'var(--green)';
-            msgElem.textContent = 'Kurs gültig.';
-            return;
-        }
-
-        input.classList.add('invalid-input');
-        msgElem.style.color = 'var(--red)';
-        msgElem.textContent = 'Kurs ungültig. Bitte gültigen Kursnamen eingeben.';
-    } else {
-        input.classList.remove('valid-input');
-        input.classList.remove('invalid-input');
-        msgElem.style.color = '#fff';
-        msgElem.textContent = '';
-    }
-}
-
-const setCourse = (event) => {
-    if (event.key === 'Enter') {
-        observedCourse.course = courseInputElem.value.toUpperCase();
-        setTitle(courseInputElem.classList.contains('valid-input') ? `${observedCourse.course} Kalender` : defaultTitle);
-    }
+const setCourse = () => {
+    selectedCourse = courseInputElem.value.toUpperCase();
+    setTitle(`${selectedCourse} Kalender`);
+    document.title = `DHBW ${selectedCourse} Kalender`;
+    onSelectedCourseChange();
 }
 
 const isWeekday = date => date.getDay() % 6 !== 0;
@@ -160,32 +136,13 @@ const handleKeyPress = (event) => {
     }
 };
 
-// Create a proxy to observe changes to selectedCourse
-const handler = {
-    set: function (target, property, value, receiver) {
-        target[property] = value;
-        if (property === 'course') {
-            if (courseInputElem.classList.contains('valid-input')) {
-                onSelectedCourseChange(); // Call the function when selectedCourse changes
-            } else {
-                removeCalendar(); // Remove the calendar when the course is invalid
-            }
-        }
-        return true;
-    }
-};
-
 const updateWeekView = async () => {
-    if (!courseInputElem.classList.contains('valid-input')) {
-        return;
-    }
-
     const date = datePicker.value;
     const [year, month, day] = date.split('-');
 
     removeCalendar();
 
-    let xmlString = await loadWeek(observedCourse.course, day, month, year);
+    let xmlString = await loadWeek(selectedCourse, day, month, year);
 
     // Parse the XML string into an XML document
     let parser = new DOMParser();
@@ -195,8 +152,6 @@ const updateWeekView = async () => {
         applyXSLT(xmlDoc, xslt, document.querySelector('.calendar'));
     });
 }
-
-const observedCourse = new Proxy({ course: selectedCourse }, handler);
 
 const onSelectedCourseChange = () => {
     updateWeekView();
@@ -242,6 +197,38 @@ const getAvailableCourses = () => {
     });
 }
 
+const createDropdown = () => {
+    // Get the dropdown element
+    var dropdown = document.getElementById("course-input");
+
+    // Initialize variables for checking year
+    var currentYear = new Date().getFullYear();
+    var lastYear = currentYear;
+
+    // Add options to the dropdown
+    for (var key in courses) {
+        if (courses.hasOwnProperty(key)) {
+            // Extract year from key
+            var year = parseInt(key.substring(4, 6));
+
+            // If it's a new year, add a disabled option with the year as label
+            if (year < lastYear) {
+                var yearOption = document.createElement("option");
+                yearOption.text = (2000 + year).toString();
+                yearOption.disabled = true;
+                dropdown.add(yearOption);
+            }
+
+            // Add the option itself
+            var optionElement = document.createElement("option");
+            optionElement.text = key;
+            dropdown.add(optionElement);
+
+            lastYear = year;
+        }
+    }
+}
+
 setTitle(defaultTitle);
 
 document.addEventListener('keydown', handleKeyPress);
@@ -262,6 +249,8 @@ document.getElementById('today-btn').addEventListener('click', () => {
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
+    courses = await getAvailableCourses();
+
     for (let i = 0; i < 225; i++) {
         let li = document.createElement('li');
         document.querySelector('.calendar').appendChild(li);
@@ -281,5 +270,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('date-picker').valueAsDate = new Date();
 
-    courses = await getAvailableCourses();
+    createDropdown();
 });

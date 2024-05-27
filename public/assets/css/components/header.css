@@ -28,23 +28,6 @@
     margin-right: 0 !important;
 }
 
-#course-input {
-    text-transform: uppercase;
-    width: 150px;
-}
-
-#course-input.valid-input:focus {
-    outline-offset: 0px;
-    outline: 1px solid var(--green);
-    color: var(--green);
-}
-
-#course-input.invalid-input:focus {
-    outline-offset: 0px;
-    outline: 1px solid var(--red);
-    color: var(--red);
-}
-
 .view-options {
     background-color: var(--dark-tertiary-color);
     display: flex;
@@ -71,10 +54,6 @@
     background-color: var(--dark-primary-color);
 }
 
-.course-msg {
-    margin-left: 10px;
-}
-
 h1 {
     margin: 0;
     color: var(--dark-primary-color);
@@ -92,7 +71,7 @@ h1 {
     color: #fff;
 }
 
-.date-wrap > button {
+.date-wrap>button {
     background-color: var(--dark-tertiary-color);
     border: none;
     display: flex;
@@ -101,13 +80,32 @@ h1 {
     padding: 5px;
     border-radius: 5px;
     color: #fff;
+    height: 22px;
 }
 
-.date-wrap > button > img {
+.date-wrap>button>img {
     width: 12px;
     height: 12px;
 }
 
 #course-input {
-    padding: 0 5px;
+    width: 150px;
+    padding: 4.5px;
+    background-image:
+        linear-gradient(45deg, transparent 50%, gray 50%),
+        linear-gradient(135deg, gray 50%, transparent 50%),
+        linear-gradient(to right, #ccc, #ccc);
+    background-position:
+        calc(100% - 14px) center,
+        calc(100% - 10px) center,
+        calc(100% - 2.5em) center;
+    background-size:
+        4px 4px,
+        4px 4px,
+        1px 1.5em;
+    background-repeat: no-repeat;
+    appearance: none;
+    -webkit-appearance: none; /* Add vendor prefix for older browsers */
+    -moz-appearance: none; /* Add vendor prefix for older browsers */
 }
+
