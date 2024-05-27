@@ -11,6 +11,7 @@
     grid-column-gap: 10px;
     margin: 10px auto 20px auto;
     width: 100%;
+    color: var(--dark-primary-color);
 }
 
 .month-view-body {
@@ -25,7 +26,7 @@
     min-height: 100px;
     height: calc((80vh - 5 * 10px - 10px - 20px - 1.2em - 10px) / 5);
     padding: 5px;
-    background-color: #242424;
+    background-color: var(--dark-primary-color);
     border-radius: 10px;
 }
 
@@ -33,7 +34,7 @@
     width: 20px;
     height: 20px;
     padding: 5px;
-    background-color: #000;
+    background-color: var(--dark-tertiary-color);
     border-radius: 100%;
     position: relative;
 }
@@ -42,7 +43,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-51%, -48%);
+    transform: translate(-48%, -46%);
 }
 
 .month-view-day-info {
@@ -50,7 +51,7 @@
 }
 
 .today {
-    background-color: red;
+    background-color: var(--red);
 }
 
 .month-view-head-day {

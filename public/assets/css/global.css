@@ -4,26 +4,32 @@
 
 :root {
 	/* Font Sizes */
-	--font-sm: 12px;
+	/* --font-sm: 12px;
 	--font-md: 16px;
 	--font-lg: 18px;
 	--font-xl: 20px;
 	--font-2xl: 24px;
-	--font-3xl: 32px;
+	--font-3xl: 32px; */
 	/* Colors */
-	--primary-color: #2c3e50;
-	--light-primary-color: #f8f9fa;
+	--primary-color: rgb(115, 183, 184);
+
+	--red: #e22844;
+	--green: #0f7643;
+
+	/* --light-primary-color: #f8f9fa;
 	--light-secondary-color: #e9ecef;
-	--light-tertiary-color: #f1f3f5;
-	--dark-primary-color: #0f0f0f;
-	--dark-secondary-color: #212529;
-	--dark-tertiary-color: #343a40;
+	--light-tertiary-color: #f1f3f5; */
+
+	--dark-primary-color: rgb(33, 40, 49);
+	--dark-secondary-color: rgb(38, 46, 55);
+	--dark-tertiary-color: rgb(46, 56, 67);
 	/* Borders */
-	--border-color-light: #e5e5e5;
-	--border-color-dark: #262626;
+	/* --border-color-light: #e5e5e5;
+	--border-color-dark: #262626; */
 	/* Text */
-	--text-color-light-primary: #0f0f0f;
+	/* --text-color-light-primary: #0f0f0f;
 	--text-color-light-secondary: #383c41;
+
 	--text-color-dark-primary: #f8f9fa;
-	--text-color-dark-secondary: #999b9d;
+	--text-color-dark-secondary: #999b9d; */
 }

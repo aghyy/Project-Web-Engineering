@@ -87,14 +87,14 @@ const checkCourseInput = () => {
                 enteredCourse <= 6) {
 
                 input.classList.add('valid-input');
-                msgElem.style.color = 'green';
+                msgElem.style.color = 'var(--green)';
                 msgElem.textContent = 'Kurs gültig.';
                 return;
             }
         }
 
         input.classList.add('invalid-input');
-        msgElem.style.color = 'red';
+        msgElem.style.color = 'var(--red)';
         msgElem.textContent = 'Kurs ungültig. Bitte gültigen Kursnamen eingeben.';
     } else {
         input.classList.remove('valid-input');
