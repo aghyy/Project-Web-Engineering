@@ -10,7 +10,8 @@
     min-height: 700px;
     height: 80vh;
     padding: 0;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
     overscroll-behavior: none;
     border-radius: 10px;
 }
@@ -25,7 +26,6 @@
 .calendar li {
     background-color: var(--dark-tertiary-color);
     display: inline-block;
-    /* min-height: 1em; */
 }
 
 li.day,
