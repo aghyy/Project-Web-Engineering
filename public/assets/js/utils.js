@@ -275,4 +275,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('date-picker').valueAsDate = new Date();
 
     createDropdown();
+
+    document.querySelector('#course-input').selectedIndex = 0;
 });
