@@ -4,7 +4,7 @@
 
 .calendar {
     display: grid;
-    grid-gap: .5px;
+    grid-gap: 1px;
     position: relative;
     width: 100%;
     min-height: 700px;
@@ -48,7 +48,7 @@ li.day,
 li.corner {
     position: sticky;
     top: 0;
-    border-bottom: .5px solid var(--primary-color);
+    border-bottom: 1px solid var(--primary-color);
     margin-bottom: -1px;
     z-index: 99999;
 }
@@ -97,7 +97,8 @@ li.event p {
     grid-area: day / fri;
 }
 
-.h07_45,
+/* different grid gap before whole hour */
+/* .h07_45,
 .h08_45,
 .h09_45,
 .h10_45,
@@ -108,8 +109,8 @@ li.event p {
 .h15_45,
 .h16_45,
 .h17_45 {
-    margin-bottom: 1.5px;
-}
+    margin-bottom: 1px;
+} */
 
 .h07_00 {
     grid-area: h07_00 / time;
