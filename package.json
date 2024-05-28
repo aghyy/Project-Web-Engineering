@@ -4,12 +4,14 @@
   "description": "DHBW Calendar Project for Web Engineering using NodeJS, XML, XSLT",
   "main": "index.js",
   "dependencies": {
+    "autoprefixer": "^10.4.19",
     "axios": "^1.6.8",
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
     "js2xmlparser": "^5.0.0",
     "jsdom": "^24.0.0",
     "nodemon": "^3.1.0",
+    "postcss-cli": "^11.0.0",
     "xml": "^1.0.1"
   },
   "devDependencies": {

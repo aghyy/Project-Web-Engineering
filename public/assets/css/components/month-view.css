@@ -6,7 +6,7 @@
 .month-view-head {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(auto-fill);
+    grid-template-rows: auto;
     grid-row-gap: 10px;
     grid-column-gap: 10px;
     margin: 10px auto 20px auto;
@@ -17,7 +17,7 @@
 .month-view-body {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(auto-fill);
+    grid-template-rows: auto;
     grid-row-gap: 10px;
     grid-column-gap: 10px;
 }
