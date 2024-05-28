@@ -6,6 +6,7 @@ var selectedCourse;
 // setting default values
 const defaultTitle = 'Kurs auswählen';
 const defaultDocumentTitle = 'DHBW Kalender';
+const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
 // setting xslt urls
 const xsltWeekUrl = 'assets/xml/calendar-week-block.xslt';
 const xsltMonthUrl = 'assets/xml/calendar-month-block.xslt';
@@ -16,6 +17,13 @@ const datePicker = document.getElementById('date-picker');
 // functions
 const setTitle = (title) => {
     document.querySelector('h1').textContent = title;
+}
+
+const getFirefoxResult = (resultHTML) => {
+    return resultHTML
+            .replaceAll('<transformiix:result xmlns:transformiix="http://www.mozilla.org/TransforMiix">', '')
+            .replaceAll('</transformiix:result>', '')
+            .replaceAll('xmlns="http://www.w3.org/1999/xhtml"', '');
 }
 
 const loadXML = (url, callback) => {
@@ -38,7 +46,7 @@ const applyXSLT = (xml, xslt, container) => {
     xsltProcessor.importStylesheet(xslt);
     const resultDocument = xsltProcessor.transformToDocument(xml);
     const resultHTML = new XMLSerializer().serializeToString(resultDocument);
-    container.innerHTML += resultHTML;
+    container.innerHTML += isFirefox ? getFirefoxResult(resultHTML) : resultHTML;
 }
 
 const setView = (elem) => {
