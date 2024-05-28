@@ -162,7 +162,7 @@ const onSelectedCourseChange = () => {
 
 const removeCalendar = () => {
     document.querySelectorAll('.calendar li.event').forEach((elem) => {
-        document.querySelector('.calendar').removeChild(elem);
+        elem.parentNode.removeChild(elem);
     });
 }
 
