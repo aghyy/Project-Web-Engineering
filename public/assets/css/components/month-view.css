@@ -1,5 +1,6 @@
 .month-view-wrap {
-    display: flex;
+    /* display: flex; */
+    display: none;
     flex-direction: column;
 }
 

@@ -27,6 +27,12 @@
           <xsl:when test="holiday='true'">
             <xsl:text> background-color: var(--green);</xsl:text>
           </xsl:when>
+          <xsl:when test="lecture='true'">
+            <xsl:text> background-color: var(--lecture-event);</xsl:text>
+          </xsl:when>
+          <xsl:when test="other_event='true'">
+            <xsl:text> background-color: var(--other-event);</xsl:text>
+          </xsl:when>
         </xsl:choose>
       </xsl:attribute>
       

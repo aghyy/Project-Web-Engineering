@@ -1,6 +1,6 @@
-.week-view-wrap {
+/* .week-view-wrap {
     display: none;
-}
+} */
 
 .calendar {
     display: grid;
@@ -20,7 +20,7 @@
     grid-template-columns:
         [time] auto [mon] 1fr [tue] 1fr [wed] 1fr [thu] 1fr [fri] 1fr [end-col];
     grid-template-rows:
-        [day] auto [h07_00] 1fr [h07_15] 1fr [h07_30] 1fr [h07_45] 1fr [h08_00] 1fr [h08_15] 1fr [h08_30] 1fr [h08_45] 1fr [h09_00] 1fr [h09_15] 1fr [h09_30] 1fr [h09_45] 1fr [h10_00] 1fr [h10_15] 1fr [h10_30] 1fr [h10_45] 1fr [h11_00] 1fr [h11_15] 1fr [h11_30] 1fr [h11_45] 1fr [h12_00] 1fr [h12_15] 1fr [h12_30] 1fr [h12_45] 1fr [h13_00] 1fr [h13_15] 1fr [h13_30] 1fr [h13_45] 1fr [h14_00] 1fr [h14_15] 1fr [h14_30] 1fr [h14_45] 1fr [h15_00] 1fr [h15_15] 1fr [h15_30] 1fr [h15_45] 1fr [h16_00] 1fr [h16_15] 1fr [h16_30] 1fr [h16_45] 1fr [h17_00] 1fr [h17_15] 1fr [h17_30] 1fr [h17_45] 1fr [h18_00] 1fr [end-row];
+        [day] auto /* [h07_00] 1fr [h07_15] 1fr [h07_30] 1fr [h07_45] 1fr */ [h08_00] 1fr [h08_15] 1fr [h08_30] 1fr [h08_45] 1fr [h09_00] 1fr [h09_15] 1fr [h09_30] 1fr [h09_45] 1fr [h10_00] 1fr [h10_15] 1fr [h10_30] 1fr [h10_45] 1fr [h11_00] 1fr [h11_15] 1fr [h11_30] 1fr [h11_45] 1fr [h12_00] 1fr [h12_15] 1fr [h12_30] 1fr [h12_45] 1fr [h13_00] 1fr [h13_15] 1fr [h13_30] 1fr [h13_45] 1fr [h14_00] 1fr [h14_15] 1fr [h14_30] 1fr [h14_45] 1fr [h15_00] 1fr [h15_15] 1fr [h15_30] 1fr [h15_45] 1fr [h16_00] 1fr [h16_15] 1fr [h16_30] 1fr [h16_45] 1fr [h17_00] 1fr [h17_15] 1fr [h17_30] 1fr [h17_45] 1fr [h18_00] 1fr [end-row];
 }
 
 .calendar li {
@@ -58,7 +58,7 @@ li.time {
 }
 
 li.event {
-    background-color: #007E83;
+    background-color: #000; /* should never be the case, just as default */
     position: absolute;
     height: calc(100% - 20px);
     width: calc(100% - 10px - 20px);
@@ -66,6 +66,7 @@ li.event {
     padding: 10px;
     border-radius: 7px;
     font-size: 85%;
+    /* overflow-x: hidden; */
     overflow-y: scroll;
 }
 
@@ -112,7 +113,7 @@ li.event p {
     margin-bottom: 1px;
 } */
 
-.h07_00 {
+/* .h07_00 {
     grid-area: h07_00 / time;
 }
 
@@ -126,7 +127,7 @@ li.event p {
 
 .h07_45 {
     grid-area: h07_45 / time;
-}
+} */
 
 .h08_00 {
     grid-area: h08_00 / time;

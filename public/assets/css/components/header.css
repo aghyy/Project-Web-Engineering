@@ -63,13 +63,6 @@ h1 {
     pointer-events: none;
 }
 
-#date-picker,
-#course-input {
-    border: none;
-    border-radius: 5px;
-    background-color: var(--dark-tertiary-color);
-    color: #fff;
-}
 
 .date-wrap>button {
     background-color: var(--dark-tertiary-color);
@@ -86,6 +79,20 @@ h1 {
 .date-wrap>button>img {
     width: 12px;
     height: 12px;
+}
+
+#date-picker,
+#course-input {
+    border: none;
+    border-radius: 5px;
+    background-color: var(--dark-tertiary-color);
+    color: #fff;
+}
+
+#date-picker {
+    color-scheme: dark;
+    max-height: 22px;
+    padding: 1px 5px;
 }
 
 #course-input {

@@ -68,7 +68,9 @@ const parseToXml = (listOfLectureCurrentWeek) => {
 			begin: lesson.begin,
 			end: lesson.end,
 			holiday: lesson.holiday,
-			exam: lesson.exam
+			exam: lesson.exam,
+			lecture: lesson.lecture,
+			other_event: lesson.other_event
 		}));
 	});
 
@@ -99,16 +101,26 @@ const getXml = async (courseName, day, month, year) => {
 		listOfLectureCurrentWeek.push({ "course": course });
 
 		for (const element of wholeWeek) {
+			let type = element.querySelector('a > .tooltip > strong').textContent;
 			let begin = element.querySelector('.week_block a').textContent.slice(0, 5);
+
+			if (type === 'Sonstiger Termin' && begin === '07:00') {
+				continue;
+			}
+
 			let end = element.querySelector('.week_block a').textContent.slice(7, 12);
 			let first = new Date('1970-01-01 ' + begin);
 			let last = new Date('1970-01-01 ' + end);
 			let dif = last.getTime() - first.getTime();
 			let difDate = new Date(dif);
-			let timeDif = `${difDate.getHours() - 1}h${difDate.getMinutes() !== 0 ? ' ' + difDate.getMinutes() + 'min' : ""}`;
+			let timeDif = `${difDate.getHours() - 1}h ${difDate.getMinutes()}min`
+							.replace('0h ', '')
+							.replace(' 0min', '');
 
 			let holiday = begin == '08:00' && end == '18:00' ? true : false;
 			let exam = element.style.backgroundColor == 'rgb(255, 0, 0)' ? true : false;
+			let lecture = type === 'Lehrveranstaltung' ? true : false;
+			let other_event = type === 'Sonstiger Termin' ? true : false;
 
 			let weekDay = mapWeekDay(element.querySelectorAll('.tooltip div')[1].textContent.slice(0, 2));
 
@@ -145,7 +157,9 @@ const getXml = async (courseName, day, month, year) => {
 				end: end.replace(':', '_'),
 				week_day: weekDay,
 				holiday: holiday,
-				exam: exam
+				exam: exam,
+				lecture: lecture,
+				other_event: other_event
 			};
 
 			listOfLectureCurrentWeek.push(jsonObject);

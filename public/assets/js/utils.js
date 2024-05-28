@@ -63,7 +63,7 @@ const setView = (elem) => {
 
     if (elem.classList.contains('month-view')) {
         weekView.style.display = 'none';
-        monthView.style.display = 'block';
+        monthView.style.display = 'flex';
     } else if (elem.classList.contains('week-view')) {
         monthView.style.display = 'none';
         weekView.style.display = 'block';
@@ -148,6 +148,10 @@ const handleKeyPress = (event) => {
 };
 
 const updateWeekView = async () => {
+    if (!selectedCourse) {
+        return;
+    }
+
     const date = datePicker.value;
     const [year, month, day] = date.split('-');
 
@@ -263,7 +267,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     setTitle(defaultTitle);
 
-    for (let i = 0; i < 225; i++) {
+    for (let i = 0; i < 205; i++) { // per quarter hour 5, per hour 20 li elements
         let li = document.createElement('li');
         document.querySelector('.calendar').appendChild(li);
     }

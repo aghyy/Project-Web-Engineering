@@ -56,12 +56,12 @@
             </div>
 
             <div class="view-options">
-                <div class="month-view active-view view-option" onclick="setView(this);">
+                <div class="month-view view-option" onclick="setView(this);">
                     <div class='ignore-click'>
                         <img src="assets/img/calendar-outline.svg" alt="month view">
                     </div>
                 </div>
-                <div class="week-view view-option" onclick="setView(this);">
+                <div class="week-view view-option active-view" onclick="setView(this);">
                     <div class='ignore-click'>
                         <img src="assets/img/list-outline.svg" alt="week view">
                     </div>
@@ -92,10 +92,10 @@
             <li class="day thu" id="3"></li>
             <li class="day fri" id="4"></li>
 
-            <li class="time h07_00">07:00</li>
+            <!-- <li class="time h07_00">07:00</li>
             <li class="time h07_15"></li>
             <li class="time h07_30"></li>
-            <li class="time h07_45"></li>
+            <li class="time h07_45"></li> -->
             <li class="time h08_00">08:00</li>
             <li class="time h08_15"></li>
             <li class="time h08_30"></li>
@@ -155,6 +155,10 @@
         <div class="legend-item">
             <div class="legend-color" style="background-color: var(--green);"></div>
             <p>Feiertag</p>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--other-event);"></div>
+            <p>Sonstiger Termin</p>
         </div>
     </div>
 
