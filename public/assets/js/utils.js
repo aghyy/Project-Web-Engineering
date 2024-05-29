@@ -193,7 +193,7 @@ const determineWeekDays = (elem) => {
 }
 
 const showDropdown = (element) => { // not supported by all browsers, technically deprecated
-    var event;
+    let event;
     event = document.createEvent('MouseEvents');
     event.initMouseEvent('mousedown', true, true, window);
     element.dispatchEvent(event);
