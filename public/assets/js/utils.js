@@ -79,6 +79,65 @@ const setCourse = () => {
 
 const isWeekday = date => date.getDay() % 6 !== 0;
 
+const getWeekNumber = (d) => {
+    // Copy date so don't modify original
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    // Get first day of year
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    // Return array of year and week number
+    return [d.getUTCFullYear(), weekNo];
+}
+
+const formatDateAsDayMonth = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return `${day}.${month}.`;
+}
+
+const setCalendarWeek = () => {
+    var calWeek = getWeekNumber(new Date(datePicker.value));
+    document.querySelector('.week-number').textContent = `KW ${calWeek[1]}`;
+}
+
+const getDayDates = () => {
+    const inputDate = datePicker.valueAsDate;
+
+    // Find the Monday of the week
+    const dayOfWeek = inputDate.getDay();
+    const monday = new Date(inputDate);
+    const diffToMonday = (dayOfWeek + 6) % 7; // Calculate days to Monday
+    monday.setDate(inputDate.getDate() - diffToMonday);
+
+    const weekdays = [];
+    for (let i = 0; i < 5; i++) {
+        const date = new Date(monday);
+        date.setDate(monday.getDate() + i);
+        weekdays.push(formatDateAsDayMonth(date));
+    }
+
+    return weekdays;
+}
+
+const setDayDates = () => {
+    let days = document.querySelectorAll('li.day');
+    let index = 0;
+
+    days.forEach((elem) => {
+        elem.textContent = `${elem.textContent.split(' ')[0]} ${getDayDates()[index]}`;
+        index++;
+    });
+}
+
+const prepareCalendar = () => {
+    setCalendarWeek();
+    setDayDates();
+}
+
 const getMonthStructXML = () => {
     let todayDate = new Date();
     let firstDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);
@@ -148,6 +207,8 @@ const handleKeyPress = (event) => {
 };
 
 const updateWeekView = async () => {
+    prepareCalendar();
+
     if (!selectedCourse) {
         return;
     }
@@ -244,6 +305,11 @@ const createDropdown = () => {
     }
 }
 
+// const ifFirefox = () => {
+//     isFirefox && alert('Might want to switch to Chrome. https://www.google.com/chrome/');
+//     ifFirefox();
+// }
+
 // event listeners
 document.addEventListener('keydown', handleKeyPress);
 document.getElementById('date-picker').addEventListener('change', updateWeekView);
@@ -289,4 +355,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     createDropdown();
 
     document.querySelector('#course-input').selectedIndex = 0;
+
+    prepareCalendar();
+
+    // ifFirefox();
 });
