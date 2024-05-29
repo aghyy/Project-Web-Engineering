@@ -13,6 +13,10 @@ const xsltMonthUrl = 'assets/xml/calendar-month-block.xslt';
 const courseInputElem = document.getElementById('course-input');
 const datePicker = document.getElementById('date-picker');
 
+// checking views
+const isWeekView = () => document.querySelector('.week-view-wrap').style.display !== 'none';
+const isMonthView = () => document.querySelector('.month-view-wrap').style.display !== 'none';
+
 // functions
 const setTitle = (title) => {
     document.querySelector('h1').textContent = title;
@@ -137,17 +141,16 @@ const prepareCalendar = () => {
     setDayDates();
 }
 
-const getMonthStructXML = () => {
-    let todayDate = new Date();
-    let firstDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);
-    let lastDate = new Date(todayDate.getFullYear(), todayDate.getMonth() + 1, 0);
+const getMonthStructXML = (monthDate) => {
+    let firstDate = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1);
+    let lastDate = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0);
     let firstDay = firstDate.getDay();
     let lastDay = lastDate.getDate();
 
-    let todaysDay = todayDate.getDate();
+    let todaysDay = new Date().getDate();
 
-    let month = ("0" + (todayDate.getMonth() + 1)).slice(-2);
-    let year = todayDate.getFullYear();
+    let month = ("0" + (monthDate.getMonth() + 1)).slice(-2);
+    let year = monthDate.getFullYear();
 
     let xmlString = '<?xml version="1.0" encoding="UTF-8"?>';
     xmlString += '<days>';
@@ -161,22 +164,25 @@ const getMonthStructXML = () => {
 
         if (isWeekday(new Date(`${year}-${month}-${day}`))) {
             let show = true;
-            let today = day == todaysDay;
+            let today = new Date(`${year}-${month}-${day}`).toDateString() == new Date().toDateString();
             xmlString += `<day><day>${i}</day><show>${show}</show><today>${today}</today></day>`;
         }
     }
 
-    for (let i = 0; i < 25; i++) {
-        if (!xmlString.includes('<day>')) {
-            xmlString += '<day><day></day><show>false</show><today>false</today></day>';
-        }
+    // Ensure there are 25 days listed
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(xmlString + '</days>', "text/xml");
+    let dayTags = xmlDoc.querySelectorAll("days > day");
+
+    let additionalDaysNeeded = 25 - dayTags.length;
+
+    for (let i = 0; i < additionalDaysNeeded; i++) {
+        xmlString += '<day><day></day><show>false</show><today>false</today></day>';
     }
 
     xmlString += '</days>';
 
-    // Parse the XML string into an XML document
-    let parser = new DOMParser();
-    let xmlDoc = parser.parseFromString(xmlString, "text/xml");
+    xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
     return xmlDoc;
 }
@@ -245,6 +251,16 @@ const updateWeekView = async () => {
     });
 }
 
+const updateMonthView = () => {
+    document.querySelectorAll('.month-view-card').forEach((elem) => {
+        elem.parentNode.removeChild(elem);
+    });
+
+    loadXML(xsltMonthUrl, function (xslt) {
+        applyXSLT(getMonthStructXML(datePicker.valueAsDate), xslt, document.querySelector('.month-view-body'));
+    });
+}
+
 const removeCalendar = () => {
     document.querySelectorAll('.calendar > li.event').forEach((elem) => {
         elem.parentNode.removeChild(elem);
@@ -274,7 +290,8 @@ const changeDate = (days) => {
     date.setDate(date.getDate() + days);
     datePicker.value = date.toISOString().split('T')[0];
 
-    updateWeekView();
+    isWeekView() && updateWeekView();
+    isMonthView() && updateMonthView();
 }
 
 const getAvailableCourses = () => {
@@ -340,7 +357,7 @@ document.getElementById('today-btn').addEventListener('click', () => {
     setDateToToday();
 });
 
-courseInputElem.addEventListener('change', function() {
+courseInputElem.addEventListener('change', function () {
     courseInputElem.blur();
 });
 
@@ -355,7 +372,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     loadXML(xsltMonthUrl, function (xslt) {
-        applyXSLT(getMonthStructXML(), xslt, document.querySelector('.month-view-body'));
+        applyXSLT(getMonthStructXML(new Date()), xslt, document.querySelector('.month-view-body'));
     });
 
     document.querySelectorAll('.month-view-head-day').forEach((elem) => {
