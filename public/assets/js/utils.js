@@ -1,6 +1,5 @@
 // defining global variables
 var weekDates = [];
-var weekDays = {};
 var courses = {};
 var selectedCourse;
 // setting default values
@@ -86,9 +85,9 @@ const getWeekNumber = (d) => {
     // Make Sunday's day number 7
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
     // Get first day of year
-    var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    let yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
     // Calculate full weeks to nearest Thursday
-    var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    let weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
     // Return array of year and week number
     return [d.getUTCFullYear(), weekNo];
 }
@@ -100,7 +99,7 @@ const formatDateAsDayMonth = (date) => {
 }
 
 const setCalendarWeek = () => {
-    var calWeek = getWeekNumber(new Date(datePicker.value));
+    let calWeek = getWeekNumber(new Date(datePicker.value));
     document.querySelector('.week-number').textContent = `KW ${calWeek[1]}`;
 }
 
@@ -141,7 +140,7 @@ const prepareCalendar = () => {
 const getMonthStructXML = () => {
     let todayDate = new Date();
     let firstDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);
-    var lastDate = new Date(todayDate.getFullYear(), todayDate.getMonth() + 1, 0);
+    let lastDate = new Date(todayDate.getFullYear(), todayDate.getMonth() + 1, 0);
     let firstDay = firstDate.getDay();
     let lastDay = lastDate.getDate();
 
@@ -162,7 +161,7 @@ const getMonthStructXML = () => {
 
         if (isWeekday(new Date(`${year}-${month}-${day}`))) {
             let show = true;
-            let today = day == todaysDay ? true : false;
+            let today = day == todaysDay;
             xmlString += `<day><day>${i}</day><show>${show}</show><today>${today}</today></day>`;
         }
     }
@@ -287,31 +286,28 @@ const getAvailableCourses = () => {
 }
 
 const createDropdown = () => {
-    // Get the dropdown element
-    var dropdown = document.getElementById("course-input");
-
     // Initialize variables for checking year
-    var currentYear = new Date().getFullYear();
-    var lastYear = currentYear;
+    let currentYear = new Date().getFullYear();
+    let lastYear = currentYear;
 
     // Add options to the dropdown
-    for (var key in courses) {
+    for (let key in courses) {
         if (courses.hasOwnProperty(key)) {
             // Extract year from key
-            var year = parseInt(key.substring(4, 6));
+            let year = parseInt(key.substring(4, 6));
 
             // If it's a new year, add a disabled option with the year as label
             if (year < lastYear) {
-                var yearOption = document.createElement("option");
+                let yearOption = document.createElement("option");
                 yearOption.text = (2000 + year).toString();
                 yearOption.disabled = true;
-                dropdown.add(yearOption);
+                courseInputElem.add(yearOption);
             }
 
             // Add the option itself
-            var optionElement = document.createElement("option");
+            let optionElement = document.createElement("option");
             optionElement.text = key;
-            dropdown.add(optionElement);
+            courseInputElem.add(optionElement);
 
             lastYear = year;
         }
