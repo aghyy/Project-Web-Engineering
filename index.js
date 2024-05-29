@@ -18,8 +18,18 @@ app.get("/", (req, res) => {
 
 app.post('/api/get_week/', async (req, res) => {
 	res.set('Content-Type', 'application/xml');
-	const xmlData = await getXml(req.body.course, req.body.day, req.body.month, req.body.year);
+	const xmlData = await getXmlForWeek(req.body.course, req.body.day, req.body.month, req.body.year);
 	res.send(xmlData);
+});
+
+app.post('/api/get_month/', async (req, res) => {
+	res.set('Content-Type', 'application/xml');
+	let fullXml = [];
+	for (let i = 0; i < 5; i++) {
+		const xmlData = await getXmlForMonth(req.body.course, req.body.day, req.body.month, req.body.year);
+		fullXml.push(xmlData)
+	}
+	res.send(fullXml);
 });
 
 app.listen(PORT, () => {
@@ -89,7 +99,7 @@ const parseToXml = (listOfLectureCurrentWeek) => {
 	return js2xmlparser.parse("calendar", xmlCalendar, { 'declaration': { 'encoding': 'UTF-8' } });
 }
 
-const getXml = async (courseName, day, month, year) => {
+const getXmlForWeek = async (courseName, day, month, year) => {
 	const htmlString = await scrapeHtml(courseName, day, month, year);
 	let listOfLectureCurrentWeek = [];
 
@@ -170,5 +180,52 @@ const getXml = async (courseName, day, month, year) => {
 		return parsedOutput;
 	}
 }
+
+const getXmlForMonth = async (courseName, day, month, year) => {
+	const htmlString = await scrapeHtml(courseName, day, month, year);
+	let listOfLectureCurrentMonth = [];
+
+	let html = new jsdom.JSDOM(htmlString.data).window.document;
+	if (html.body.children.length > 0) {
+		let wholeMonth = html.querySelectorAll('.week_block');
+		let course = html.querySelector('.week_block') && html.querySelector('.week_block').querySelector('.resource').textContent;
+
+		listOfLectureCurrentMonth.push({ "course": course });
+
+		for (const element of wholeMonth) {
+			let type = element.querySelector('a > .tooltip > strong').textContent;
+			let begin = element.querySelector('.week_block a').textContent.slice(0, 5);
+
+			if (type === 'Sonstiger Termin' && begin === '07:00') {
+				continue;
+			}
+
+			let end = element.querySelector('.week_block a').textContent.slice(7, 12);
+			let holiday = begin == '08:00' && end == '18:00';
+			let exam = element.style.backgroundColor == 'rgb(255, 0, 0)';
+			let lecture = type === 'Lehrveranstaltung';
+			let other_event = type === 'Sonstiger Termin';
+
+			let weekDay = mapWeekDay(element.querySelectorAll('.tooltip div')[1].textContent.slice(0, 2));
+			let name = element.querySelector('a').innerHTML.split('<br>')[1].split('<span class="tooltip">')[0].replace('</span>', '');
+
+			let jsonObject = {
+				name: name,
+				begin: begin.replace(':', '_'),
+				week_day: weekDay,
+				holiday: holiday,
+				exam: exam,
+				lecture: lecture,
+				other_event: other_event
+			};
+
+			listOfLectureCurrentMonth.push(jsonObject);
+		}
+
+		let parsedOutput = parseToXml(listOfLectureCurrentWeek);
+		return parsedOutput;
+	}
+}
+
 
 reload(app);
