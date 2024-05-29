@@ -117,10 +117,10 @@ const getXml = async (courseName, day, month, year) => {
 							.replace('0h ', '')
 							.replace(' 0min', '');
 
-			let holiday = begin == '08:00' && end == '18:00' ? true : false;
-			let exam = element.style.backgroundColor == 'rgb(255, 0, 0)' ? true : false;
-			let lecture = type === 'Lehrveranstaltung' ? true : false;
-			let other_event = type === 'Sonstiger Termin' ? true : false;
+			let holiday = begin == '08:00' && end == '18:00';
+			let exam = element.style.backgroundColor == 'rgb(255, 0, 0)';
+			let lecture = type === 'Lehrveranstaltung';
+			let other_event = type === 'Sonstiger Termin';
 
 			let weekDay = mapWeekDay(element.querySelectorAll('.tooltip div')[1].textContent.slice(0, 2));
 
