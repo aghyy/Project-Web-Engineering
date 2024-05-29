@@ -193,16 +193,22 @@ const determineWeekDays = (elem) => {
 }
 
 const handleKeyPress = (event) => {
-    if (document.activeElement === document.querySelector('#course-input')) {
-        // key shortcuts if input course is active
-    } else {
-        if (event.key === 'w') {
+    if (document.querySelector('.week-view-wrap').style.display !== 'none') {
+        if (event.key === 'ArrowLeft') {
             event.preventDefault();
-            setView(document.querySelector('.week-view'));
-        } else if (event.key === 'm') {
+            changeDate(-7);
+        } else if (event.key === 'ArrowRight') {
             event.preventDefault();
-            setView(document.querySelector('.month-view'));
+            changeDate(7);
         }
+    }
+    
+    if (event.key === 'w') {
+        event.preventDefault();
+        setView(document.querySelector('.week-view'));
+    } else if (event.key === 'm') {
+        event.preventDefault();
+        setView(document.querySelector('.month-view'));
     }
 };
 
@@ -306,7 +312,7 @@ const createDropdown = () => {
 }
 
 // const ifFirefox = () => {
-//     isFirefox && alert('Might want to switch to Chrome. https://www.google.com/chrome/');
+//     isFirefox && alert('https://www.google.com/chrome/');
 //     ifFirefox();
 // }
 
