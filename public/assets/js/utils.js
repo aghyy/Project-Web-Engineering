@@ -21,9 +21,9 @@ const setTitle = (title) => {
 
 const getFirefoxResult = (resultHTML) => {
     return resultHTML
-            .replaceAll('<transformiix:result xmlns:transformiix="http://www.mozilla.org/TransforMiix">', '')
-            .replaceAll('</transformiix:result>', '')
-            .replaceAll('xmlns="http://www.w3.org/1999/xhtml"', '');
+        .replaceAll('<transformiix:result xmlns:transformiix="http://www.mozilla.org/TransforMiix">', '')
+        .replaceAll('</transformiix:result>', '')
+        .replaceAll('xmlns="http://www.w3.org/1999/xhtml"', '');
 }
 
 const loadXML = (url, callback) => {
@@ -71,10 +71,10 @@ const setView = (elem) => {
 }
 
 const setCourse = () => {
-    selectedCourse = courseInputElem.value.toUpperCase();
+    selectedCourse = courseInputElem.value;
     setTitle(`${selectedCourse} Kalender`);
     document.title = `DHBW ${selectedCourse} Kalender`;
-    onSelectedCourseChange();
+    updateWeekView();
 }
 
 const isWeekday = date => date.getDay() % 6 !== 0;
@@ -84,11 +84,11 @@ const getWeekNumber = (d) => {
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
     // Set to nearest Thursday: current date + 4 - current day number
     // Make Sunday's day number 7
-    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
     // Get first day of year
-    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
     // Calculate full weeks to nearest Thursday
-    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
     // Return array of year and week number
     return [d.getUTCFullYear(), weekNo];
 }
@@ -192,6 +192,13 @@ const determineWeekDays = (elem) => {
     return weekDates[elem.id];
 }
 
+const showDropdown = (element) => { // not supported by all browsers, technically deprecated
+    var event;
+    event = document.createEvent('MouseEvents');
+    event.initMouseEvent('mousedown', true, true, window);
+    element.dispatchEvent(event);
+};
+
 const handleKeyPress = (event) => {
     if (document.querySelector('.week-view-wrap').style.display !== 'none') {
         if (event.key === 'ArrowLeft') {
@@ -202,13 +209,17 @@ const handleKeyPress = (event) => {
             changeDate(7);
         }
     }
-    
+
     if (event.key === 'w') {
         event.preventDefault();
         setView(document.querySelector('.week-view'));
     } else if (event.key === 'm') {
         event.preventDefault();
         setView(document.querySelector('.month-view'));
+    } else if (event.key === 'c') {
+        showDropdown(courseInputElem);
+    } else if (event.key === 't') {
+        setDateToToday();
     }
 };
 
@@ -235,12 +246,8 @@ const updateWeekView = async () => {
     });
 }
 
-const onSelectedCourseChange = () => {
-    updateWeekView();
-}
-
 const removeCalendar = () => {
-    document.querySelectorAll('.calendar li.event').forEach((elem) => {
+    document.querySelectorAll('.calendar > li.event').forEach((elem) => {
         elem.parentNode.removeChild(elem);
     });
 }
@@ -311,6 +318,11 @@ const createDropdown = () => {
     }
 }
 
+const setDateToToday = () => {
+    datePicker.valueAsDate = new Date();
+    updateWeekView();
+}
+
 // const ifFirefox = () => {
 //     isFirefox && alert('https://www.google.com/chrome/');
 //     ifFirefox();
@@ -329,9 +341,11 @@ document.getElementById('next-btn').addEventListener('click', () => {
 });
 
 document.getElementById('today-btn').addEventListener('click', () => {
-    datePicker.valueAsDate = new Date();
+    setDateToToday();
+});
 
-    updateWeekView();
+courseInputElem.addEventListener('change', function() {
+    courseInputElem.blur();
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
