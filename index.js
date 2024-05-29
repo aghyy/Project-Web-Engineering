@@ -97,7 +97,7 @@ const getXml = async (courseName, day, month, year) => {
 	if (html.body.children.length > 0) {
 		let wholeWeek = html.querySelectorAll('.week_block');
 
-		let course = html.querySelector('.week_block').querySelector('.resource').textContent;
+		let course = html.querySelector('.week_block') && html.querySelector('.week_block').querySelector('.resource').textContent;
 		listOfLectureCurrentWeek.push({ "course": course });
 
 		for (const element of wholeWeek) {
