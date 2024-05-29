@@ -285,6 +285,24 @@ const loadWeek = async (course, day, month, year) => {
     return data;
 }
 
+const loadMonth = async (course, day, month, year) => {
+    const response = await fetch('http://localhost:6059/api/get_month/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/xml',
+        },
+        body: JSON.stringify({
+            course: course,
+            day: day,
+            month: month,
+            year: year,
+        }),
+    });
+    const data = await response.text();
+    return data;
+}
+
 const changeDate = (days) => {
     let date = new Date(datePicker.value);
     date.setDate(date.getDate() + days);
@@ -390,6 +408,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelector('#course-input').selectedIndex = 0;
 
     prepareCalendar();
+
+    // console.log(await loadMonth(selectedCourse, day, month, year));
 
     // ifFirefox();
 });
