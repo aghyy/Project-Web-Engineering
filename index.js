@@ -222,7 +222,7 @@ const getXmlForMonth = async (courseName, month, year) => {
 			listOfLectureCurrentMonth.push(jsonObject);
 		}
 
-		return parseToXml(listOfLectureCurrentWeek);
+		return parseToXml(listOfLectureCurrentMonth);
 	}
 }
 
