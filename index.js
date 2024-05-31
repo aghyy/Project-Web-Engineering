@@ -222,10 +222,8 @@ const getXmlForMonth = async (courseName, month, year) => {
 			listOfLectureCurrentMonth.push(jsonObject);
 		}
 
-		let parsedOutput = parseToXml(listOfLectureCurrentWeek);
-		return parsedOutput;
+		return parseToXml(listOfLectureCurrentWeek);
 	}
 }
-
 
 reload(app);
