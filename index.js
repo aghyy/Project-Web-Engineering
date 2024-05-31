@@ -26,7 +26,7 @@ app.post('/api/get_month/', async (req, res) => {
 	res.set('Content-Type', 'application/xml');
 	let fullXml = [];
 	for (let i = 0; i < 5; i++) {
-		const xmlData = await getXmlForMonth(req.body.course, req.body.day, req.body.month, req.body.year);
+		const xmlData = await getXmlForMonth(req.body.course, req.body.month, req.body.year);
 		fullXml.push(xmlData)
 	}
 	res.send(fullXml);
@@ -181,8 +181,8 @@ const getXmlForWeek = async (courseName, day, month, year) => {
 	}
 }
 
-const getXmlForMonth = async (courseName, day, month, year) => {
-	const htmlString = await scrapeHtml(courseName, day, month, year);
+const getXmlForMonth = async (courseName, month, year) => {
+	const htmlString = await scrapeHtml(courseName, 1, month, year);
 	let listOfLectureCurrentMonth = [];
 
 	let html = new jsdom.JSDOM(htmlString.data).window.document;
