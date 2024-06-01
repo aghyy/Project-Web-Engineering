@@ -50,6 +50,9 @@ const applyXSLT = (xml, xslt, container) => {
     const resultDocument = xsltProcessor.transformToDocument(xml);
     const resultHTML = new XMLSerializer().serializeToString(resultDocument);
     container.innerHTML += isFirefox ? getFirefoxResult(resultHTML) : resultHTML;
+
+
+    
 }
 
 const setView = (elem) => {
@@ -105,6 +108,7 @@ const formatDateAsDayMonth = (date) => {
 const setCalendarWeek = () => {
     let calWeek = getWeekNumber(new Date(datePicker.value));
     document.querySelector('.week-number').textContent = `KW ${calWeek[1]}`;
+   
 }
 
 const getDayDates = () => {
@@ -310,6 +314,7 @@ const changeDate = (days) => {
 
     isWeekView() && updateWeekView();
     isMonthView() && updateMonthView();
+
 }
 
 const getAvailableCourses = () => {
