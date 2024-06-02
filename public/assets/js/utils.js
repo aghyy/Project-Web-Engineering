@@ -71,13 +71,19 @@ const setView = (elem) => {
         monthView.style.display = 'none';
         weekView.style.display = 'block';
     }
+
+    setCourse();
 }
 
 const setCourse = () => {
     selectedCourse = courseInputElem.value;
     setTitle(`${selectedCourse} Kalender`);
     document.title = `DHBW ${selectedCourse} Kalender`;
-    updateWeekView();
+    if (isWeekView()) {
+        updateWeekView();
+    } else if (isMonthView()) {
+        updateMonthView();
+    }
 }
 
 const isWeekday = date => date.getDay() % 6 !== 0;
@@ -147,13 +153,11 @@ const getMonthStructXML = (monthDate) => {
     let firstDay = firstDate.getDay();
     let lastDay = lastDate.getDate();
 
-    let todaysDay = new Date().getDate();
-
     let month = ("0" + (monthDate.getMonth() + 1)).slice(-2);
     let year = monthDate.getFullYear();
 
     let xmlString = '<?xml version="1.0" encoding="UTF-8"?>';
-    xmlString += '<days>';
+    xmlString += '<calendar>';
 
     for (let i = 1; i < firstDay; i++) {
         xmlString += '<day><day></day><show>false</show><today>false</today></day>';
@@ -171,8 +175,8 @@ const getMonthStructXML = (monthDate) => {
 
     // Ensure there are 25 days listed
     let parser = new DOMParser();
-    let xmlDoc = parser.parseFromString(xmlString + '</days>', "text/xml");
-    let dayTags = xmlDoc.querySelectorAll("days > day");
+    let xmlDoc = parser.parseFromString(xmlString + '</calendar>', "text/xml");
+    let dayTags = xmlDoc.querySelectorAll("calendar > day");
 
     let additionalDaysNeeded = 25 - dayTags.length;
 
@@ -180,7 +184,7 @@ const getMonthStructXML = (monthDate) => {
         xmlString += '<day><day></day><show>false</show><today>false</today></day>';
     }
 
-    xmlString += '</days>';
+    xmlString += '</calendar>';
 
     xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
@@ -231,7 +235,7 @@ const handleKeyPress = (event) => {
 const updateWeekView = async () => {
     prepareCalendar();
 
-    if (!selectedCourse) {
+    if (selectedCourse === 'Kurs auswählen') {
         return;
     }
 
@@ -251,13 +255,26 @@ const updateWeekView = async () => {
     });
 }
 
-const updateMonthView = () => {
+const updateMonthView = async () => {
+    if (selectedCourse === 'Kurs auswählen') {
+        return;
+    }
+
     document.querySelectorAll('.month-view-card').forEach((elem) => {
         elem.parentNode.removeChild(elem);
     });
 
+    const date = datePicker.value;
+    const [year, month, day] = date.split('-');
+
+    let xmlString = await loadMonth(selectedCourse, month, year);
+
+    // Parse the XML string into an XML document
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
     loadXML(xsltMonthUrl, function (xslt) {
-        applyXSLT(getMonthStructXML(datePicker.valueAsDate), xslt, document.querySelector('.month-view-body'));
+        applyXSLT(xmlDoc, xslt, document.querySelector('.month-view-body'));
     });
 }
 
@@ -285,7 +302,7 @@ const loadWeek = async (course, day, month, year) => {
     return data;
 }
 
-const loadMonth = async (course, day, month, year) => {
+const loadMonth = async (course, month, year) => {
     const response = await fetch('http://localhost:6059/api/get_month/', {
         method: 'POST',
         headers: {
@@ -294,7 +311,6 @@ const loadMonth = async (course, day, month, year) => {
         },
         body: JSON.stringify({
             course: course,
-            day: day,
             month: month,
             year: year,
         }),
@@ -354,11 +370,6 @@ const setDateToToday = () => {
     updateWeekView();
 }
 
-// const ifFirefox = () => {
-//     isFirefox && alert('https://www.google.com/chrome/');
-//     ifFirefox();
-// }
-
 // event listeners
 document.addEventListener('keydown', handleKeyPress);
 document.getElementById('date-picker').addEventListener('change', updateWeekView);
@@ -401,15 +412,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         elem.textContent = determineWeekDays(elem);
     });
 
-    document.getElementById('date-picker').valueAsDate = new Date();
+    let currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 2);
+    let adjustedDate = currentDate.toISOString().split('T')[0];
+
+    document.getElementById('date-picker').valueAsDate = adjustedDate;
 
     createDropdown();
 
     document.querySelector('#course-input').selectedIndex = 0;
 
     prepareCalendar();
-
-    // console.log(await loadMonth(selectedCourse, 6, 2024));
-
-    // ifFirefox();
 });

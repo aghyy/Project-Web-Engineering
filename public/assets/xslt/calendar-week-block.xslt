@@ -8,24 +8,24 @@
   
   <!-- key for finding overlaps -->
   <xsl:key name="lessons-by-day" match="lesson" use="ancestor::day/@id"/>
-
+  
   <xsl:template match="lesson">
     <xsl:variable name="day" select="../@id"/>
     <xsl:variable name="begin" select="begin"/>
     <xsl:variable name="end" select="end"/>
-
+    
     <xsl:variable name="current-lesson" select="."/>
     <xsl:variable name="begin-minutes" select="substring-before($begin, '_') * 60 + substring-after($begin, '_')"/>
     <xsl:variable name="end-minutes" select="substring-before($end, '_') * 60 + substring-after($end, '_')"/>
-
+    
     <!-- overlap condition -->
     <xsl:variable name="overlap" select="
       count(key('lessons-by-day', $day)[
-        . != $current-lesson and 
-        not(substring-before(begin, '_') * 60 + substring-after(begin, '_') &gt;= $end-minutes or
+          . != $current-lesson and 
+          not(substring-before(begin, '_') * 60 + substring-after(begin, '_') &gt;= $end-minutes or
             substring-before(end, '_') * 60 + substring-after(end, '_') &lt;= $begin-minutes)
-      ]) > 0"/>
-
+        ]) > 0"/>
+    
     <!-- overlap style -->  
     <xsl:variable name="position-style">
       <xsl:choose>
@@ -36,11 +36,11 @@
           <xsl:text>right: 0; width: 40%; margin:0px 10px 0px 0px;</xsl:text>
         </xsl:when>
         <!-- <xsl:otherwise>
-          <xsl:text>width: 95%;</xsl:text>
-        </xsl:otherwise> -->
-      </xsl:choose>
+             <xsl:text>width: 95%;</xsl:text>
+             </xsl:otherwise> -->
+         </xsl:choose>
     </xsl:variable>
-
+    
     <li class="event">
       <xsl:attribute name="style">
         <xsl:text>grid-column: </xsl:text>
@@ -50,7 +50,7 @@
         <xsl:text> / h</xsl:text>
         <xsl:value-of select="$end"/>
         <xsl:text>;</xsl:text>
-
+        
         <xsl:choose>
           <xsl:when test="exam='true'">
             <xsl:text> background-color: var(--red);</xsl:text>
@@ -65,37 +65,46 @@
             <xsl:text> background-color: var(--other-event);</xsl:text>
           </xsl:when>
         </xsl:choose>
-
+        
         <!-- apply overlap style -->
         <xsl:value-of select="$position-style"/>
-
+        
       </xsl:attribute>
-
+      
       <h3><xsl:value-of select="name"/></h3>      
-      <xsl:if test="holiday='false'">
-        <p>
-          <xsl:call-template name="newline-to-br">
-            <xsl:with-param name="text" select="person"/>
-          </xsl:call-template>
-        </p>
-
-        <br />
-        
-        <p>
-          <xsl:call-template name="newline-to-br">
-            <xsl:with-param name="text" select="room"/>
-          </xsl:call-template>
-        </p>
-        
-        <br />
-        
-        <p>Dauer: <xsl:value-of select="total_time"/></p>
-        <p><xsl:value-of select="substring($begin, 1, 2)"/>:<xsl:value-of select="substring($begin, 4)"/> - <xsl:value-of select="substring($end, 1, 2)"/>:<xsl:value-of select="substring($end, 4)"/></p>
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="holiday='false'">
+          <p>
+            <xsl:call-template name="newline-to-br">
+              <xsl:with-param name="text" select="person"/>
+            </xsl:call-template>
+          </p>
+          
+          <br />
+          
+          <p>
+            <xsl:call-template name="newline-to-br">
+              <xsl:with-param name="text" select="room"/>
+            </xsl:call-template>
+          </p>
+          
+          <br />
+          
+          <p>Dauer: <xsl:value-of select="total_time"/></p>
+          <p>
+            <xsl:value-of select="substring($begin, 1, 2)"/>:<xsl:value-of select="substring($begin, 4)"/> - 
+            <xsl:value-of select="substring($end, 1, 2)"/>:<xsl:value-of select="substring($end, 4)"/>
+          </p>
+        </xsl:when>
+        <xsl:otherwise>
+          <p>Ganztägig</p>
+        </xsl:otherwise>
+      </xsl:choose>
+      
       
     </li>
   </xsl:template>
-
+  
   <xsl:template name="newline-to-br">
     <xsl:param name="text"/>
     <xsl:choose>
