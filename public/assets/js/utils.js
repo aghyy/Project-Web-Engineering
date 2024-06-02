@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     prepareCalendar();
 
-    // console.log(await loadMonth(selectedCourse, day, month, year));
+    // console.log(await loadMonth(selectedCourse, 6, 2024));
 
     // ifFirefox();
 });
