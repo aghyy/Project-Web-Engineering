@@ -7,8 +7,8 @@ const defaultTitle = 'Kurs auswählen';
 const defaultDocumentTitle = 'DHBW Kalender';
 const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
 // setting xslt urls
-const xsltWeekUrl = 'assets/xml/calendar-week-block.xslt';
-const xsltMonthUrl = 'assets/xml/calendar-month-block.xslt';
+const xsltWeekUrl = 'assets/xslt/calendar-week-block.xslt';
+const xsltMonthUrl = 'assets/xslt/calendar-month-block.xslt';
 // getting elements
 const courseInputElem = document.getElementById('course-input');
 const datePicker = document.getElementById('date-picker');
