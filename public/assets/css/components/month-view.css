@@ -52,6 +52,7 @@
 .month-view-day-info {
     padding: 5px;
     overflow-y: scroll;
+    overscroll-behavior: none;
     height: calc(100% - 30px);
 }
 
