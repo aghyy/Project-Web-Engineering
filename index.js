@@ -80,9 +80,41 @@ const isWeekend = (year, month, day) => {
 	return dayOfWeek === 0 || dayOfWeek === 6; // 0 is Sunday, 6 is Saturday
 }
 
-const getWeekDaysOfMonth = (month, year) => {
+const createSubarrays = (arr) => {
+	let result = [];
+	let subarray = [];
+
+	for (let i = 0; i < arr.length; i++) {
+		subarray.push(arr[i]);
+
+		// Check if the next element is not consecutive
+		if (arr[i + 1] !== arr[i] + 1) {
+			result.push(subarray);
+			subarray = [];
+		}
+	}
+
+	// Push the last subarray if it contains any elements
+	if (subarray.length) {
+		result.push(subarray);
+	}
+
+	return result;
+}
+
+function mapFirstDay(firstDay) {
+    const mapping = {
+        3: 3,
+        2: 4
+    };
+    return mapping.hasOwnProperty(firstDay) ? mapping[firstDay] : firstDay;
+}
+
+const getWeekDaysOfMonth = (month, year, firstDay) => {
 	const weekdays = [];
 	const date = new Date(year, month - 1, 1);
+	let dayIndex = mapFirstDay(firstDay);
+
 	while (date.getMonth() === month - 1) {
 		const dayOfWeek = date.getDay();
 		if (dayOfWeek !== 0 && dayOfWeek !== 6) { // 0 is Sunday, 6 is Saturday
@@ -91,10 +123,7 @@ const getWeekDaysOfMonth = (month, year) => {
 		date.setDate(date.getDate() + 1);
 	}
 
-	const result = [];
-	for (let i = 0; i < weekdays.length; i += 5) {
-		result.push(weekdays.slice(i, i + 5));
-	}
+	const result = createSubarrays(weekdays);
 
 	return result;
 }
@@ -116,7 +145,8 @@ const parseWeekToXml = (listOfLectureCurrentWeek) => {
 			holiday: lesson.holiday,
 			exam: lesson.exam,
 			lecture: lesson.lecture,
-			other_event: lesson.other_event
+			other_event: lesson.other_event,
+			voluntary: lesson.voluntary
 		}));
 	});
 
@@ -136,7 +166,12 @@ const parseWeekToXml = (listOfLectureCurrentWeek) => {
 }
 
 const parseMonthToXml = (listOfLectureCurrentMonth, month, year) => {
-	const daysOfMonth = getWeekDaysOfMonth(month, year); // Array to accumulate the week days of the month
+	let daysXml = [];
+	let firstDate = new Date(year, month - 1, 1);
+	let firstDay = firstDate.getDay();
+	let firstDayDiff = firstDay === 6 ? 5 - firstDay + 2 : firstDay;
+
+	const daysOfMonth = getWeekDaysOfMonth(month, year, firstDay); // Array to accumulate the week days of the month
 	const daysOfMonthComb = [].concat.apply([], daysOfMonth); // Flatten the array
 	const daysOfWeek = ["mon", "tue", "wed", "thu", "fri"];
 
@@ -145,31 +180,32 @@ const parseMonthToXml = (listOfLectureCurrentMonth, month, year) => {
 	let weekDays = [];
 
 	listOfLectureCurrentMonth.forEach((week) => {
-		let dayIndex = 0;
+		let dayIndex = weekIndex === 0 ? firstDayDiff - 1 : 0;
 		weekDays = daysOfMonth[weekIndex];
 
 		// Group lessons by day
 		weekDays.forEach(day => {
 			let weekDay = daysOfWeek[dayIndex];
 
-			lessonsByDay[day] = week.filter(obj => obj.week_day === weekDay).map(lesson => ({
-				name: lesson.name,
-				begin: lesson.begin,
-				holiday: lesson.holiday,
-				exam: lesson.exam,
-				lecture: lesson.lecture,
-				other_event: lesson.other_event
-			}));
+			lessonsByDay[day] = week
+				.filter(obj => obj.week_day === weekDay && obj.name !== undefined)
+				.map(lesson => {
+					let lessonDetails = {};
+					if (lesson.name !== undefined) lessonDetails.name = lesson.name;
+					if (lesson.begin !== undefined) lessonDetails.begin = lesson.begin;
+					if (lesson.holiday !== undefined) lessonDetails.holiday = lesson.holiday;
+					if (lesson.exam !== undefined) lessonDetails.exam = lesson.exam;
+					if (lesson.lecture !== undefined) lessonDetails.lecture = lesson.lecture;
+					if (lesson.other_event !== undefined) lessonDetails.other_event = lesson.other_event;
+					if (lesson.voluntary !== undefined) lessonDetails.voluntary = lesson.voluntary;
+					return lessonDetails;
+				});
 
 			dayIndex++;
 		});
 
 		weekIndex++;
 	});
-
-	let daysXml = [];
-	let firstDate = new Date(year, month - 1, 1);
-	let firstDay = firstDate.getDay();
 
 	for (let i = 1; i < firstDay; i++) {
 		daysXml.push({
@@ -180,15 +216,20 @@ const parseMonthToXml = (listOfLectureCurrentMonth, month, year) => {
 	}
 
 	daysOfMonthComb.forEach(day => {
-		daysXml.push({
+		let dayObj = {
 			"@": {
 				id: day
 			},
-			lesson: lessonsByDay[day],
 			show: true,
 			today: new Date(`${year}-${month}-${day}`).toDateString() == new Date().toDateString(),
 			day: day
-		});
+		};
+
+		if (lessonsByDay[day] !== undefined) {
+			dayObj.lesson = lessonsByDay[day];
+		}
+
+		daysXml.push(dayObj);
 	});
 
 	let additionalDaysNeeded = 25 - daysXml.length;
@@ -237,10 +278,14 @@ const getXmlForWeek = async (courseName, day, month, year) => {
 				.replace('0h ', '')
 				.replace(' 0min', '');
 
+			let name = element.querySelector('a').innerHTML.split('<br>')[1].split('<span class="tooltip">')[0].replace('</span>', '');
+
 			let holiday = begin == '08:00' && end == '18:00';
 			let exam = element.style.backgroundColor == 'rgb(255, 0, 0)';
 			let lecture = type === 'Lehrveranstaltung';
 			let other_event = type === 'Sonstiger Termin';
+			let voluntary = name.toLowerCase().includes('ccna');
+			if (voluntary) exam = lecture = other_event = false;
 
 			let weekDay = mapWeekDay(element.querySelectorAll('.tooltip div')[1].textContent.slice(0, 2));
 
@@ -266,8 +311,6 @@ const getXmlForWeek = async (courseName, day, month, year) => {
 			let allRooms = rooms.join('\n');
 			let allPersons = persons.join('\n');
 
-			let name = element.querySelector('a').innerHTML.split('<br>')[1].split('<span class="tooltip">')[0].replace('</span>', '');
-
 			let jsonObject = {
 				name: name,
 				person: allPersons ?? "",
@@ -279,7 +322,8 @@ const getXmlForWeek = async (courseName, day, month, year) => {
 				holiday: holiday,
 				exam: exam,
 				lecture: lecture,
-				other_event: other_event
+				other_event: other_event,
+				voluntary: voluntary
 			};
 
 			listOfLectureCurrentWeek.push(jsonObject);
@@ -294,11 +338,12 @@ const getXmlForWeek = async (courseName, day, month, year) => {
 const getXmlForMonth = async (courseName, month, year, day) => {
 	const htmlString = await scrapeHtml(courseName, day, month, year);
 	let listOfLectureCurrentMonth = [];
+	const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
 	let html = new jsdom.JSDOM(htmlString.data).window.document;
 	if (html.body.children.length > 0) {
 		let wholeMonth = html.querySelectorAll('.week_block');
-		let course = html.querySelector('.week_block') && html.querySelector('.week_block').querySelector('.resource').textContent;
+		let course = courseName;
 
 		listOfLectureCurrentMonth.push({ "course": course });
 
@@ -310,14 +355,31 @@ const getXmlForMonth = async (courseName, month, year, day) => {
 				continue;
 			}
 
+			let name = element.querySelector('a').innerHTML.split('<br>')[1].split('<span class="tooltip">')[0].replace('</span>', '');
+
 			let end = element.querySelector('.week_block a').textContent.slice(7, 12);
 			let holiday = begin == '08:00' && end == '18:00';
 			let exam = element.style.backgroundColor == 'rgb(255, 0, 0)';
 			let lecture = type === 'Lehrveranstaltung';
 			let other_event = type === 'Sonstiger Termin';
+			let voluntary = name.toLowerCase().includes('ccna');
+			if (voluntary) exam = lecture = other_event = false;
 
 			let weekDay = mapWeekDay(element.querySelectorAll('.tooltip div')[1].textContent.slice(0, 2));
-			let name = element.querySelector('a').innerHTML.split('<br>')[1].split('<span class="tooltip">')[0].replace('</span>', '');
+
+			if (weekDay === null) {
+				let missingDay = element.querySelectorAll('.tooltip div')[1].textContent.split(' ')[0].replace('.', '');
+				let monthOfMissingDay = element.querySelectorAll('.tooltip div')[1].textContent.split(' ')[1].split(' ')[0];
+				let nameOfSelectedMonth = new Date(year, month - 1).toLocaleString('de-DE', { month: 'long' });
+
+				if (nameOfSelectedMonth !== monthOfMissingDay) {
+					console.log(nameOfSelectedMonth, monthOfMissingDay);
+					continue;
+				}
+
+				let dateOfMissingDay = new Date(year, month - 1, missingDay);
+				weekDay = daysOfWeek[dateOfMissingDay.getDay()];
+			}
 
 			let jsonObject = {
 				name: name,
@@ -326,11 +388,14 @@ const getXmlForMonth = async (courseName, month, year, day) => {
 				holiday: holiday,
 				exam: exam,
 				lecture: lecture,
-				other_event: other_event
+				other_event: other_event,
+				voluntary: voluntary
 			};
 
 			listOfLectureCurrentMonth.push(jsonObject);
 		}
+
+		console.log(listOfLectureCurrentMonth);
 
 		return listOfLectureCurrentMonth;
 	}

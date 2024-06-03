@@ -22,6 +22,14 @@ const setTitle = (title) => {
     document.querySelector('h1').textContent = title;
 }
 
+const updateCalendar = () => {
+    if (isWeekView()) {
+        updateWeekView();
+    } else if (isMonthView()) {
+        updateMonthView();
+    }
+}
+
 const getFirefoxResult = (resultHTML) => {
     return resultHTML
         .replaceAll('<transformiix:result xmlns:transformiix="http://www.mozilla.org/TransforMiix">', '')
@@ -79,11 +87,7 @@ const setCourse = () => {
     selectedCourse = courseInputElem.value;
     setTitle(`${selectedCourse} Kalender`);
     document.title = `DHBW ${selectedCourse} Kalender`;
-    if (isWeekView()) {
-        updateWeekView();
-    } else if (isMonthView()) {
-        updateMonthView();
-    }
+    updateCalendar();
 }
 
 const isWeekday = date => date.getDay() % 6 !== 0;
@@ -201,7 +205,7 @@ const determineWeekDays = (elem) => {
     return weekDates[elem.id];
 }
 
-const showDropdown = (element) => { // not supported by all browsers, technically deprecated
+const showDropdown = (element) => { // not supported by all browsers, technically deprecated (probably just safari)
     let event;
     event = document.createEvent('MouseEvents');
     event.initMouseEvent('mousedown', true, true, window);
@@ -235,14 +239,14 @@ const handleKeyPress = (event) => {
 const updateWeekView = async () => {
     prepareCalendar();
 
-    if (selectedCourse === 'Kurs auswählen') {
+    if (!selectedCourse || selectedCourse === 'Kurs auswählen') {
         return;
     }
 
     const date = datePicker.value;
     const [year, month, day] = date.split('-');
 
-    removeCalendar();
+    removeWeekCalendar();
 
     let xmlString = await loadWeek(selectedCourse, day, month, year);
 
@@ -256,13 +260,14 @@ const updateWeekView = async () => {
 }
 
 const updateMonthView = async () => {
-    if (selectedCourse === 'Kurs auswählen') {
+    removeMonthCalendar();
+
+    if (!selectedCourse || selectedCourse === 'Kurs auswählen') {
+        loadXML(xsltMonthUrl, function (xslt) {
+            applyXSLT(getMonthStructXML(new Date(datePicker.valueAsDate)), xslt, document.querySelector('.month-view-body'));
+        });
         return;
     }
-
-    document.querySelectorAll('.month-view-card').forEach((elem) => {
-        elem.parentNode.removeChild(elem);
-    });
 
     const date = datePicker.value;
     const [year, month, day] = date.split('-');
@@ -278,8 +283,14 @@ const updateMonthView = async () => {
     });
 }
 
-const removeCalendar = () => {
+const removeWeekCalendar = () => {
     document.querySelectorAll('.calendar > li.event').forEach((elem) => {
+        elem.parentNode.removeChild(elem);
+    });
+}
+
+const removeMonthCalendar = () => {
+    document.querySelectorAll('.month-view-card').forEach((elem) => {
         elem.parentNode.removeChild(elem);
     });
 }
@@ -324,8 +335,7 @@ const changeDate = (days) => {
     date.setDate(date.getDate() + days);
     datePicker.value = date.toISOString().split('T')[0];
 
-    isWeekView() && updateWeekView();
-    isMonthView() && updateMonthView();
+    updateCalendar();
 }
 
 const getAvailableCourses = () => {
@@ -367,12 +377,12 @@ const createDropdown = () => {
 
 const setDateToToday = () => {
     datePicker.valueAsDate = new Date();
-    updateWeekView();
+    updateCalendar();
 }
 
 // event listeners
 document.addEventListener('keydown', handleKeyPress);
-document.getElementById('date-picker').addEventListener('change', updateWeekView);
+document.getElementById('date-picker').addEventListener('change', updateCalendar);
 
 document.getElementById('prev-btn').addEventListener('click', () => {
     changeDate(-7);

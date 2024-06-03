@@ -60,6 +60,9 @@
                         <xsl:when test="other_event='true'">
                             <xsl:text> background-color: var(--other-event);</xsl:text>
                         </xsl:when>
+                        <xsl:when test="voluntary='true'">
+                            <xsl:text> background-color: var(--volunt-event);</xsl:text>
+                        </xsl:when>
                     </xsl:choose>
                 </xsl:attribute>
             </div>
