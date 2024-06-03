@@ -334,7 +334,6 @@ const getXmlForMonth = async (courseName, month, year, day) => {
 	try {
 		htmlString = await scrapeHtml(courseName, day, month, year);
 	} catch (error) {
-		console.log(error);
 		return {};
 	}
 

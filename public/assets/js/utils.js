@@ -85,8 +85,10 @@ const setView = (elem) => {
 
 const setCourse = () => {
     selectedCourse = courseInputElem.value;
-    setTitle(`${selectedCourse} Kalender`);
-    document.title = `DHBW ${selectedCourse} Kalender`;
+    if (selectedCourse && selectedCourse !== 'Kurs auswählen') {
+        setTitle(`${selectedCourse} Kalender`);
+        document.title = `DHBW ${selectedCourse} Kalender`;
+    }
     updateCalendar();
 }
 
