@@ -26,14 +26,7 @@ app.post('/api/get_month/', async (req, res) => {
 	res.set('Content-Type', 'application/xml');
 	let fullXml = [];
 	let day = 1;
-	let flag = false;
-	for (let i = 0; i < 5; i++) {
-		if (isWeekend(req.body.year, req.body.month, day) && !flag) {
-			day += 7;
-			flag = true;
-			continue;
-		}
-
+	for (let i = 0; i < 6; i++) {
 		const xmlData = await getXmlForMonth(req.body.course, req.body.month, req.body.year, day);
 		fullXml.push(xmlData);
 
@@ -80,52 +73,58 @@ const isWeekend = (year, month, day) => {
 	return dayOfWeek === 0 || dayOfWeek === 6; // 0 is Sunday, 6 is Saturday
 }
 
-const createSubarrays = (arr) => {
-	let result = [];
-	let subarray = [];
+const getDateOfSpecificDayInWeek = (year, month, randomDay, dayName) => {
+	const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+	const monthIndex = month - 1;
+	const dayIndex = dayNames.indexOf(dayName.toLowerCase());
+	const randomDate = new Date(year, monthIndex, randomDay);
+	const randomDayOfWeek = randomDate.getDay(); // 0 for Sunday, 1 for Monday, etc.
+	let difference = dayIndex - randomDayOfWeek;
 
-	for (let i = 0; i < arr.length; i++) {
-		subarray.push(arr[i]);
-
-		// Check if the next element is not consecutive
-		if (arr[i + 1] !== arr[i] + 1) {
-			result.push(subarray);
-			subarray = [];
-		}
+	if (difference < 0) {
+		difference += 7;
 	}
 
-	// Push the last subarray if it contains any elements
-	if (subarray.length) {
-		result.push(subarray);
+	const desiredDate = randomDay + difference;
+
+	return new Date(year, monthIndex, desiredDate);
+}
+
+const createSubarrays = (array) => {
+	const subarrays = [];
+	for (let i = 0; i < array.length; i += 5) {
+		subarrays.push(array.slice(i, i + 5));
 	}
-
-	return result;
+	return subarrays;
 }
 
-function mapFirstDay(firstDay) {
-    const mapping = {
-        3: 3,
-        2: 4
-    };
-    return mapping.hasOwnProperty(firstDay) ? mapping[firstDay] : firstDay;
-}
-
-const getWeekDaysOfMonth = (month, year, firstDay) => {
+const getWeekDaysOfMonth = (month, year) => {
 	const weekdays = [];
 	const date = new Date(year, month - 1, 1);
-	let dayIndex = mapFirstDay(firstDay);
 
-	while (date.getMonth() === month - 1) {
+	// Add weekdays of the previous month until the beginning of the week
+	while (date.getDay() !== 1) { // 1 is Monday
+		date.setDate(date.getDate() - 1);
+	}
+
+	// Populate weekdays array with dates that are not Saturday (6) or Sunday (0)
+	while (weekdays.length < 30) { // 6 weeks x 5 weekdays = 30
 		const dayOfWeek = date.getDay();
 		if (dayOfWeek !== 0 && dayOfWeek !== 6) { // 0 is Sunday, 6 is Saturday
-			weekdays.push(date.getDate());
+			let monthAbbreviation = date.toLocaleString('en-US', { month: 'short' }).toLowerCase();
+			weekdays.push(date.getDate() + '-' + monthAbbreviation);
 		}
 		date.setDate(date.getDate() + 1);
 	}
 
+	// Create subarrays using the provided function
 	const result = createSubarrays(weekdays);
 
 	return result;
+}
+
+const checkEmptyObjects = (arr) => {
+	return arr.every(obj => Object.keys(obj).length === 0);
 }
 
 const parseWeekToXml = (listOfLectureCurrentWeek) => {
@@ -165,53 +164,58 @@ const parseWeekToXml = (listOfLectureCurrentWeek) => {
 	return js2xmlparser.parse("calendar", xmlCalendar, { 'declaration': { 'encoding': 'UTF-8' } });
 }
 
+const showDay = (day, month, year) => {
+	let monthAbbreviation = new Date(year, month - 1).toLocaleString('en-US', { month: 'short' }).toLowerCase();
+	return day.includes(monthAbbreviation);
+};
+
+const checkToday = (day, month) => {
+	let today = new Date();
+	let todayDay = today.getDate();
+	let monthAbbreviation = today.toLocaleString('en-US', { month: 'short' }).toLowerCase();
+	return day == `${todayDay}-${monthAbbreviation}`;
+}
+
 const parseMonthToXml = (listOfLectureCurrentMonth, month, year) => {
 	let daysXml = [];
 	let firstDate = new Date(year, month - 1, 1);
 	let firstDay = firstDate.getDay();
-	let firstDayDiff = firstDay === 6 ? 5 - firstDay + 2 : firstDay;
 
 	const daysOfMonth = getWeekDaysOfMonth(month, year, firstDay); // Array to accumulate the week days of the month
-	const daysOfMonthComb = [].concat.apply([], daysOfMonth); // Flatten the array
+	const daysOfMonthComb = [].concat.apply([], daysOfMonth); // flattened array
 	const daysOfWeek = ["mon", "tue", "wed", "thu", "fri"];
 
 	let lessonsByDay = {}; // Object to accumulate lessons for each day
 	let weekIndex = 0;
 	let weekDays = [];
 
-	listOfLectureCurrentMonth.forEach((week) => {
-		let dayIndex = weekIndex === 0 ? firstDayDiff - 1 : 0;
-		weekDays = daysOfMonth[weekIndex];
+	if (!checkEmptyObjects(listOfLectureCurrentMonth)) {
+		listOfLectureCurrentMonth.forEach((week) => {
+			let dayIndex = 0;
+			weekDays = daysOfMonth[weekIndex];
 
-		// Group lessons by day
-		weekDays.forEach(day => {
-			let weekDay = daysOfWeek[dayIndex];
+			// Group lessons by day
+			weekDays.forEach(day => {
+				let weekDay = daysOfWeek[dayIndex];
 
-			lessonsByDay[day] = week
-				.filter(obj => obj.week_day === weekDay && obj.name !== undefined)
-				.map(lesson => {
-					let lessonDetails = {};
-					if (lesson.name !== undefined) lessonDetails.name = lesson.name;
-					if (lesson.begin !== undefined) lessonDetails.begin = lesson.begin;
-					if (lesson.holiday !== undefined) lessonDetails.holiday = lesson.holiday;
-					if (lesson.exam !== undefined) lessonDetails.exam = lesson.exam;
-					if (lesson.lecture !== undefined) lessonDetails.lecture = lesson.lecture;
-					if (lesson.other_event !== undefined) lessonDetails.other_event = lesson.other_event;
-					if (lesson.voluntary !== undefined) lessonDetails.voluntary = lesson.voluntary;
-					return lessonDetails;
-				});
+				lessonsByDay[day] = week
+					.filter(obj => obj.week_day === weekDay && obj.name !== undefined)
+					.map(lesson => {
+						let lessonDetails = {};
+						if (lesson.name !== undefined) lessonDetails.name = lesson.name;
+						if (lesson.begin !== undefined) lessonDetails.begin = lesson.begin;
+						if (lesson.holiday !== undefined) lessonDetails.holiday = lesson.holiday;
+						if (lesson.exam !== undefined) lessonDetails.exam = lesson.exam;
+						if (lesson.lecture !== undefined) lessonDetails.lecture = lesson.lecture;
+						if (lesson.other_event !== undefined) lessonDetails.other_event = lesson.other_event;
+						if (lesson.voluntary !== undefined) lessonDetails.voluntary = lesson.voluntary;
+						return lessonDetails;
+					});
 
-			dayIndex++;
-		});
+				dayIndex++;
+			});
 
-		weekIndex++;
-	});
-
-	for (let i = 1; i < firstDay; i++) {
-		daysXml.push({
-			"@": {
-				id: 'hidden'
-			}
+			weekIndex++;
 		});
 	}
 
@@ -220,8 +224,8 @@ const parseMonthToXml = (listOfLectureCurrentMonth, month, year) => {
 			"@": {
 				id: day
 			},
-			show: true,
-			today: new Date(`${year}-${month}-${day}`).toDateString() == new Date().toDateString(),
+			show: showDay(day, month, year),
+			today: checkToday(day, month),
 			day: day
 		};
 
@@ -232,18 +236,8 @@ const parseMonthToXml = (listOfLectureCurrentMonth, month, year) => {
 		daysXml.push(dayObj);
 	});
 
-	let additionalDaysNeeded = 25 - daysXml.length;
-
-	for (let i = 0; i < additionalDaysNeeded; i++) {
-		daysXml.push({
-			"@": {
-				id: 'hidden'
-			}
-		});
-	}
-
 	let xmlCalendar = {
-		course: listOfLectureCurrentMonth[0][0].course,
+		course: listOfLectureCurrentMonth[0][0] === undefined ? "" : listOfLectureCurrentMonth[0][0].course,
 		day: daysXml
 	};
 
@@ -336,7 +330,14 @@ const getXmlForWeek = async (courseName, day, month, year) => {
 }
 
 const getXmlForMonth = async (courseName, month, year, day) => {
-	const htmlString = await scrapeHtml(courseName, day, month, year);
+	let htmlString;
+	try {
+		htmlString = await scrapeHtml(courseName, day, month, year);
+	} catch (error) {
+		console.log(error);
+		return {};
+	}
+
 	let listOfLectureCurrentMonth = [];
 	const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
@@ -368,18 +369,17 @@ const getXmlForMonth = async (courseName, month, year, day) => {
 			let weekDay = mapWeekDay(element.querySelectorAll('.tooltip div')[1].textContent.slice(0, 2));
 
 			if (weekDay === null) {
+				var germanMonths = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 				let missingDay = element.querySelectorAll('.tooltip div')[1].textContent.split(' ')[0].replace('.', '');
-				let monthOfMissingDay = element.querySelectorAll('.tooltip div')[1].textContent.split(' ')[1].split(' ')[0];
-				let nameOfSelectedMonth = new Date(year, month - 1).toLocaleString('de-DE', { month: 'long' });
-
-				if (nameOfSelectedMonth !== monthOfMissingDay) {
-					console.log(nameOfSelectedMonth, monthOfMissingDay);
-					continue;
-				}
-
-				let dateOfMissingDay = new Date(year, month - 1, missingDay);
+				let monthName = element.querySelectorAll('.tooltip div')[1].textContent.split(' ')[1].split(' ')[0];
+				let monthIndex = germanMonths.indexOf(monthName);
+				let dateOfMissingDay = new Date(year, monthIndex, missingDay);
 				weekDay = daysOfWeek[dateOfMissingDay.getDay()];
 			}
+
+			// let date = getDateOfSpecificDayInWeek(year, month, day, weekDay);
+			// let monthAbbreviation = date.toLocaleString('default', { month: 'short' }).toLowerCase();
+			// let jsonDay = `${date.getDate()}-${monthAbbreviation}`;
 
 			let jsonObject = {
 				name: name,
@@ -394,8 +394,6 @@ const getXmlForMonth = async (courseName, month, year, day) => {
 
 			listOfLectureCurrentMonth.push(jsonObject);
 		}
-
-		console.log(listOfLectureCurrentMonth);
 
 		return listOfLectureCurrentMonth;
 	}

@@ -93,16 +93,11 @@ const setCourse = () => {
 const isWeekday = date => date.getDay() % 6 !== 0;
 
 const getWeekNumber = (d) => {
-    // Copy date so don't modify original
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    // Set to nearest Thursday: current date + 4 - current day number
-    // Make Sunday's day number 7
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-    // Get first day of year
     let yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    // Calculate full weeks to nearest Thursday
     let weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-    // Return array of year and week number
+    
     return [d.getUTCFullYear(), weekNo];
 }
 
@@ -151,50 +146,6 @@ const prepareCalendar = () => {
     setDayDates();
 }
 
-const getMonthStructXML = (monthDate) => {
-    let firstDate = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1);
-    let lastDate = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0);
-    let firstDay = firstDate.getDay();
-    let lastDay = lastDate.getDate();
-
-    let month = ("0" + (monthDate.getMonth() + 1)).slice(-2);
-    let year = monthDate.getFullYear();
-
-    let xmlString = '<?xml version="1.0" encoding="UTF-8"?>';
-    xmlString += '<calendar>';
-
-    for (let i = 1; i < firstDay; i++) {
-        xmlString += '<day><day></day><show>false</show><today>false</today></day>';
-    }
-
-    for (let i = 1; i <= lastDay; i++) {
-        let day = ("0" + i).slice(-2);
-
-        if (isWeekday(new Date(`${year}-${month}-${day}`))) {
-            let show = true;
-            let today = new Date(`${year}-${month}-${day}`).toDateString() == new Date().toDateString();
-            xmlString += `<day><day>${i}</day><show>${show}</show><today>${today}</today></day>`;
-        }
-    }
-
-    // Ensure there are 25 days listed
-    let parser = new DOMParser();
-    let xmlDoc = parser.parseFromString(xmlString + '</calendar>', "text/xml");
-    let dayTags = xmlDoc.querySelectorAll("calendar > day");
-
-    let additionalDaysNeeded = 25 - dayTags.length;
-
-    for (let i = 0; i < additionalDaysNeeded; i++) {
-        xmlString += '<day><day></day><show>false</show><today>false</today></day>';
-    }
-
-    xmlString += '</calendar>';
-
-    xmlDoc = parser.parseFromString(xmlString, "text/xml");
-
-    return xmlDoc;
-}
-
 const determineWeekDays = (elem) => {
     if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
         weekDates = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
@@ -212,6 +163,14 @@ const showDropdown = (element) => { // not supported by all browsers, technicall
     element.dispatchEvent(event);
 };
 
+const changeMonth = (months) => {
+    let date = new Date(datePicker.value);
+    date.setMonth(date.getMonth() + months);
+    datePicker.value = date.toISOString().split('T')[0];
+
+    updateCalendar();
+}
+
 const handleKeyPress = (event) => {
     if (document.querySelector('.week-view-wrap').style.display !== 'none') {
         if (event.key === 'ArrowLeft') {
@@ -220,6 +179,14 @@ const handleKeyPress = (event) => {
         } else if (event.key === 'ArrowRight') {
             event.preventDefault();
             changeDate(7);
+        }
+    } else if (document.querySelector('.month-view-wrap').style.display !== 'none') {
+        if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            changeMonth(-1);
+        } else if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            changeMonth(1);
         }
     }
 
@@ -260,17 +227,20 @@ const updateWeekView = async () => {
 }
 
 const updateMonthView = async () => {
+    const date = datePicker.value;
+    const [year, month, day] = date.split('-');
+    
     removeMonthCalendar();
 
     if (!selectedCourse || selectedCourse === 'Kurs auswählen') {
+        let xmlString = await loadMonth('', month, year);
+        let xmlDoc = new DOMParser().parseFromString(xmlString, "text/xml");
+
         loadXML(xsltMonthUrl, function (xslt) {
-            applyXSLT(getMonthStructXML(new Date(datePicker.valueAsDate)), xslt, document.querySelector('.month-view-body'));
+            applyXSLT(xmlDoc, xslt, document.querySelector('.month-view-body'));
         });
         return;
     }
-
-    const date = datePicker.value;
-    const [year, month, day] = date.split('-');
 
     let xmlString = await loadMonth(selectedCourse, month, year);
 
@@ -385,11 +355,19 @@ document.addEventListener('keydown', handleKeyPress);
 document.getElementById('date-picker').addEventListener('change', updateCalendar);
 
 document.getElementById('prev-btn').addEventListener('click', () => {
-    changeDate(-7);
+    if (isWeekView()) {
+        changeDate(-7);
+    } else if (isMonthView()) {
+        changeMonth(-1);
+    }
 });
 
 document.getElementById('next-btn').addEventListener('click', () => {
-    changeDate(7);
+    if (isWeekView()) {
+        changeDate(7);
+    } else if (isMonthView()) {
+        changeMonth(1);
+    }
 });
 
 document.getElementById('today-btn').addEventListener('click', () => {
@@ -409,10 +387,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         let li = document.createElement('li');
         document.querySelector('.calendar').appendChild(li);
     }
-
-    loadXML(xsltMonthUrl, function (xslt) {
-        applyXSLT(getMonthStructXML(new Date()), xslt, document.querySelector('.month-view-body'));
-    });
 
     document.querySelectorAll('.month-view-head-day').forEach((elem) => {
         elem.textContent = determineWeekDays(elem);

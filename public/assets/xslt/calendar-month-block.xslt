@@ -12,31 +12,36 @@
     <xsl:template match="day">
         <!-- Extract day, show, and today values -->
         <xsl:variable name="day" select="day"/>
-        <xsl:variable name="show" select="show"/>
+        <!-- <xsl:variable name="show" select="show"/> -->
         <xsl:variable name="today" select="today"/>
         
         <!-- Create a div with class 'month-view-card' regardless of the content -->
         <div class="month-view-card">
+            <xsl:attribute name="style">
+                <xsl:choose>
+                    <xsl:when test="show='false'">
+                        <xsl:text> opacity: .5;</xsl:text>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:attribute>
             <!-- Check if the show parameter is true -->
-            <xsl:if test="$show='true'">
-                <!-- Create a div with class 'month-view-day' -->
-                <div class="month-view-day">
-                    <!-- Set class attribute dynamically based on the today parameter -->
-                    <xsl:attribute name="class">
-                        <xsl:text>month-view-day </xsl:text>
-                        <xsl:if test="$today='true'">today</xsl:if>
-                    </xsl:attribute>
-                    <!-- Output the day value -->
-                    <div>
-                        <xsl:value-of select="$day"/>
-                    </div>
+            <!-- Create a div with class 'month-view-day' -->
+            <div class="month-view-day">
+                <!-- Set class attribute dynamically based on the today parameter -->
+                <xsl:attribute name="class">
+                    <xsl:text>month-view-day </xsl:text>
+                    <xsl:if test="$today='true'">today</xsl:if>
+                </xsl:attribute>
+                <!-- Output the day value -->
+                <div>
+                    <xsl:value-of select="translate($day, translate($day, '1234567890', ''), '')"/>
                 </div>
-                <!-- Create a div with class 'month-view-day-info' -->
-                <div class="month-view-day-info">
-                    <!-- Additional day info goes here if needed -->
-                    <xsl:apply-templates select="lesson"/>
-                </div>
-            </xsl:if>
+            </div>
+            <!-- Create a div with class 'month-view-day-info' -->
+            <div class="month-view-day-info">
+                <!-- Additional day info goes here if needed -->
+                <xsl:apply-templates select="lesson"/>
+            </div>
         </div>
     </xsl:template>
     
