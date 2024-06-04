@@ -1,6 +1,8 @@
-/* .week-view-wrap {
-    display: none;
-} */
+.week-view-wrap {
+    background-color: var(--week-border-color);
+    border-radius: 10px;
+    overflow: hidden;
+}
 
 .calendar {
     display: grid;
@@ -13,7 +15,8 @@
     overflow-x: hidden;
     overflow-y: scroll;
     overscroll-behavior: none;
-    border-radius: 10px;
+    margin-block-start: 0;
+    margin-block-end: 0;
 }
 
 .calendar-grid {
@@ -33,7 +36,7 @@
 li.day,
 li.time,
 li.corner {
-    background-color: var(--dark-tertiary-color);
+    background-color: var(--dark-quaternary-color);
 }
 
 li:not(.day, .corner) {
@@ -44,7 +47,7 @@ li.day,
 li.corner {
     position: sticky;
     top: 0;
-    border-bottom: 1px solid var(--primary-text-color);
+    border-bottom: 1px solid var(--week-border-color);
     margin-bottom: -1px;
     z-index: 99999;
     text-align: center;
@@ -111,22 +114,6 @@ li.event p {
 .h16_45,
 .h17_45 {
     margin-bottom: 1px;
-} */
-
-/* .h07_00 {
-    grid-area: h07_00 / time;
-}
-
-.h07_15 {
-    grid-area: h07_15 / time;
-}
-
-.h07_30 {
-    grid-area: h07_30 / time;
-}
-
-.h07_45 {
-    grid-area: h07_45 / time;
 } */
 
 .h08_00 {

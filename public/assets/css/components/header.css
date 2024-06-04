@@ -29,7 +29,7 @@
 }
 
 .view-options {
-    background-color: var(--dark-primary-color);
+    background-color: var(--dark-quaternary-color);
     display: flex;
     flex-direction: row;
     width: fit-content;
@@ -51,7 +51,7 @@
 }
 
 .active-view {
-    background-color: var(--dark-tertiary-color);
+    background-color: var(--dark-quinary-color);
 }
 
 h1 {
@@ -63,10 +63,9 @@ h1 {
     pointer-events: none;
 }
 
-
 .date-wrap>button {
-    background-color: var(--dark-tertiary-color);
-    border: none;
+    background-color: var(--dark-quaternary-color);
+    border: .5px solid var(--dark-quinary-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -83,9 +82,9 @@ h1 {
 
 #date-picker,
 #course-input {
-    border: none;
     border-radius: 5px;
-    background-color: var(--dark-tertiary-color);
+    background-color: var(--dark-quaternary-color);
+    border: .5px solid var(--dark-quinary-color);
     color: var(--primary-text-color);
 }
 
