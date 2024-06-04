@@ -13,10 +13,12 @@ const xsltMonthUrl = 'assets/xslt/calendar-month-block.xslt';
 // getting elements
 const courseInputElem = document.getElementById('course-input');
 const datePicker = document.getElementById('date-picker');
+const monthViewWrap = document.querySelector('.month-view-wrap');
+const weekViewWrap = document.querySelector('.week-view-wrap');
 
 // checking views
-const isWeekView = () => document.querySelector('.week-view-wrap').style.display !== 'none';
-const isMonthView = () => document.querySelector('.month-view-wrap').style.display !== 'none';
+const isMonthView = () => monthViewWrap.style.display !== 'none';
+const isWeekView = () => weekViewWrap.style.display !== 'none';
 
 // functions
 const setTitle = (title) => {
@@ -149,6 +151,18 @@ const prepareCalendar = () => {
     setDayDates();
 }
 
+const toggleBeatLoader = () => {
+    let beatLoaderContainer = document.querySelector('.loader-container');
+
+    if (beatLoaderContainer.style.display === 'flex') {
+        beatLoaderContainer.style.display = 'none';
+        monthViewWrap.style.display = 'flex';
+    } else {
+        beatLoaderContainer.style.display = 'flex';
+        monthViewWrap.style.display = 'none';
+    }
+}
+
 const determineWeekDays = (elem) => {
     if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
         weekDates = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
@@ -257,6 +271,9 @@ const updateMonthView = async () => {
     const date = datePicker.value;
     const [year, month, day] = date.split('-');
 
+    removeMonthCalendar();
+    toggleBeatLoader();
+
     const loadMonthPromise = makeCancelable(loadMonth(selectedCourse || '', month, year));
     currentRequest = loadMonthPromise;
 
@@ -267,7 +284,7 @@ const updateMonthView = async () => {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
-        removeMonthCalendar();
+        toggleBeatLoader();
 
         loadXML(xsltMonthUrl, function (xslt) {
             applyXSLT(xmlDoc, xslt, document.querySelector('.month-view-body'));
