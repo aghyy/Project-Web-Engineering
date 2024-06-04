@@ -1,7 +1,7 @@
 .calendar-legend {
     display: flex;
     flex-direction: row;
-    color: var(--dark-primary-color);
+    color: var(--primary-text-color);
     height: 25px;
     margin: 15px 0;
 }

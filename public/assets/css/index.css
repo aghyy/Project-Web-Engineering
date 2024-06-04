@@ -3,7 +3,7 @@ html {
     margin: 20px;
     /* background-color: var(--primary-color); */
     font-family: Arial, Helvetica, sans-serif;
-    color: #fff;
+    color: var(--primary-text-color);
 }
 
 html {

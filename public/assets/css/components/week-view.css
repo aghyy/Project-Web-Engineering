@@ -4,7 +4,7 @@
 
 .calendar {
     display: grid;
-    grid-gap: .5px;
+    grid-gap: 1px;
     position: relative;
     width: 100%;
     min-height: 700px;
@@ -44,7 +44,7 @@ li.day,
 li.corner {
     position: sticky;
     top: 0;
-    border-bottom: .5px solid #fff;
+    border-bottom: 1px solid var(--primary-text-color);
     margin-bottom: -1px;
     z-index: 99999;
     text-align: center;
