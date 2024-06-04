@@ -30,6 +30,7 @@
 
 .view-options {
     background-color: var(--dark-quaternary-color);
+    border: .5px solid var(--dark-quinary-color);
     display: flex;
     flex-direction: row;
     width: fit-content;
@@ -100,7 +101,7 @@ h1 {
     background-image:
         linear-gradient(45deg, transparent 50%, gray 50%),
         linear-gradient(135deg, gray 50%, transparent 50%),
-        linear-gradient(to right, #ccc, #ccc);
+        linear-gradient(to right, var(--dark-quinary-color), var(--dark-quinary-color));
     background-position:
         calc(100% - 14px) center,
         calc(100% - 10px) center,
