@@ -173,6 +173,15 @@ const determineWeekDays = (elem) => {
     return weekDates[elem.id];
 }
 
+// const updateWeekDates = () => {
+//     if (window.matchMedia("(max-width: 450px)").matches) {
+//         weekDates = ['Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.'];
+//     } else {
+//         weekDates = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
+//     }
+//     // You can do something with weekDates here, like updating the UI
+// }
+
 const showDropdown = (element) => { // not supported by all browsers, technically deprecated (probably just safari)
     let event;
     event = document.createEvent('MouseEvents');
@@ -397,6 +406,7 @@ const setDateToToday = () => {
 }
 
 // event listeners
+// window.addEventListener('resize', updateWeekDates);
 document.addEventListener('keydown', handleKeyPress);
 document.getElementById('date-picker').addEventListener('change', updateCalendar);
 
@@ -441,7 +451,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.day').forEach((elem) => {
         elem.textContent = determineWeekDays(elem);
     });
-
     
     createDropdown();
     document.querySelector('#course-input').selectedIndex = 0;
