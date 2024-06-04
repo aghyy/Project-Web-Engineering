@@ -2,6 +2,7 @@
 var weekDates = [];
 var courses = {};
 var selectedCourse;
+var currentRequest = null;
 // setting default values
 const defaultTitle = 'Kurs auswählen';
 const defaultDocumentTitle = 'DHBW Kalender';
@@ -228,34 +229,58 @@ const updateWeekView = async () => {
     });
 }
 
+const makeCancelable = (promise) => {
+    let hasCanceled_ = false;
+
+    const wrappedPromise = new Promise((resolve, reject) => {
+        promise.then((val) =>
+            hasCanceled_ ? reject({isCanceled: true}) : resolve(val)
+        );
+        promise.catch((error) =>
+            hasCanceled_ ? reject({isCanceled: true}) : reject(error)
+        );
+    });
+
+    return {
+        promise: wrappedPromise,
+        cancel() {
+            hasCanceled_ = true;
+        },
+    };
+}
+
 const updateMonthView = async () => {
+    if (currentRequest) {
+        currentRequest.cancel();
+    }
+
     const date = datePicker.value;
     const [year, month, day] = date.split('-');
 
-    if (!selectedCourse || selectedCourse === 'Kurs auswählen') {
-        let xmlString = await loadMonth('', month, year);
-        let xmlDoc = new DOMParser().parseFromString(xmlString, "text/xml");
+    const loadMonthPromise = makeCancelable(loadMonth(selectedCourse || '', month, year));
+    currentRequest = loadMonthPromise;
+
+    try {
+        let xmlString = await loadMonthPromise.promise;
+        
+        // Parse the XML string into an XML document
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
         removeMonthCalendar();
 
         loadXML(xsltMonthUrl, function (xslt) {
             applyXSLT(xmlDoc, xslt, document.querySelector('.month-view-body'));
         });
-        return;
+    } catch (error) {
+        if (!error.isCanceled) {
+            console.error('An error occurred:', error);
+        }
+    } finally {
+        currentRequest = null;
     }
+};
 
-    let xmlString = await loadMonth(selectedCourse, month, year);
-
-    // Parse the XML string into an XML document
-    let parser = new DOMParser();
-    let xmlDoc = parser.parseFromString(xmlString, "text/xml");
-
-    removeMonthCalendar();
-
-    loadXML(xsltMonthUrl, function (xslt) {
-        applyXSLT(xmlDoc, xslt, document.querySelector('.month-view-body'));
-    });
-}
 
 const removeWeekCalendar = () => {
     document.querySelectorAll('.calendar > li.event').forEach((elem) => {
