@@ -398,15 +398,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         elem.textContent = determineWeekDays(elem);
     });
 
+    
+    createDropdown();
+    document.querySelector('#course-input').selectedIndex = 0;
+    
     let currentDate = new Date();
     currentDate.setHours(currentDate.getHours() + 2);
-    let adjustedDate = currentDate.toISOString().split('T')[0];
+    // let adjustedDate = currentDate.toISOString().split('T')[0];
 
-    document.getElementById('date-picker').valueAsDate = adjustedDate;
-
-    createDropdown();
-
-    document.querySelector('#course-input').selectedIndex = 0;
-
+    document.getElementById('date-picker').valueAsDate = currentDate;
+    
     prepareCalendar();
 });
