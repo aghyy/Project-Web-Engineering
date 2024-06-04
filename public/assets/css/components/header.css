@@ -29,7 +29,7 @@
 }
 
 .view-options {
-    background-color: var(--dark-tertiary-color);
+    background-color: var(--dark-primary-color);
     display: flex;
     flex-direction: row;
     width: fit-content;
@@ -51,7 +51,7 @@
 }
 
 .active-view {
-    background-color: var(--dark-primary-color);
+    background-color: var(--dark-tertiary-color);
 }
 
 h1 {

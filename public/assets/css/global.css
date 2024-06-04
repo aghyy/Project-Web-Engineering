@@ -10,22 +10,38 @@
 	--font-xl: 20px;
 	--font-2xl: 24px;
 	--font-3xl: 32px; */
+
 	/* Colors */
-	--primary-color: rgb(115, 183, 184);
+	--primary-color: #00CED1;
+	/* Dark Turquoise */
 
-	--red: #e22844;
+	--red: #FF4500;
+	/* Orange Red */
 	--green: #0f7643;
-	--lecture-event: #007E83;
-	--other-event: #044144;
-	--volunt-event: #614107;
+	/* Dark Green */
+	--lecture-event: #4682B4;
+	/* Steel Blue */
+	--other-event: #1d1d1d;
+	/* Dark Grey (matches with c1) */
+	--volunt-event: #FFD700;
+	/* Gold */
 
-	/* --light-primary-color: #f8f9fa;
-	--light-secondary-color: #e9ecef;
-	--light-tertiary-color: #f1f3f5; */
+	/* Light colors */
+	--light-primary-color: #F5F5F5;
+	/* White Smoke */
+	--light-secondary-color: #D3D3D3;
+	/* Light Grey */
+	--light-tertiary-color: #E0FFFF;
+	/* Light Cyan */
 
-	--dark-primary-color: rgb(33, 40, 49);
-	--dark-secondary-color: rgb(38, 46, 55);
-	--dark-tertiary-color: rgb(46, 56, 67);
+	/* Dark colors */
+	--dark-primary-color: #A9A9A9;
+	/* White */
+	--dark-secondary-color: #808080;
+	/* Matches with c2 */
+	--dark-tertiary-color: #696969;
+	/* Matches with c3 */
+
 	/* Borders */
 	/* --border-color-light: #e5e5e5;
 	--border-color-dark: #262626; */

@@ -20,7 +20,7 @@
             <xsl:attribute name="style">
                 <xsl:choose>
                     <xsl:when test="show='false'">
-                        <xsl:text> opacity: .5;</xsl:text>
+                        <xsl:text> opacity: .7;</xsl:text>
                     </xsl:when>
                 </xsl:choose>
             </xsl:attribute>

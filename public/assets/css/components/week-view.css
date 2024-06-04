@@ -4,7 +4,7 @@
 
 .calendar {
     display: grid;
-    grid-gap: 1px;
+    grid-gap: .5px;
     position: relative;
     width: 100%;
     min-height: 700px;
@@ -26,14 +26,14 @@
 }
 
 .calendar li {
-    background-color: var(--dark-tertiary-color);
+    background-color: var(--dark-primary-color);
     display: inline-block;
 }
 
 li.day,
 li.time,
 li.corner {
-    background-color: var(--dark-primary-color);
+    background-color: var(--dark-tertiary-color);
 }
 
 li:not(.day, .corner) {
@@ -44,7 +44,7 @@ li.day,
 li.corner {
     position: sticky;
     top: 0;
-    border-bottom: 1px solid var(--primary-color);
+    border-bottom: .5px solid #fff;
     margin-bottom: -1px;
     z-index: 99999;
     text-align: center;
