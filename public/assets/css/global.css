@@ -18,7 +18,9 @@
 	--dark-quaternary-color: #454547;
 	--dark-quinary-color: #1d1d1d;
 
-	--week-border-color: var(--dark-tertiary-color);
-
+	--dark-tertiary-color-with-opacity: rgba(105, 105, 105, 0.3);
+	
 	--primary-text-color: #fff;
+
+	--week-grid-border: .5px solid var(--dark-tertiary-color);
 }

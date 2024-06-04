@@ -1,12 +1,17 @@
 .week-view-wrap {
-    background-color: var(--week-border-color);
     border-radius: 10px;
     overflow: hidden;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    background: transparent;
+    background-color: var(--dark-color-with-opacity);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    margin: 10px 0;
+    border: .5px solid var(--dark-quinary-color);
 }
 
 .calendar {
     display: grid;
-    grid-gap: 1px;
     position: relative;
     width: 100%;
     min-height: 700px;
@@ -23,14 +28,13 @@
     grid-template-columns:
         [time] auto [mon] 1fr [tue] 1fr [wed] 1fr [thu] 1fr [fri] 1fr [end-col];
     grid-template-rows:
-        [day] auto
-        /* [h07_00] 1fr [h07_15] 1fr [h07_30] 1fr [h07_45] 1fr */
-        [h08_00] 1fr [h08_15] 1fr [h08_30] 1fr [h08_45] 1fr [h09_00] 1fr [h09_15] 1fr [h09_30] 1fr [h09_45] 1fr [h10_00] 1fr [h10_15] 1fr [h10_30] 1fr [h10_45] 1fr [h11_00] 1fr [h11_15] 1fr [h11_30] 1fr [h11_45] 1fr [h12_00] 1fr [h12_15] 1fr [h12_30] 1fr [h12_45] 1fr [h13_00] 1fr [h13_15] 1fr [h13_30] 1fr [h13_45] 1fr [h14_00] 1fr [h14_15] 1fr [h14_30] 1fr [h14_45] 1fr [h15_00] 1fr [h15_15] 1fr [h15_30] 1fr [h15_45] 1fr [h16_00] 1fr [h16_15] 1fr [h16_30] 1fr [h16_45] 1fr [h17_00] 1fr [h17_15] 1fr [h17_30] 1fr [h17_45] 1fr [h18_00] 1fr [end-row];
+        [day] auto [h08_00] 1fr [h08_15] 1fr [h08_30] 1fr [h08_45] 1fr [h09_00] 1fr [h09_15] 1fr [h09_30] 1fr [h09_45] 1fr [h10_00] 1fr [h10_15] 1fr [h10_30] 1fr [h10_45] 1fr [h11_00] 1fr [h11_15] 1fr [h11_30] 1fr [h11_45] 1fr [h12_00] 1fr [h12_15] 1fr [h12_30] 1fr [h12_45] 1fr [h13_00] 1fr [h13_15] 1fr [h13_30] 1fr [h13_45] 1fr [h14_00] 1fr [h14_15] 1fr [h14_30] 1fr [h14_45] 1fr [h15_00] 1fr [h15_15] 1fr [h15_30] 1fr [h15_45] 1fr [h16_00] 1fr [h16_15] 1fr [h16_30] 1fr [h16_45] 1fr [h17_00] 1fr [h17_15] 1fr [h17_30] 1fr [h17_45] 1fr [h18_00] 1fr [end-row];
 }
 
 .calendar li {
     background-color: var(--dark-primary-color);
     display: inline-block;
+    border-right: var(--week-grid-border);
 }
 
 li.day,
@@ -43,20 +47,42 @@ li:not(.day, .corner) {
     height: 25px;
 }
 
+li:not(.day, .corner, .time) {
+    background: transparent;
+}
+
+li.day.fri {
+    border-right: none;
+}
+
+li:not(.day, .corner, .time):nth-child(5n+2) {
+    border-right: none;
+}
+
+li:nth-last-child(n+6) {
+    border-bottom: var(--week-grid-border);
+}
+
+li.time.h18_00 {
+    border-bottom: none;
+}
+
 li.day,
 li.corner {
     position: sticky;
     top: 0;
-    border-bottom: 1px solid var(--week-border-color);
+    border-bottom: var(--week-grid-border);
     margin-bottom: -1px;
     z-index: 99999;
     text-align: center;
-    padding: 20px 0;
+    padding: 15px 0;
     font-weight: bolder;
 }
 
 li.time {
     padding: 0 20px;
+    display: flex;
+    align-items: center;
 }
 
 li.event {
