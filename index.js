@@ -178,10 +178,8 @@ const checkToday = (day, month) => {
 
 const parseMonthToXml = (listOfLectureCurrentMonth, month, year) => {
 	let daysXml = [];
-	let firstDate = new Date(year, month - 1, 1);
-	let firstDay = firstDate.getDay();
 
-	const daysOfMonth = getWeekDaysOfMonth(month, year, firstDay); // Array to accumulate the week days of the month
+	const daysOfMonth = getWeekDaysOfMonth(month, year); // Array to accumulate the week days of the month
 	const daysOfMonthComb = [].concat.apply([], daysOfMonth); // flattened array
 	const daysOfWeek = ["mon", "tue", "wed", "thu", "fri"];
 
@@ -343,9 +341,8 @@ const getXmlForMonth = async (courseName, month, year, day) => {
 	let html = new jsdom.JSDOM(htmlString.data).window.document;
 	if (html.body.children.length > 0) {
 		let wholeMonth = html.querySelectorAll('.week_block');
-		let course = courseName;
 
-		listOfLectureCurrentMonth.push({ "course": course });
+		listOfLectureCurrentMonth.push({ "course": courseName });
 
 		for (const element of wholeMonth) {
 			let type = element.querySelector('a > .tooltip > strong').textContent;
@@ -368,7 +365,7 @@ const getXmlForMonth = async (courseName, month, year, day) => {
 			let weekDay = mapWeekDay(element.querySelectorAll('.tooltip div')[1].textContent.slice(0, 2));
 
 			if (weekDay === null) {
-				var germanMonths = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+				let germanMonths = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 				let missingDay = element.querySelectorAll('.tooltip div')[1].textContent.split(' ')[0].replace('.', '');
 				let monthName = element.querySelectorAll('.tooltip div')[1].textContent.split(' ')[1].split(' ')[0];
 				let monthIndex = germanMonths.indexOf(monthName);
