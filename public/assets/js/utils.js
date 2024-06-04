@@ -231,12 +231,12 @@ const updateWeekView = async () => {
 const updateMonthView = async () => {
     const date = datePicker.value;
     const [year, month, day] = date.split('-');
-    
-    removeMonthCalendar();
 
     if (!selectedCourse || selectedCourse === 'Kurs auswählen') {
         let xmlString = await loadMonth('', month, year);
         let xmlDoc = new DOMParser().parseFromString(xmlString, "text/xml");
+
+        removeMonthCalendar();
 
         loadXML(xsltMonthUrl, function (xslt) {
             applyXSLT(xmlDoc, xslt, document.querySelector('.month-view-body'));
@@ -249,6 +249,8 @@ const updateMonthView = async () => {
     // Parse the XML string into an XML document
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+    removeMonthCalendar();
 
     loadXML(xsltMonthUrl, function (xslt) {
         applyXSLT(xmlDoc, xslt, document.querySelector('.month-view-body'));
