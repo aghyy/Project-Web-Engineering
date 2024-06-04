@@ -18,3 +18,20 @@
     height: 10px;
     margin-right: 10px;
 }
+
+@media only screen and (max-width: 1000px) {}
+
+@media only screen and (max-width: 700px) {}
+
+@media only screen and (max-width: 450px) {
+    .calendar-legend {
+        flex-direction: column;
+        margin: 15px 0;
+        height: auto;
+    }
+
+    .legend-item {
+        margin: 0;
+        height: 1.2em;
+    }
+}

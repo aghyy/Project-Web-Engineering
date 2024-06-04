@@ -243,7 +243,13 @@ const parseMonthToXml = (listOfLectureCurrentMonth, month, year) => {
 }
 
 const getXmlForWeek = async (courseName, day, month, year) => {
-	const htmlString = await scrapeHtml(courseName, day, month, year);
+	let htmlString;
+	try {
+		htmlString = await scrapeHtml(courseName, day, month, year);
+	} catch (error) {
+		return {};
+	}
+
 	let listOfLectureCurrentWeek = [];
 
 	let html = new jsdom.JSDOM(htmlString.data).window.document;
