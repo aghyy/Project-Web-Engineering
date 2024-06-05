@@ -1,6 +1,10 @@
 .month-view-wrap {
     display: none;
     flex-direction: column;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .month-view-head {
@@ -28,6 +32,7 @@
     background-color: var(--dark-primary-color);
     border-radius: 10px;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .month-view-day {

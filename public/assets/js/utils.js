@@ -4,7 +4,6 @@ var courses = {};
 var selectedCourse;
 var currentRequest = null;
 // setting default values
-const defaultTitle = 'Kurs auswählen';
 const defaultDocumentTitle = 'DHBW Kalender';
 const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
 // setting xslt urls
@@ -21,9 +20,51 @@ const isMonthView = () => monthViewWrap.style.display !== 'none';
 const isWeekView = () => weekViewWrap.style.display !== 'none';
 
 // functions
-// const setTitle = (title) => {
-//     document.querySelector('h1').textContent = title;
-// }
+const getDateForPopup = (inputString) => {
+    const match = inputString.match(/\d+/);
+    return match ? parseInt(match[0]) : null;
+}
+
+const createPopup = (event) => {
+    let body = document.querySelector('body');
+    let popupBackground = document.createElement('div');
+    let popup = document.createElement('div');
+    let popupContent = document.createElement('div');
+    let closeButton = document.createElement('div');
+
+    let clickedElement = event.target;
+    let unparsedDate;
+    let [year, month, day] = datePicker.value.split('-');
+
+    if (clickedElement.classList.contains('day')) {
+        unparsedDate = clickedElement.textContent;
+    } else {
+        let parentMonthViewCard = clickedElement.closest('.month-view-card');
+        unparsedDate = parentMonthViewCard.querySelector('.month-view-day').textContent;
+    }
+
+    let parsedDate = new Date(year, month - 1, getDateForPopup(unparsedDate));
+
+    popupBackground.classList.add('popup-background');
+    popup.classList.add('popup');
+    popupContent.classList.add('popup-content');
+    closeButton.classList.add('popup-close-button');
+
+    closeButton.innerHTML = '<ion-icon name="close-outline"></ion-icon>';
+    closeButton.addEventListener('click', removePopup);
+
+    popupContent.textContent = `Popup for date: ${parsedDate}`;
+
+    popup.appendChild(closeButton);
+    popup.appendChild(popupContent);
+    popupBackground.appendChild(popup);
+    body.appendChild(popupBackground);
+}
+
+const removePopup = () => {
+    let popup = document.querySelector('.popup-background');
+    popup.parentNode.removeChild(popup);
+}
 
 const updateCalendar = () => {
     if (isWeekView()) {
@@ -92,7 +133,6 @@ const setView = (elem) => {
 const setCourse = () => {
     selectedCourse = courseInputElem.value;
     if (selectedCourse && selectedCourse !== 'Kurs auswählen') {
-        // setTitle(`${selectedCourse} Kalender`);
         document.title = `DHBW ${selectedCourse} Kalender`;
     }
     updateCalendar();
@@ -105,7 +145,7 @@ const getWeekNumber = (d) => {
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
     let yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
     let weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-    
+
     return [d.getUTCFullYear(), weekNo];
 }
 
@@ -201,6 +241,12 @@ const changeMonth = (months) => {
 }
 
 const handleKeyPress = (event) => {
+    if (document.querySelector('.popup-background')) {
+        if (event.key === 'Escape') {
+            removePopup();
+        }
+    }
+
     if (document.querySelector('.week-view-wrap').style.display !== 'none') {
         if (event.key === 'ArrowLeft') {
             event.preventDefault();
@@ -260,10 +306,10 @@ const makeCancelable = (promise) => {
 
     const wrappedPromise = new Promise((resolve, reject) => {
         promise.then((val) =>
-            hasCanceled_ ? reject({isCanceled: true}) : resolve(val)
+            hasCanceled_ ? reject({ isCanceled: true }) : resolve(val)
         );
         promise.catch((error) =>
-            hasCanceled_ ? reject({isCanceled: true}) : reject(error)
+            hasCanceled_ ? reject({ isCanceled: true }) : reject(error)
         );
     });
 
@@ -291,7 +337,7 @@ const updateMonthView = async () => {
 
     try {
         let xmlString = await loadMonthPromise.promise;
-        
+
         // Parse the XML string into an XML document
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xmlString, "text/xml");
@@ -413,6 +459,10 @@ const setDateToToday = () => {
 document.addEventListener('keydown', handleKeyPress);
 document.getElementById('date-picker').addEventListener('change', updateCalendar);
 
+document.querySelectorAll('li.day').forEach((elem) => {
+    elem.addEventListener('click', createPopup);
+});
+
 document.getElementById('prev-btn').addEventListener('click', () => {
     if (isWeekView()) {
         changeDate(-7);
@@ -440,15 +490,13 @@ courseInputElem.addEventListener('change', function () {
 document.addEventListener('DOMContentLoaded', async () => {
     courses = await getAvailableCourses();
 
-    // setTitle(defaultTitle);
-
     for (let i = 0; i < 205; i++) { // per quarter hour 5, per hour 20 li elements
         let li = document.createElement('li');
-        
+
         if ((i % 20) >= 15 && (i % 20) < 20) {
             li.classList.add('border-li');
         }
-    
+
         document.querySelector('.calendar').appendChild(li);
     }
 
@@ -459,15 +507,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.day').forEach((elem) => {
         elem.textContent = determineWeekDays(elem);
     });
-    
+
     createDropdown();
     document.querySelector('#course-input').selectedIndex = 0;
-    
+
     let currentDate = new Date();
     currentDate.setHours(currentDate.getHours() + 2);
     // let adjustedDate = currentDate.toISOString().split('T')[0];
 
     document.getElementById('date-picker').valueAsDate = currentDate;
-    
+
     prepareCalendar();
 });

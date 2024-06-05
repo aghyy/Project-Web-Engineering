@@ -16,7 +16,7 @@
         <xsl:variable name="today" select="today"/>
         
         <!-- Create a div with class 'month-view-card' regardless of the content -->
-        <div class="month-view-card">
+        <div class="month-view-card" onclick="createPopup(event);">
             <xsl:attribute name="style">
                 <xsl:choose>
                     <xsl:when test="show='false'">
