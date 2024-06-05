@@ -21,15 +21,38 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     padding: 20px;
     z-index: 999999999;
-    width: 500px;
+    width: 600px;
     height: 80vh;
 }
 
 .popup-close-button {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    right: 20px;
     cursor: pointer;
     color: var(--primary-text-color);
     font-size: x-large;
+    height: 24px;
+    font-weight: bolder;
+}
+
+.popup-close-button:hover {
+    color: var(--red);
+}
+
+.popup-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    margin: 44px auto 0;
+}
+
+.popup-table th, .popup-table td {
+    padding: 12px 15px;
+    border: var(--week-grid-border);
+    text-align: left;
+}
+
+.popup-table th {
+    background-color: var(--dark-quatenary-color);
+    color: #fff;
 }

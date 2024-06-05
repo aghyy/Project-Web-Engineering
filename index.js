@@ -16,6 +16,16 @@ app.get("/", (req, res) => {
 	res.sendFile(path.join(__dirname, "index.html"));
 });
 
+app.post('/api/get_day/', async (req, res) => {
+	res.set('Content-Type', 'application/xml');
+	const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+	const xmlData = await getXmlForWeek(req.body.course, req.body.day, req.body.month, req.body.year);
+	const date = new Date(req.body.year, req.body.month - 1, req.body.day);
+	const weekDay = daysOfWeek[date.getDay()];
+	const xmlDataForDay = getXMLForDay(xmlData, weekDay);
+	res.send(xmlDataForDay);
+});
+
 app.post('/api/get_week/', async (req, res) => {
 	res.set('Content-Type', 'application/xml');
 	const xmlData = await getXmlForWeek(req.body.course, req.body.day, req.body.month, req.body.year);
@@ -24,16 +34,8 @@ app.post('/api/get_week/', async (req, res) => {
 
 app.post('/api/get_month/', async (req, res) => {
 	res.set('Content-Type', 'application/xml');
-	let fullXml = [];
-	let day = 1;
-	for (let i = 0; i < 6; i++) {
-		const xmlData = await getXmlForMonth(req.body.course, req.body.month, req.body.year, day);
-		fullXml.push(xmlData);
-
-		day += 7;
-	}
-
-	res.send(parseMonthToXml(fullXml, req.body.month, req.body.year));
+	const xmlData = await getXmlMonthData(req.body.course, req.body.month, req.body.year);
+	res.send(xmlData);
 });
 
 app.listen(PORT, () => {
@@ -89,6 +91,23 @@ const getDateOfSpecificDayInWeek = (year, month, randomDay, dayName) => {
 
 	return new Date(year, monthIndex, desiredDate);
 }
+
+const getXMLForDay = (xmlString, dayId) => {
+    // Find the <day> element with the specified id
+    const dayRegex = new RegExp(`<day\\s+id=['"]${dayId}['"][^>]*>(.*?)<\/day>`, 's');
+    const match = xmlString.match(dayRegex);
+
+    if (!match) {
+        // If day element with the specified id is not found, return empty string
+        return '';
+    }
+
+    // Construct the full XML string for the day
+    const xmlStringForDay = match[0];
+    const fullXMLForDay = `<?xml version='1.0' encoding='UTF-8'?><calendar>${xmlStringForDay}</calendar>`;
+    
+    return fullXMLForDay;
+};
 
 const createSubarrays = (array) => {
 	const subarrays = [];
@@ -240,6 +259,19 @@ const parseMonthToXml = (listOfLectureCurrentMonth, month, year) => {
 	};
 
 	return js2xmlparser.parse("calendar", xmlCalendar, { 'declaration': { 'encoding': 'UTF-8' } });
+}
+
+const getXmlMonthData = async (courseName, month, year) => {
+	let fullXml = [];
+	let day = 1;
+	for (let i = 0; i < 6; i++) {
+		const xmlData = await getXmlForMonth(courseName, month, year, day);
+		fullXml.push(xmlData);
+
+		day += 7;
+	}
+
+	return parseMonthToXml(fullXml, month, year);
 }
 
 const getXmlForWeek = async (courseName, day, month, year) => {

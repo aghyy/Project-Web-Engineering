@@ -7,6 +7,7 @@ var currentRequest = null;
 const defaultDocumentTitle = 'DHBW Kalender';
 const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
 // setting xslt urls
+const xsltDayUrl = 'assets/xslt/calendar-day-block.xslt';
 const xsltWeekUrl = 'assets/xslt/calendar-week-block.xslt';
 const xsltMonthUrl = 'assets/xslt/calendar-month-block.xslt';
 // getting elements
@@ -25,7 +26,7 @@ const getDateForPopup = (inputString) => {
     return match ? parseInt(match[0]) : null;
 }
 
-const createPopup = (event) => {
+const createPopup = async (event) => {
     let body = document.querySelector('body');
     let popupBackground = document.createElement('div');
     let popup = document.createElement('div');
@@ -45,15 +46,27 @@ const createPopup = (event) => {
 
     let parsedDate = new Date(year, month - 1, getDateForPopup(unparsedDate));
 
+    let xmlString = await loadDay(selectedCourse, parsedDate.getDate(), parsedDate.getMonth() + 1, parsedDate.getFullYear());
+    
+    // Parse the XML string into an XML document
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+    loadXML(xsltDayUrl, function (xslt) {
+        applyXSLT(xmlDoc, xslt, document.querySelector('.popup-content'));
+    });
+
     popupBackground.classList.add('popup-background');
     popup.classList.add('popup');
     popupContent.classList.add('popup-content');
     closeButton.classList.add('popup-close-button');
 
     closeButton.innerHTML = '<ion-icon name="close-outline"></ion-icon>';
+
+    popupBackground.addEventListener('click', removePopup);
     closeButton.addEventListener('click', removePopup);
 
-    popupContent.textContent = `Popup for date: ${parsedDate}`;
+    document.body.style.overflow = 'hidden';
 
     popup.appendChild(closeButton);
     popup.appendChild(popupContent);
@@ -61,9 +74,15 @@ const createPopup = (event) => {
     body.appendChild(popupBackground);
 }
 
-const removePopup = () => {
+const removePopup = (event) => {
     let popup = document.querySelector('.popup-background');
-    popup.parentNode.removeChild(popup);
+    let closeButton = document.querySelector('.popup-close-button>ion-icon');
+
+    if (event.target === popup || event.target === closeButton) {
+        document.body.style.overflow = 'auto';
+        popup.parentNode.removeChild(popup);
+    }
+
 }
 
 const updateCalendar = () => {
@@ -356,7 +375,6 @@ const updateMonthView = async () => {
     }
 };
 
-
 const removeWeekCalendar = () => {
     document.querySelectorAll('.calendar > li.event').forEach((elem) => {
         elem.parentNode.removeChild(elem);
@@ -367,6 +385,24 @@ const removeMonthCalendar = () => {
     document.querySelectorAll('.month-view-card').forEach((elem) => {
         elem.parentNode.removeChild(elem);
     });
+}
+
+const loadDay = async (course, day, month, year) => {
+    const response = await fetch('http://localhost:6059/api/get_day/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/xml',
+        },
+        body: JSON.stringify({
+            course: course,
+            day: day,
+            month: month,
+            year: year,
+        }),
+    });
+    const data = await response.text();
+    return data;
 }
 
 const loadWeek = async (course, day, month, year) => {

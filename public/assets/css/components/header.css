@@ -82,7 +82,7 @@
     pointer-events: none;
 }
 
-.nav-button {
+.today-button {
     background-color: var(--dark-quaternary-color);
     border: .5px solid var(--dark-quinary-color);
     display: flex;
@@ -96,13 +96,28 @@
     transition: color 0.3s;
 }
 
-.nav-button:hover {
-    color: var(--primary-text-hover-color);
+.nav-button {
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    color: var(--primary-text-color);
+    font-size: x-large;
+    display: flex;
+    align-items: center;
+    padding: 0;
 }
 
-.nav-button:has(ion-icon) {
-    width: 23px;
-    height: 23px;
+.nav-button:first-of-type {
+    margin-right: auto;
+}
+
+.nav-button:last-of-type {
+    margin-left: auto;
+}
+
+.nav-button:hover,
+.today-button:hover {
+    color: var(--primary-text-hover-color);
 }
 
 .date-wrap {
