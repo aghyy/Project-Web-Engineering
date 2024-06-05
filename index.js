@@ -38,6 +38,12 @@ app.post('/api/get_month/', async (req, res) => {
 	res.send(xmlData);
 });
 
+app.post('/api/get_menu', async (req, res) => {
+	res.set('Content-Type', 'application/xml');
+	const xmlData = await getXmlForMenu(req.body.year, req.body.month, req.body.day);
+	res.send(xmlData);
+})
+
 app.listen(PORT, () => {
 	console.log(`Server is running on http://localhost:${PORT}`);
 });
@@ -53,6 +59,14 @@ const scrapeHtml = async (courseName, day, month, year) => {
 	return await axios.request({
 		method: "GET",
 		url: `https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=${users[courseName]}&file=${courseName}&day=${day}&month=${month}&year=${year}`,
+		headers: headers
+	});
+}
+
+const scrapeHtmlForMenu = async (day, month, year) => {
+	return await axios.request({
+		method: 'GET',
+		url: `https://www.sw-ka.de/de/hochschulgastronomie/speiseplan/mensa_erzberger/`,
 		headers: headers
 	});
 }
@@ -431,6 +445,30 @@ const getXmlForMonth = async (courseName, month, year, day) => {
 
 		return listOfLectureCurrentMonth;
 	}
+}
+
+const getXmlForMenu = async (day, month, year) => {
+	let jsonObject;
+	let htmlString;
+	try {
+		htmlString = await scrapeHtmlForMenu(day, month, year);
+	} catch (error) {
+		return {};
+	}
+
+	let html = new jsdom.JSDOM(htmlString.data).window.document;
+	if (html.body.children.length > 0) {
+		let meal1 = '';
+		let meal2 = '';
+		let meal3 = '';
+
+		jsonObject = {
+			meal1: meal1,
+			meal2: meal2,
+			meal3: meal3
+		};
+	}
+	return jsonObject;
 }
 
 reload(app);
