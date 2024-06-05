@@ -35,8 +35,9 @@
 
     <div class="calendar-wrapper">
         <div class="header">
-            <button class="nav-button" id="prev-btn"><img src="assets/img/chevron-back-outline.svg"
-                    alt="previous"></button>
+            <button class="nav-button" id="prev-btn">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </button>
 
             <div class="header-content">
                 <div class="header-top">
@@ -53,26 +54,28 @@
 
                     <div class="date-wrap header-center">
                         <input type="date" name="date" id="date-picker" />
+                        <div class="vertical"></div>
                         <button class="nav-button" id="today-btn">Heute</button>
                     </div>
 
                     <div class="view-options header-right">
                         <div class="month-view view-option" onclick="setView(this);">
                             <div class='ignore-click'>
-                                <img src="assets/img/calendar-outline.svg" alt="month view">
+                                <ion-icon name="calendar-outline"></ion-icon>
                             </div>
                         </div>
                         <div class="week-view view-option active-view" onclick="setView(this);">
                             <div class='ignore-click'>
-                                <img src="assets/img/list-outline.svg" alt="week view">
+                                <ion-icon name="list-outline"></ion-icon>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <button class="nav-button" id="next-btn"><img src="assets/img/chevron-forward-outline.svg"
-                    alt="next"></button>
+            <button class="nav-button" id="next-btn">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+            </button>
         </div>
 
         <div class="week-view-wrap">
@@ -176,6 +179,8 @@
     </div>
 
     <script src="assets/js/utils.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 
 </html>

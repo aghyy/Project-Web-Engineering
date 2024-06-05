@@ -66,6 +66,12 @@
     padding: 7px;
     height: 14px;
     width: 14px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.view-options>div:hover {
+    color: #007BFF;
 }
 
 .active-view {
@@ -94,9 +100,9 @@
     color: #007BFF;
 }
 
-.nav-button>img {
-    width: 12px;
-    height: 12px;
+.nav-button:has(ion-icon) {
+    width: 23px;
+    height: 23px;
 }
 
 .date-wrap {
@@ -120,7 +126,6 @@
     padding: 1px 5px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
-    margin-right: 10px;
 }
 
 #course-input {
@@ -146,4 +151,10 @@
 
 #course-input:focus {
     outline: none;
+}
+
+.vertical {
+    border-left: .5px solid var(--dark-quinary-color);
+    height: 20px;
+    margin: 0 5px;
 }
