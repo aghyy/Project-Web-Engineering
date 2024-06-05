@@ -8,6 +8,7 @@
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     z-index: 9999999;
+    animation: fade-in 0.5s forwards;
 }
 
 .popup {
@@ -23,6 +24,30 @@
     z-index: 999999999;
     width: 600px;
     height: 80vh;
+    opacity: 0;
+    animation: popup-animation 0.5s forwards;
+}
+
+@keyframes popup-animation {
+    from {
+        transform: translate(-50%, -60%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+@keyframes popup-close-animation {
+    from {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+    to {
+        transform: translate(-50%, -60%);
+        opacity: 0;
+    }
 }
 
 .popup-close-button {

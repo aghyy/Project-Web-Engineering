@@ -75,14 +75,19 @@ const createPopup = async (event) => {
 }
 
 const removePopup = (event) => {
-    let popup = document.querySelector('.popup-background');
+    let popupBackground = document.querySelector('.popup-background');
+    let popup = document.querySelector('.popup');
     let closeButton = document.querySelector('.popup-close-button>ion-icon');
 
-    if (event.target === popup || event.target === closeButton) {
-        document.body.style.overflow = 'auto';
-        popup.parentNode.removeChild(popup);
+    if (event.target === popupBackground || event.target === closeButton) {
+        popup.style.animation = 'popup-close-animation 0.5s forwards';
+        popupBackground.style.animation = 'fade-out 0.5s forwards';
+        
+        setTimeout(() => {
+            popupBackground.parentNode.removeChild(popupBackground);
+            document.body.style.overflow = 'auto';
+        }, 500);
     }
-
 }
 
 const updateCalendar = () => {
