@@ -79,13 +79,15 @@ const removePopup = (event) => {
     let popup = document.querySelector('.popup');
     let closeButton = document.querySelector('.popup-close-button>ion-icon');
 
-    if (event.target === popupBackground || event.target === closeButton) {
+    if (event.target === popupBackground || event.target === closeButton || event.key === 'Escape') {
         popup.style.animation = 'popup-close-animation 0.5s forwards';
         popupBackground.style.animation = 'fade-out 0.5s forwards';
         
         setTimeout(() => {
-            popupBackground.parentNode.removeChild(popupBackground);
-            document.body.style.overflow = 'auto';
+            try {
+                popupBackground.parentNode.removeChild(popupBackground);
+                document.body.style.overflow = 'auto';
+            } catch {}
         }, 500);
     }
 }
@@ -267,7 +269,7 @@ const changeMonth = (months) => {
 const handleKeyPress = (event) => {
     if (document.querySelector('.popup-background')) {
         if (event.key === 'Escape') {
-            removePopup();
+            removePopup(event);
         }
     }
 
