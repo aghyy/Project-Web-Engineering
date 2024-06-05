@@ -1,5 +1,4 @@
 .month-view-wrap {
-    /* display: flex; */
     display: none;
     flex-direction: column;
 }
@@ -10,7 +9,7 @@
     grid-template-rows: auto;
     grid-row-gap: 10px;
     grid-column-gap: 10px;
-    margin: 10px auto 20px auto;
+    margin: 20px auto;
     width: 100%;
     color: var(--primary-text-color);
 }

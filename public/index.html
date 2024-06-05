@@ -25,49 +25,110 @@
     <link rel="stylesheet" href="assets/css/components/week-view.css">
     <link rel="stylesheet" href="assets/css/components/legend.css">
     <link rel="stylesheet" href="assets/css/components/beatloader.css">
+    <link rel="stylesheet" href="assets/css/components/calendar.css">
 
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
     <script src="assets/js/jquery-3.7.1.min.js"></script>
 </head>
 
 <body>
-    <div class="head">
-        <h1></h1> <!-- title dynamically generated -->
 
-        <div class="options">
-            <div>
-                <div class="info-wrap">
-                    <div class="date-wrap">
-                        <p>Datum anzeigen</p>
-                        <button id="prev-btn"><img src="assets/img/chevron-back-outline.svg" alt="previous"></button>
-                        <input type="date" name="date" id="date-picker" />
-                        <button id="next-btn"><img src="assets/img/chevron-forward-outline.svg" alt="next"></button>
-                        <button id="today-btn">Heute</button>
-                    </div>
+    <div class="calendar-wrapper">
+        <div class="header">
+            <button class="nav-button" id="prev-btn"><img src="assets/img/chevron-back-outline.svg"
+                    alt="previous"></button>
 
-                    <div class="course-wrap">
-                        <p>Kurs</p>
+            <div class="header-content">
+                <div class="header-top">
+                    <h2>Wochenansicht</h2>
+                </div>
 
+                <div class="header-btm">
+                    <div class="course-wrap header-left">
                         <select id="course-input" onchange="setCourse();">
                             <option disabled selected>Kurs auswählen</option>
                             <!-- Options will be added dynamically using JavaScript -->
                         </select>
                     </div>
+
+                    <div class="date-wrap header-center">
+                        <input type="date" name="date" id="date-picker" />
+                        <button class="nav-button" id="today-btn">Heute</button>
+                    </div>
+
+                    <div class="view-options header-right">
+                        <div class="month-view view-option" onclick="setView(this);">
+                            <div class='ignore-click'>
+                                <img src="assets/img/calendar-outline.svg" alt="month view">
+                            </div>
+                        </div>
+                        <div class="week-view view-option active-view" onclick="setView(this);">
+                            <div class='ignore-click'>
+                                <img src="assets/img/list-outline.svg" alt="week view">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="view-options">
-                <div class="month-view view-option" onclick="setView(this);">
-                    <div class='ignore-click'>
-                        <img src="assets/img/calendar-outline.svg" alt="month view">
-                    </div>
-                </div>
-                <div class="week-view view-option active-view" onclick="setView(this);">
-                    <div class='ignore-click'>
-                        <img src="assets/img/list-outline.svg" alt="week view">
-                    </div>
-                </div>
-            </div>
+            <button class="nav-button" id="next-btn"><img src="assets/img/chevron-forward-outline.svg"
+                    alt="next"></button>
+        </div>
+
+        <div class="week-view-wrap">
+            <ul class="calendar calendar-grid">
+                <li class="day mon" id="0"></li>
+                <li class="day tue" id="1"></li>
+                <li class="day wed" id="2"></li>
+                <li class="day thu" id="3"></li>
+                <li class="day fri" id="4"></li>
+
+                <li class="time h08_00">08:00</li>
+                <li class="time h08_15"></li>
+                <li class="time h08_30"></li>
+                <li class="time h08_45"></li>
+                <li class="time h09_00">09:00</li>
+                <li class="time h09_15"></li>
+                <li class="time h09_30"></li>
+                <li class="time h09_45"></li>
+                <li class="time h10_00">10:00</li>
+                <li class="time h10_15"></li>
+                <li class="time h10_30"></li>
+                <li class="time h10_45"></li>
+                <li class="time h11_00">11:00</li>
+                <li class="time h11_15"></li>
+                <li class="time h11_30"></li>
+                <li class="time h11_45"></li>
+                <li class="time h12_00">12:00</li>
+                <li class="time h12_15"></li>
+                <li class="time h12_30"></li>
+                <li class="time h12_45"></li>
+                <li class="time h13_00">13:00</li>
+                <li class="time h13_15"></li>
+                <li class="time h13_30"></li>
+                <li class="time h13_45"></li>
+                <li class="time h14_00">14:00</li>
+                <li class="time h14_15"></li>
+                <li class="time h14_30"></li>
+                <li class="time h14_45"></li>
+                <li class="time h15_00">15:00</li>
+                <li class="time h15_15"></li>
+                <li class="time h15_30"></li>
+                <li class="time h15_45"></li>
+                <li class="time h16_00">16:00</li>
+                <li class="time h16_15"></li>
+                <li class="time h16_30"></li>
+                <li class="time h16_45"></li>
+                <li class="time h17_00">17:00</li>
+                <li class="time h17_15"></li>
+                <li class="time h17_30"></li>
+                <li class="time h17_45"></li>
+                <li class="time h18_00">18:00</li>
+
+                <li class="corner">
+                    <div class="week-number"></div>
+                </li>
+            </ul>
         </div>
     </div>
 
@@ -91,68 +152,6 @@
         <div class="month-view-body"></div>
     </div>
 
-    <div class="week-view-wrap">
-        <ul class="calendar calendar-grid">
-
-            <li class="day mon" id="0"></li>
-            <li class="day tue" id="1"></li>
-            <li class="day wed" id="2"></li>
-            <li class="day thu" id="3"></li>
-            <li class="day fri" id="4"></li>
-
-            <!-- <li class="time h07_00">07:00</li>
-            <li class="time h07_15"></li>
-            <li class="time h07_30"></li>
-            <li class="time h07_45"></li> -->
-            <li class="time h08_00"><div>08:00</div></li>
-            <li class="time h08_15"></li>
-            <li class="time h08_30"></li>
-            <li class="time h08_45"></li>
-            <li class="time h09_00">09:00</li>
-            <li class="time h09_15"></li>
-            <li class="time h09_30"></li>
-            <li class="time h09_45"></li>
-            <li class="time h10_00">10:00</li>
-            <li class="time h10_15"></li>
-            <li class="time h10_30"></li>
-            <li class="time h10_45"></li>
-            <li class="time h11_00">11:00</li>
-            <li class="time h11_15"></li>
-            <li class="time h11_30"></li>
-            <li class="time h11_45"></li>
-            <li class="time h12_00">12:00</li>
-            <li class="time h12_15"></li>
-            <li class="time h12_30"></li>
-            <li class="time h12_45"></li>
-            <li class="time h13_00">13:00</li>
-            <li class="time h13_15"></li>
-            <li class="time h13_30"></li>
-            <li class="time h13_45"></li>
-            <li class="time h14_00">14:00</li>
-            <li class="time h14_15"></li>
-            <li class="time h14_30"></li>
-            <li class="time h14_45"></li>
-            <li class="time h15_00">15:00</li>
-            <li class="time h15_15"></li>
-            <li class="time h15_30"></li>
-            <li class="time h15_45"></li>
-            <li class="time h16_00">16:00</li>
-            <li class="time h16_15"></li>
-            <li class="time h16_30"></li>
-            <li class="time h16_45"></li>
-            <li class="time h17_00">17:00</li>
-            <li class="time h17_15"></li>
-            <li class="time h17_30"></li>
-            <li class="time h17_45"></li>
-            <li class="time h18_00">18:00</li>
-
-            <li class="corner">
-                <div class="week-number"></div>
-            </li>
-        </ul>
-
-    </div>
-    
     <div class="calendar-legend">
         <div class="legend-item">
             <div class="legend-color" style="background-color: var(--lecture-event);"></div>

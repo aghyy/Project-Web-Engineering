@@ -21,9 +21,9 @@ const isMonthView = () => monthViewWrap.style.display !== 'none';
 const isWeekView = () => weekViewWrap.style.display !== 'none';
 
 // functions
-const setTitle = (title) => {
-    document.querySelector('h1').textContent = title;
-}
+// const setTitle = (title) => {
+//     document.querySelector('h1').textContent = title;
+// }
 
 const updateCalendar = () => {
     if (isWeekView()) {
@@ -67,6 +67,7 @@ const setView = (elem) => {
     const prevSelectedView = document.querySelector('.view-option.active-view');
     const monthView = document.querySelector('.month-view-wrap');
     const weekView = document.querySelector('.week-view-wrap');
+    const headerTitle = document.querySelector('.header-top>h2');
 
     if (elem === prevSelectedView) {
         return;
@@ -78,9 +79,11 @@ const setView = (elem) => {
     if (elem.classList.contains('month-view')) {
         weekView.style.display = 'none';
         monthView.style.display = 'flex';
+        headerTitle.textContent = 'Monatsansicht';
     } else if (elem.classList.contains('week-view')) {
         monthView.style.display = 'none';
         weekView.style.display = 'block';
+        headerTitle.textContent = 'Wochenansicht';
     }
 
     setCourse();
@@ -89,7 +92,7 @@ const setView = (elem) => {
 const setCourse = () => {
     selectedCourse = courseInputElem.value;
     if (selectedCourse && selectedCourse !== 'Kurs auswählen') {
-        setTitle(`${selectedCourse} Kalender`);
+        // setTitle(`${selectedCourse} Kalender`);
         document.title = `DHBW ${selectedCourse} Kalender`;
     }
     updateCalendar();
@@ -437,10 +440,15 @@ courseInputElem.addEventListener('change', function () {
 document.addEventListener('DOMContentLoaded', async () => {
     courses = await getAvailableCourses();
 
-    setTitle(defaultTitle);
+    // setTitle(defaultTitle);
 
     for (let i = 0; i < 205; i++) { // per quarter hour 5, per hour 20 li elements
         let li = document.createElement('li');
+        
+        if ((i % 20) >= 15 && (i % 20) < 20) {
+            li.classList.add('border-li');
+        }
+    
         document.querySelector('.calendar').appendChild(li);
     }
 

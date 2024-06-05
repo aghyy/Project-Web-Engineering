@@ -1,13 +1,12 @@
 .week-view-wrap {
-    border-radius: 10px;
     overflow: hidden;
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
     background: transparent;
     background-color: var(--dark-color-with-opacity);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    margin: 10px 0;
-    border: .5px solid var(--dark-quinary-color);
+    /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); */
+    /* margin: 10px 0; */
+    /* border: .5px solid var(--dark-quinary-color); */
 }
 
 .calendar {
@@ -59,9 +58,14 @@ li:not(.day, .corner, .time):nth-child(5n+2) {
     border-right: none;
 }
 
-li:nth-last-child(n+6) {
+li.time:nth-of-type(4n+1),
+li.border-li {
     border-bottom: var(--week-grid-border);
 }
+
+/* li:nth-last-child(n+6) {
+    border-bottom: var(--week-grid-border);
+} */
 
 li.time.h18_00 {
     border-bottom: none;

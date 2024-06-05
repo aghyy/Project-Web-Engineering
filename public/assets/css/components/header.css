@@ -1,31 +1,53 @@
-.info-wrap {
+.header {
     display: flex;
-    flex-direction: row;
-    color: var(--primary-text-color);
-}
-
-.info-wrap>div {
-    display: flex;
-    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    margin: 0 10px;
+    padding: 20px;
+    background: var(--dark-quaternary-color);
+    border-bottom: var(--week-grid-border);
 }
 
-.info-wrap>*>input {
-    height: 20px;
-    color: #000;
+.header-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
 }
 
-.info-wrap>div>* {
-    margin-right: 10px;
+.header-top {
+    width: 100%;
+    margin-bottom: 10px;
 }
 
-.info-wrap>div:first-of-type {
-    margin-left: 0 !important;
+.header-top h2 {
+    margin: 0;
+    font-size: 24px;
+    text-align: center;
 }
 
-.info-wrap>div:last-of-type {
-    margin-right: 0 !important;
+.header-btm {
+    display: flex;
+    width: 100%;
+    color: var(--primary-text-color);
+    position: relative;
+    height: 24px;
+}
+
+.header-left {
+    position: absolute;
+    left: 0;
+}
+
+.header-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.header-right {
+    position: absolute;
+    right: 0;
 }
 
 .view-options {
@@ -34,37 +56,27 @@
     display: flex;
     flex-direction: row;
     width: fit-content;
-    border-radius: 10px;
+    border-radius: 5px;
     overflow: hidden;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .view-options>div {
-    padding: 10px;
-    height: 16px;
-    width: 16px;
-}
-
-.options {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    padding: 7px;
+    height: 14px;
+    width: 14px;
 }
 
 .active-view {
     background-color: var(--dark-quinary-color);
 }
 
-h1 {
-    margin: 0;
-    color: var(--primary-text-color);
-}
-
 .ignore-click {
     pointer-events: none;
 }
 
-.date-wrap>button {
+.nav-button {
     background-color: var(--dark-quaternary-color);
     border: .5px solid var(--dark-quinary-color);
     display: flex;
@@ -73,12 +85,24 @@ h1 {
     padding: 5px;
     border-radius: 5px;
     color: var(--primary-text-color);
-    height: 22px;
+    height: 23px;
+    cursor: pointer;
+    transition: color 0.3s;
 }
 
-.date-wrap>button>img {
+.nav-button:hover {
+    color: #007BFF;
+}
+
+.nav-button>img {
     width: 12px;
     height: 12px;
+}
+
+.date-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 #date-picker,
@@ -91,10 +115,12 @@ h1 {
 
 #date-picker {
     color-scheme: dark;
+    height: 20px;
     max-height: 22px;
     padding: 1px 5px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
+    margin-right: 10px;
 }
 
 #course-input {
@@ -114,8 +140,8 @@ h1 {
         1px 1.5em;
     background-repeat: no-repeat;
     appearance: none;
-    -webkit-appearance: none; /* Add vendor prefix for older browsers */
-    -moz-appearance: none; /* Add vendor prefix for older browsers */
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
 #course-input:focus {
