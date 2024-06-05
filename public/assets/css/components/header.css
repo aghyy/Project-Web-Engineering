@@ -71,7 +71,7 @@
 }
 
 .view-options>div:hover {
-    color: #007BFF;
+    color: var(--primary-text-hover-color);
 }
 
 .active-view {
@@ -97,7 +97,7 @@
 }
 
 .nav-button:hover {
-    color: #007BFF;
+    color: var(--primary-text-hover-color);
 }
 
 .nav-button:has(ion-icon) {
@@ -126,6 +126,11 @@
     padding: 1px 5px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
+    cursor: pointer;
+}
+
+#date-picker:hover {
+    color: var(--primary-text-hover-color);
 }
 
 #course-input {
@@ -147,10 +152,15 @@
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    cursor: pointer;
 }
 
 #course-input:focus {
     outline: none;
+}
+
+#course-input:hover {
+    color: var(--primary-text-hover-color);
 }
 
 .vertical {

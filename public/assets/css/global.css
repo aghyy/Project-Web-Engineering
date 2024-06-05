@@ -21,6 +21,7 @@
 	--dark-tertiary-color-with-opacity: rgba(105, 105, 105, 0.3);
 	
 	--primary-text-color: #fff;
+	--primary-text-hover-color: #007BFF;
 
 	--week-grid-border: .5px solid var(--dark-tertiary-color);
 }

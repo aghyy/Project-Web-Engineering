@@ -101,7 +101,7 @@ const applyXSLT = (xml, xslt, container) => {
     xsltProcessor.importStylesheet(xslt);
     const resultDocument = xsltProcessor.transformToDocument(xml);
     const resultHTML = new XMLSerializer().serializeToString(resultDocument);
-    container.innerHTML += isFirefox ? getFirefoxResult(resultHTML) : resultHTML;
+    container.insertAdjacentHTML('beforeend', isFirefox ? getFirefoxResult(resultHTML) : resultHTML);
 }
 
 const setView = (elem) => {
@@ -483,7 +483,7 @@ document.getElementById('today-btn').addEventListener('click', () => {
     setDateToToday();
 });
 
-courseInputElem.addEventListener('change', function () {
+courseInputElem.addEventListener('change', () => {
     courseInputElem.blur();
 });
 
