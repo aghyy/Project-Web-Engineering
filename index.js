@@ -41,7 +41,7 @@ app.post('/api/get_month/', async (req, res) => {
 
 app.post('/api/get_menu', async (req, res) => {
 	res.set('Content-Type', 'application/xml');
-	const xmlData = await getXmlForMenu(req.body.year, req.body.month, req.body.day);
+	const xmlData = await getXmlWeekMenu();
 	res.send(xmlData);
 })
 
@@ -265,6 +265,41 @@ const parseMonthToXml = (listOfLectureCurrentMonth, month, year) => {
 	};
 
 	return js2xmlparser.parse("calendar", xmlCalendar, { 'declaration': { 'encoding': 'UTF-8' } });
+}
+
+const parseXmlMenu = (data) => {
+	let xmlData = { day: [] };
+
+	data.forEach(day => {
+		let mealsList = [];
+		let price = day[0].price;
+
+		day.forEach(mealItem => {
+			mealItem.meals.forEach(meal => {
+				mealsList.push({
+					meal: {
+						name: meal.meal,
+						allergies: meal.allergies,
+						additions: meal.additions,
+						type: meal.type
+					}
+				});
+			});
+		});
+
+		xmlData.day.push({
+			meals: mealsList,
+			price: price
+		});
+	});
+
+	const xmlOptions = {
+		declaration: {
+			encoding: "UTF-8"
+		}
+	};
+
+	return js2xmlparser.parse("menu", xmlData, xmlOptions);
 }
 
 const getXmlMonthData = async (courseName, month, year) => {
@@ -502,10 +537,8 @@ const getXmlWeekMenu = async () => {
 		const url = `https://www.imensa.de/karlsruhe/mensa-erzbergerstrasse/${day}.html`;
 		listOfMenuForWeek.push(await getXmlDayMenu(url));
 	}
-	console.log(listOfMenuForWeek);
-	return listOfMenuForWeek;
-}
 
-getXmlWeekMenu();
+	return parseXmlMenu(listOfMenuForWeek);
+}
 
 reload(app);

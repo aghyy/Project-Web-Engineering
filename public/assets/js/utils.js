@@ -412,6 +412,19 @@ const loadDay = async (course, day, month, year) => {
     return data;
 }
 
+const loadMenu = async () => {
+    const response = await fetch('http://localhost:6059/api/get_menu/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/xml',
+        }
+    });
+    const data = await response.text();
+    console.log(data);
+    return data;
+}
+
 const loadWeek = async (course, day, month, year) => {
     const response = await fetch('http://localhost:6059/api/get_week/', {
         method: 'POST',
@@ -561,4 +574,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('date-picker').valueAsDate = currentDate;
 
     prepareCalendar();
+
+    loadMenu();
 });
