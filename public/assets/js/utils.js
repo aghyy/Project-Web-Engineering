@@ -421,7 +421,6 @@ const loadMenu = async () => {
         }
     });
     const data = await response.text();
-    console.log(data);
     return data;
 }
 
