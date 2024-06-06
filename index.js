@@ -43,7 +43,7 @@ app.post('/api/get_menu', async (req, res) => {
 	res.set('Content-Type', 'application/xml');
 	const xmlData = await getXmlWeekMenu();
 	res.send(xmlData);
-})
+});
 
 app.listen(PORT, () => {
 	console.log(`Server is running on http://localhost:${PORT}`);

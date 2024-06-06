@@ -50,34 +50,6 @@
     right: 0;
 }
 
-.view-options {
-    background-color: var(--dark-quaternary-color);
-    border: .5px solid var(--dark-quinary-color);
-    display: flex;
-    flex-direction: row;
-    width: fit-content;
-    border-radius: 5px;
-    overflow: hidden;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.view-options>div {
-    padding: 7px;
-    height: 14px;
-    width: 14px;
-    cursor: pointer;
-    font-size: 13px;
-}
-
-.view-options>div:hover {
-    color: var(--primary-text-hover-color);
-}
-
-.active-view {
-    background-color: var(--dark-quinary-color);
-}
-
 .ignore-click {
     pointer-events: none;
 }
@@ -94,6 +66,7 @@
     height: 23px;
     cursor: pointer;
     transition: color 0.3s;
+    transition: 0.2s all ease;
 }
 
 .nav-button {
@@ -105,6 +78,7 @@
     display: flex;
     align-items: center;
     padding: 0;
+    transition: 0.2s all ease;
 }
 
 .nav-button:first-of-type {
@@ -132,6 +106,7 @@
     background-color: var(--dark-quaternary-color);
     border: .5px solid var(--dark-quinary-color);
     color: var(--primary-text-color);
+    transition: 0.2s all ease;
 }
 
 #date-picker {

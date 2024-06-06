@@ -27,7 +27,28 @@ const getDateForPopup = (inputString) => {
     return match ? parseInt(match[0]) : null;
 }
 
-const createMenu = async () => {
+// const showMoodlePopup = async () => {
+//     document.querySelector('.moodle-popup').style.display = 'block';
+//     // document.querySelector('.moodle-popup iframe').src = '';
+//     document.body.style.overflow = 'hidden';
+// }
+
+// const removeMoodlePopup = () => {
+//     document.querySelector('.moodle-popup').style.display = 'none';
+//     document.body.style.overflow = 'auto';
+// }
+
+const showKbShortcuts = () => {
+    document.querySelector('.kbshortcuts-popup').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+const removeKbShortcuts = () => {
+    document.querySelector('.kbshortcuts-popup').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+const showMenu = async () => {
     document.querySelector('.food-menu').style.display = 'block';
     document.body.style.overflow = 'hidden';
 
@@ -323,6 +344,10 @@ const changeMonth = (months) => {
 const handleKeyPress = (event) => {
     if (document.querySelector('.food-menu').style.display === 'block' && event.key === 'Escape') {
         removeMenu();
+    } else if (document.querySelector('.kbshortcuts-popup').style.display === 'block' && event.key === 'Escape') {
+        removeKbShortcuts();
+    // } else if (document.querySelector('.moodle-popup').style.display === 'block' && event.key === 'Escape') {
+    //     removeMoodlePopup();
     }
 
     if (document.querySelector('.popup-background')) {
@@ -579,10 +604,24 @@ const setDateToToday = () => {
 document.addEventListener('keydown', handleKeyPress);
 document.getElementById('date-picker').addEventListener('change', updateCalendar);
 document.querySelector('.food-menu-close-button').addEventListener('click', removeMenu);
+document.querySelector('.kbshortcuts-popup-close-button').addEventListener('click', removeKbShortcuts);
+// document.querySelector('.moodle-popup-close-button').addEventListener('click', removeMoodlePopup);
+
+// document.querySelector('.moodle-popup').addEventListener('click', (event) => {
+//     if (event.target === document.querySelector('.moodle-popup')) {
+//         removeMoodlePopup();
+//     }
+// });
 
 document.querySelector('.food-menu').addEventListener('click', (event) => {
     if (event.target === document.querySelector('.food-menu')) {
         removeMenu();
+    }
+});
+
+document.querySelector('.kbshortcuts-popup').addEventListener('click', (event) => {
+    if (event.target === document.querySelector('.kbshortcuts-popup')) {
+        removeKbShortcuts();
     }
 });
 
