@@ -54,19 +54,10 @@ const headers = {
 
 const users = JSON.parse(fs.readFileSync('public/assets/json/courses.json', 'utf8'));
 
-const scrapeHtml = async (courseName, day, month, year) => {
-	// HTTP GET request in Axios
+const scrapeHtml = async (url) => {
 	return await axios.request({
 		method: "GET",
-		url: `https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=${users[courseName]}&file=${courseName}&day=${day}&month=${month}&year=${year}`,
-		headers: headers
-	});
-}
-
-const scrapeHtmlForMenu = async (day, month, year) => {
-	return await axios.request({
-		method: 'GET',
-		url: `https://www.sw-ka.de/de/hochschulgastronomie/speiseplan/mensa_erzberger/`,
+		url: url,
 		headers: headers
 	});
 }
@@ -290,8 +281,9 @@ const getXmlMonthData = async (courseName, month, year) => {
 
 const getXmlForWeek = async (courseName, day, month, year) => {
 	let htmlString;
+	let url = `https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=${users[courseName]}&file=${courseName}&day=${day}&month=${month}&year=${year}`;
 	try {
-		htmlString = await scrapeHtml(courseName, day, month, year);
+		htmlString = await scrapeHtml(url);
 	} catch (error) {
 		return {};
 	}
@@ -381,8 +373,9 @@ const getXmlForWeek = async (courseName, day, month, year) => {
 
 const getXmlForMonth = async (courseName, month, year, day) => {
 	let htmlString;
+	let url = `https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=${users[courseName]}&file=${courseName}&day=${day}&month=${month}&year=${year}`;
 	try {
-		htmlString = await scrapeHtml(courseName, day, month, year);
+		htmlString = await scrapeHtml(url);
 	} catch (error) {
 		return {};
 	}
@@ -450,8 +443,9 @@ const getXmlForMonth = async (courseName, month, year, day) => {
 const getXmlForMenu = async (day, month, year) => {
 	let jsonObject;
 	let htmlString;
+	let url = `https://www.stw-karlsruhe.de/de/essen/?view=ok&STYLE=popup_plain&c=adler&d=${day}.${month}.${year}`;
 	try {
-		htmlString = await scrapeHtmlForMenu(day, month, year);
+		htmlString = await scrapeHtml(url);
 	} catch (error) {
 		return {};
 	}
