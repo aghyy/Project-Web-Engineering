@@ -21,6 +21,10 @@ html {
     background-size: var(--s) calc(var(--s)*0.577);
 }
 
+body {
+    padding-left: 50px;
+}
+
 a:link,
 a:visited,
 a:hover,

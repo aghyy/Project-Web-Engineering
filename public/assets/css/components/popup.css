@@ -50,6 +50,7 @@
     }
 }
 
+.food-menu-close-button,
 .popup-close-button {
     position: absolute;
     right: 20px;
@@ -60,6 +61,7 @@
     font-weight: bolder;
 }
 
+.food-menu-close-button:hover,
 .popup-close-button:hover {
     color: var(--red);
 }

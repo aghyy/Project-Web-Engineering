@@ -10,6 +10,7 @@ const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
 const xsltDayUrl = 'assets/xslt/calendar-day-block.xslt';
 const xsltWeekUrl = 'assets/xslt/calendar-week-block.xslt';
 const xsltMonthUrl = 'assets/xslt/calendar-month-block.xslt';
+const xsltMenu = 'assets/xslt/menu-week-block.xslt';
 // getting elements
 const courseInputElem = document.getElementById('course-input');
 const datePicker = document.getElementById('date-picker');
@@ -24,6 +25,28 @@ const isWeekView = () => weekViewWrap.style.display !== 'none';
 const getDateForPopup = (inputString) => {
     const match = inputString.match(/\d+/);
     return match ? parseInt(match[0]) : null;
+}
+
+const createMenu = async () => {
+    document.querySelector('.food-menu').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+
+    let xmlString = await loadMenu();
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+    loadXML(xsltMenu, function (xslt) {
+        applyXSLT(xmlDoc, xslt, document.querySelector('.food-menu-content'));
+    });
+}
+
+const removeMenu = () => {
+    document.querySelector('.food-menu').style.display = 'none';
+    document.body.style.overflow = 'auto';
+
+    document.querySelectorAll('.day-wrapper').forEach((elem) => {
+        elem.parentNode.removeChild(elem);
+    }); 
 }
 
 const createPopup = async (event) => {
@@ -251,6 +274,11 @@ const determineWeekDays = (elem) => {
 //     // You can do something with weekDates here, like updating the UI
 // }
 
+const toggleMenu = () => {
+    var menuBar = document.getElementById('menuBar');
+    menuBar.classList.toggle('active');
+}
+
 const showDropdown = (element) => { // not supported by all browsers, technically deprecated (probably just safari)
     let event;
     event = document.createEvent('MouseEvents');
@@ -267,6 +295,10 @@ const changeMonth = (months) => {
 }
 
 const handleKeyPress = (event) => {
+    if (document.querySelector('.food-menu').style.display === 'block' && event.key === 'Escape'){
+        removeMenu();
+    }
+
     if (document.querySelector('.popup-background')) {
         if (event.key === 'Escape') {
             removePopup(event);
@@ -513,6 +545,13 @@ const setDateToToday = () => {
 // window.addEventListener('resize', updateWeekDates);
 document.addEventListener('keydown', handleKeyPress);
 document.getElementById('date-picker').addEventListener('change', updateCalendar);
+document.querySelector('.food-menu-close-button').addEventListener('click', removeMenu);
+
+document.querySelector('.food-menu').addEventListener('click', (event) => {
+    if (event.target === document.querySelector('.food-menu')) {
+        removeMenu();
+    }
+});
 
 document.querySelectorAll('li.day').forEach((elem) => {
     elem.addEventListener('click', createPopup);
@@ -573,6 +612,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('date-picker').valueAsDate = currentDate;
 
     prepareCalendar();
-
-    loadMenu();
 });

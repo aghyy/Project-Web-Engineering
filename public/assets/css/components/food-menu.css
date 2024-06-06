@@ -1,0 +1,121 @@
+.food-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 9999999;
+    display: none;
+}
+
+.food-menu-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--dark-quaternary-color);
+    border-radius: 10px;
+    border: 1px solid var(--dark-quintary-color);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    padding: 20px 35px;
+    z-index: 999999999;
+    width: calc(100vw - 200px);
+    height: calc(100vh - 200px);
+    display: flex;
+    overflow: hidden;
+}
+
+div.day-wrapper {
+    top: 44px;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    height: calc(100% - 44px);
+    flex: 1;
+    margin-right: 10px;
+}
+
+div.day-wrapper:last-of-type {
+    margin-right: 0;
+}
+
+div.day {
+    overflow: scroll;
+    overscroll-behavior: none;
+    height: calc(100% - 44px);
+}
+
+.meals {
+    border-bottom: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: var(--dark-primary-color);
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+.meals:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.meals p {
+    color: #333;
+}
+
+.meals p strong {
+    color: #000;
+}
+
+.meal {
+    margin-bottom: 15px;
+}
+
+.meal:last-of-type {
+    margin-bottom: 0;
+}
+
+div.day p {
+    font-weight: bold;
+    color: #000;
+    margin: 0;
+}
+
+div.day p:not(.meal-name) {
+    font-size: 80%;
+    font-weight: normal;
+}
+
+h2.day-name {
+    text-align: center;
+    margin: 0 0 10px 0;
+    font-size: 20px;
+}
+
+.food-menu-title {
+    font-size: 24px;
+    margin: 0;
+    text-align: center;
+    color: var(--primary-text-color);
+    font-weight: bolder;
+    position: absolute;
+    width: calc(100% - 70px);
+}
+
+.mensa-button {
+    appearance: none;
+    border: none;
+    background-color: #000;
+    color: #fff;
+    border-radius: 8px;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

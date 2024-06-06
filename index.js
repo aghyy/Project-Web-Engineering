@@ -267,39 +267,40 @@ const parseMonthToXml = (listOfLectureCurrentMonth, month, year) => {
 	return js2xmlparser.parse("calendar", xmlCalendar, { 'declaration': { 'encoding': 'UTF-8' } });
 }
 
-const parseXmlMenu = (data) => {
-	let xmlData = { day: [] };
+const parseXmlMenu = (json) => {
+	let dayNames = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
+	let index = 0;
+	let xml = '<menu>';
 
-	data.forEach(day => {
-		let mealsList = [];
-		let price = day[0].price;
+    json.forEach(dayArray => {
+        xml += '<day>';
 
-		day.forEach(mealItem => {
-			mealItem.meals.forEach(meal => {
-				mealsList.push({
-					meal: {
-						name: meal.meal,
-						allergies: meal.allergies,
-						additions: meal.additions,
-						type: meal.type
-					}
-				});
-			});
-		});
+		xml += `<day-name>${dayNames[index]}</day-name>`;
 
-		xmlData.day.push({
-			meals: mealsList,
-			price: price
-		});
-	});
+        dayArray.forEach(dayObject => {
+            let meals = dayObject.jsonObject.meals;
+            xml += '<meals>';
 
-	const xmlOptions = {
-		declaration: {
-			encoding: "UTF-8"
-		}
-	};
+            meals.forEach(meal => {
+                xml += '<meal>';
+                xml += `<name>${meal.meal}</name>`;
+                xml += `<allergies>${meal.allergies}</allergies>`;
+                xml += `<additions>${meal.additions}</additions>`;
+                xml += `<type>${meal.type}</type>`;
+                xml += '</meal>';
+				xml += `<price>${dayObject.jsonObject.price}</price>`;
+            });
+			
+            xml += '</meals>';
+        });
 
-	return js2xmlparser.parse("menu", xmlData, xmlOptions);
+        xml += '</day>';
+
+		index++;
+    });
+
+    xml += '</menu>';
+    return xml;
 }
 
 const getXmlMonthData = async (courseName, month, year) => {
@@ -494,7 +495,7 @@ const getXmlDayMenu = async (url) => {
 			element.querySelectorAll('.aw-meal').forEach((elem) => {
 				let meal = elem.querySelector('.aw-meal-description').textContent;
 				let attributes = elem.querySelector('.aw-meal-attributes > span').innerHTML.replace(/&nbsp;&nbsp;/g, '');
-				let type = attributes.split(' ')[0];
+				let type = attributes.split(' ')[0] !== attributes.split(' ')[0].toUpperCase() ? attributes.split(' ')[0] : '';
 				let allergies = attributes.includes('ALLERGEN') ? attributes.split('ALLERGEN ')[1] : 'Keine Allergene';
 				let additions = attributes.includes('ZUSATZ') ? attributes.split('ZUSATZ ')[1].split(' ALLERGEN')[0] : 'Keine Zusatzstoffe';
 
@@ -515,9 +516,10 @@ const getXmlDayMenu = async (url) => {
 				price : price
 			};
 
-			listOfMenuForDay.push(jsonObject);
+			listOfMenuForDay.push({jsonObject});
 		}
 	}
+
 	return listOfMenuForDay;
 }
 
