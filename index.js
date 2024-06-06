@@ -441,9 +441,9 @@ const getXmlForMonth = async (courseName, month, year, day) => {
 }
 
 const getXmlForMenu = async (day, month, year) => {
-	let jsonObject;
+	let listOfMenuForWeek = [];
 	let htmlString;
-	let url = `https://www.stw-karlsruhe.de/de/essen/?view=ok&STYLE=popup_plain&c=adler&d=${day}.${month}.${year}`;
+	let url = `https://www.imensa.de/karlsruhe/mensa-erzbergerstrasse/index.html`;
 	try {
 		htmlString = await scrapeHtml(url);
 	} catch (error) {
@@ -452,17 +452,30 @@ const getXmlForMenu = async (day, month, year) => {
 
 	let html = new jsdom.JSDOM(htmlString.data).window.document;
 	if (html.body.children.length > 0) {
-		let meal1 = '';
-		let meal2 = '';
-		let meal3 = '';
+		let meal = html.querySelectorAll('.aw-meal-category');
 
-		jsonObject = {
-			meal1: meal1,
-			meal2: meal2,
-			meal3: meal3
-		};
+		for (const element of meal){
+			let meal = element.querySelector('.aw-meal-description').textContent;
+			let attributes = element.querySelector('.aw-meal-attributes > span').innerHTML.replace(/&nbsp;&nbsp;/g, '');
+			let type = attributes.split(' ')[0];
+			let allergies = attributes.split('ALLERGEN ')[1];
+			let additions = attributes.includes('ZUSATZ') ? attributes.split('ZUSATZ ')[1].split(' ALLERGEN')[0] : 'Keine Zusatzstoffe';
+			console.log(allergies);
+
+
+
+			let jsonObject = {
+				meal: meal,
+				allergies: allergies,
+				additions: additions,
+				type: type
+			};
+
+			listOfMenuForWeek.push(jsonObject);
+		}
+
+		return listOfMenuForWeek;
 	}
-	return jsonObject;
 }
 
 reload(app);
