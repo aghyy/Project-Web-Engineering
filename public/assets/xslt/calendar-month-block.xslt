@@ -16,11 +16,23 @@
         <xsl:variable name="today" select="today"/>
         
         <!-- Create a div with class 'month-view-card' regardless of the content -->
-        <div class="month-view-card" onclick="createPopup(event);">
+        <div class="month-view-card">
             <xsl:attribute name="style">
                 <xsl:choose>
                     <xsl:when test="show='false'">
-                        <xsl:text> opacity: .6;</xsl:text>
+                        <xsl:text>opacity: .6; cursor: default;</xsl:text>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="not(lesson)">
+                        <xsl:text>cursor: default;</xsl:text>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:attribute>
+            <xsl:attribute name="onclick">
+                <xsl:choose>
+                    <xsl:when test="show='true'">
+                        <xsl:text>createPopup(event);</xsl:text>
                     </xsl:when>
                 </xsl:choose>
             </xsl:attribute>

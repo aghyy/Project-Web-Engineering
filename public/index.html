@@ -38,15 +38,44 @@
     <nav id="menuBar">
         <ul>
             <li>
-                <a href="javascript:toggleMenu()">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                            clip-rule="evenodd" />
+                <a href="javascript:setView('month')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512" color="currentColor">
+                        <rect fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32" x="48" y="80"
+                            width="416" height="384" rx="48" />
+                        <circle cx="296" cy="232" r="24" fill="currentColor" />
+                        <circle cx="376" cy="232" r="24" fill="currentColor" />
+                        <circle cx="296" cy="312" r="24" fill="currentColor" />
+                        <circle cx="376" cy="312" r="24" fill="currentColor" />
+                        <circle cx="136" cy="312" r="24" fill="currentColor" />
+                        <circle cx="216" cy="312" r="24" fill="currentColor" />
+                        <circle cx="136" cy="392" r="24" fill="currentColor" />
+                        <circle cx="216" cy="392" r="24" fill="currentColor" />
+                        <circle cx="296" cy="392" r="24" fill="currentColor" />
+                        <path fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"
+                            stroke-linecap="round" d="M128 48v32M384 48v32" />
+                        <path fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"
+                            d="M464 160H48" />
                     </svg>
-                    <span>Menu</span>
+                    <span>Monatsansicht</span>
                 </a>
             </li>
+            <div class="vertical-nav-line"></div>
+            <li>
+                <a href="javascript:setView('week')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="32" d="M160 144h288M160 256h288M160 368h288" />
+                        <circle cx="80" cy="144" r="16" fill="none" stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="32" />
+                        <circle cx="80" cy="256" r="16" fill="none" stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="32" />
+                        <circle cx="80" cy="368" r="16" fill="none" stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="32" />
+                    </svg>
+                    <span>Wochenansicht</span>
+                </a>
+            </li>
+            <div class="vertical-nav-line"></div>
             <li>
                 <a href="javascript:createMenu()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
@@ -68,16 +97,16 @@
                     <span>Mensaplan</span>
                 </a>
             </li>
+            <div class="vertical-nav-line"></div>
             <li>
                 <a href="javascript:alert('Soon available')">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path
-                          style="line-height:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;block-progression:tb;isolation:auto;mix-blend-mode:normal"
-                          d="M 14 3 L 6 4 L 0 8 L 1 8 L 1 18 L 2 18 L 2 8 L 4.0117188 8 C 4.0095011 8.0674642 4 8.1234456 4 8.1933594 C 4 9.3773594 4.3222656 10.197266 4.3222656 10.197266 L 8.765625 11.261719 L 12.013672 7.5878906 C 12.013672 7.5878906 11.719624 6.3603845 11.048828 5.4589844 L 14 3 z M 18.5 7 C 16.929012 7 15.507649 7.6748712 14.501953 8.7441406 C 14.243588 8.469398 13.961651 8.2154569 13.652344 7.9980469 L 11.632812 10.283203 C 12.440812 10.698203 13 11.531 13 12.5 L 13 20 L 16 20 L 16 12.5 C 16 11.101774 17.101774 10 18.5 10 C 19.898226 10 21 11.101774 21 12.5 L 21 20 L 24 20 L 24 12.5 C 24 9.4802259 21.519774 7 18.5 7 z M 5.0332031 11.910156 C 5.0122031 12.104156 5 12.301 5 12.5 L 5 20 L 8 20 L 8 12.621094 L 5.0332031 11.910156 z"
-                          font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible"
-                          fill="currentColor"
-                        />
-                      </svg>
+                            style="line-height:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;block-progression:tb;isolation:auto;mix-blend-mode:normal"
+                            d="M 14 3 L 6 4 L 0 8 L 1 8 L 1 18 L 2 18 L 2 8 L 4.0117188 8 C 4.0095011 8.0674642 4 8.1234456 4 8.1933594 C 4 9.3773594 4.3222656 10.197266 4.3222656 10.197266 L 8.765625 11.261719 L 12.013672 7.5878906 C 12.013672 7.5878906 11.719624 6.3603845 11.048828 5.4589844 L 14 3 z M 18.5 7 C 16.929012 7 15.507649 7.6748712 14.501953 8.7441406 C 14.243588 8.469398 13.961651 8.2154569 13.652344 7.9980469 L 11.632812 10.283203 C 12.440812 10.698203 13 11.531 13 12.5 L 13 20 L 16 20 L 16 12.5 C 16 11.101774 17.101774 10 18.5 10 C 19.898226 10 21 11.101774 21 12.5 L 21 20 L 24 20 L 24 12.5 C 24 9.4802259 21.519774 7 18.5 7 z M 5.0332031 11.910156 C 5.0122031 12.104156 5 12.301 5 12.5 L 5 20 L 8 20 L 8 12.621094 L 5.0332031 11.910156 z"
+                            font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible"
+                            fill="currentColor" />
+                    </svg>
                     <span>Moodle</span>
                 </a>
             </li>
@@ -105,21 +134,8 @@
 
                     <div class="date-wrap header-center">
                         <input type="date" name="date" id="date-picker" />
-                        <div class="vertical"></div>
+                        <div class="vertical-header-line"></div>
                         <button class="today-button" id="today-btn">Heute</button>
-                    </div>
-
-                    <div class="view-options header-right">
-                        <div class="month-view view-option" onclick="setView(this);">
-                            <div class='ignore-click'>
-                                <ion-icon name="calendar-outline"></ion-icon>
-                            </div>
-                        </div>
-                        <div class="week-view view-option active-view" onclick="setView(this);">
-                            <div class='ignore-click'>
-                                <ion-icon name="list-outline"></ion-icon>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -231,7 +247,7 @@
 
     <div class="food-menu">
         <div class="food-menu-content">
-            <div class="food-menu-title">Mensa Plan aktuelle Woche</div>
+            <div class="food-menu-title">Mensaplan aktuelle Woche</div>
             <div class="food-menu-close-button">
                 <ion-icon name="close-outline"></ion-icon>
             </div>

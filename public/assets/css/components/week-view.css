@@ -44,15 +44,11 @@ li.corner {
     cursor: default;
 }
 
-li.day {
-    cursor: pointer;
-}
-
-li:not(.day, .corner) {
+.calendar li:not(.day, .corner, .event) {
     height: 25px;
 }
 
-li:not(.day, .corner, .time) {
+.calendar li:not(.day, .corner, .time) {
     background: transparent;
 }
 
@@ -60,7 +56,7 @@ li.day.fri {
     border-right: none;
 }
 
-li:not(.day, .corner, .time):nth-child(5n+2) {
+.calendar li:not(.day, .corner, .time):nth-child(5n+2) {
     border-right: none;
 }
 

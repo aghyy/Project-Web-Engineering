@@ -46,10 +46,32 @@ const removeMenu = () => {
 
     document.querySelectorAll('.day-wrapper').forEach((elem) => {
         elem.parentNode.removeChild(elem);
-    }); 
+    });
 }
 
+const dayHasEvents = (elem) => {
+    if (checkCurrentView() === 'month') {
+        if (elem.closest('.month-view-card').querySelector('.month-view-day-info').innerHTML !== '') {
+            return true;
+        }
+    } else if (checkCurrentView() === 'week') {
+        let day = elem.classList[1];
+
+        for (let eventElem of document.querySelectorAll('li.event')) {
+            if (eventElem.getAttribute('style').includes(`grid-column: ${day}`)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+};
+
 const createPopup = async (event) => {
+    if (!dayHasEvents(event.target)) {
+        return;
+    }
+
     let body = document.querySelector('body');
     let popupBackground = document.createElement('div');
     let popup = document.createElement('div');
@@ -70,8 +92,6 @@ const createPopup = async (event) => {
     let parsedDate = new Date(year, month - 1, getDateForPopup(unparsedDate));
 
     let xmlString = await loadDay(selectedCourse, parsedDate.getDate(), parsedDate.getMonth() + 1, parsedDate.getFullYear());
-    
-    // Parse the XML string into an XML document
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
@@ -105,12 +125,12 @@ const removePopup = (event) => {
     if (event.target === popupBackground || event.target === closeButton || event.key === 'Escape') {
         popup.style.animation = 'popup-close-animation 0.5s forwards';
         popupBackground.style.animation = 'fade-out 0.5s forwards';
-        
+
         setTimeout(() => {
             try {
                 popupBackground.parentNode.removeChild(popupBackground);
                 document.body.style.overflow = 'auto';
-            } catch {}
+            } catch { }
         }, 500);
     }
 }
@@ -153,24 +173,30 @@ const applyXSLT = (xml, xslt, container) => {
     container.insertAdjacentHTML('beforeend', isFirefox ? getFirefoxResult(resultHTML) : resultHTML);
 }
 
-const setView = (elem) => {
-    const prevSelectedView = document.querySelector('.view-option.active-view');
+const checkCurrentView = () => {
+    const viewElem = document.querySelector('.header-top>h2').textContent;
+    let prevSelectedView = {
+        'Monatsansicht': 'month',
+        'Wochenansicht': 'week'
+    }[viewElem];
+
+    return prevSelectedView;
+}
+
+const setView = (view) => {
     const monthView = document.querySelector('.month-view-wrap');
     const weekView = document.querySelector('.week-view-wrap');
     const headerTitle = document.querySelector('.header-top>h2');
 
-    if (elem === prevSelectedView) {
+    if (view === checkCurrentView()) {
         return;
     }
 
-    prevSelectedView.classList.remove('active-view');
-    elem.classList.add('active-view');
-
-    if (elem.classList.contains('month-view')) {
+    if (view === 'month') {
         weekView.style.display = 'none';
         monthView.style.display = 'flex';
         headerTitle.textContent = 'Monatsansicht';
-    } else if (elem.classList.contains('week-view')) {
+    } else if (view === 'week') {
         monthView.style.display = 'none';
         weekView.style.display = 'block';
         headerTitle.textContent = 'Wochenansicht';
@@ -274,10 +300,10 @@ const determineWeekDays = (elem) => {
 //     // You can do something with weekDates here, like updating the UI
 // }
 
-const toggleMenu = () => {
-    var menuBar = document.getElementById('menuBar');
-    menuBar.classList.toggle('active');
-}
+// const toggleMenu = () => {
+//     var menuBar = document.getElementById('menuBar');
+//     menuBar.classList.toggle('active');
+// }
 
 const showDropdown = (element) => { // not supported by all browsers, technically deprecated (probably just safari)
     let event;
@@ -295,7 +321,7 @@ const changeMonth = (months) => {
 }
 
 const handleKeyPress = (event) => {
-    if (document.querySelector('.food-menu').style.display === 'block' && event.key === 'Escape'){
+    if (document.querySelector('.food-menu').style.display === 'block' && event.key === 'Escape') {
         removeMenu();
     }
 
@@ -325,10 +351,10 @@ const handleKeyPress = (event) => {
 
     if (event.key === 'w') {
         event.preventDefault();
-        setView(document.querySelector('.week-view'));
+        setView('week');
     } else if (event.key === 'm') {
         event.preventDefault();
-        setView(document.querySelector('.month-view'));
+        setView('month');
     } else if (event.key === 'c') {
         showDropdown(courseInputElem);
     } else if (event.key === 't') {
@@ -356,7 +382,14 @@ const updateWeekView = async () => {
 
     loadXML(xsltWeekUrl, function (xslt) {
         applyXSLT(xmlDoc, xslt, document.querySelector('.calendar'));
+        
+        ['mon', 'tue', 'wed', 'thu', 'fri'].forEach((day) => {
+            if (dayHasEvents(document.querySelector(`li.${day}`))) {
+                document.querySelector(`li.${day}`).style.cursor = 'pointer';
+            }
+        });
     });
+
 }
 
 const makeCancelable = (promise) => {
