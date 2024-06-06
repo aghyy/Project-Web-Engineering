@@ -6,6 +6,7 @@ const jsdom = require("jsdom");
 const js2xmlparser = require("js2xmlparser");
 const fs = require("fs");
 const bodyParser = require('body-parser');
+const url = require('url');
 const app = express();
 const PORT = 6059;
 
@@ -440,43 +441,71 @@ const getXmlForMonth = async (courseName, month, year, day) => {
 	}
 }
 
-const getXmlForMenu = async () => {
+const getXmlDayMenu = async (url) => {
 	let htmlString;
-	let url = `https://www.imensa.de/karlsruhe/mensa-erzbergerstrasse/index.html`;
 
 	try {
 		htmlString = await scrapeHtml(url);
 	} catch (error) {
 		return {};
 	}
-
-	let listOfMenuForWeek = [];
+	let listOfMenuForDay = [];
 
 	let html = new jsdom.JSDOM(htmlString.data).window.document;
 	if (html.body.children.length > 0) {
 		let meal = html.querySelectorAll('.aw-meal-category');
+		for (const element of meal) {
+			let meals = [];
+			element.querySelectorAll('.aw-meal').forEach((elem) => {
+				let meal = elem.querySelector('.aw-meal-description').textContent;
+				let attributes = elem.querySelector('.aw-meal-attributes > span').innerHTML.replace(/&nbsp;&nbsp;/g, '');
+				let type = attributes.split(' ')[0];
+				let allergies = attributes.includes('ALLERGEN') ? attributes.split('ALLERGEN ')[1] : 'Keine Allergene';
+				let additions = attributes.includes('ZUSATZ') ? attributes.split('ZUSATZ ')[1].split(' ALLERGEN')[0] : 'Keine Zusatzstoffe';
 
-		for (const element of meal){
-			let meal = element.querySelector('.aw-meal-description').textContent;
-			let attributes = element.querySelector('.aw-meal-attributes > span').innerHTML.replace(/&nbsp;&nbsp;/g, '');
-			let type = attributes.split(' ')[0];
-			let allergies = attributes.split('ALLERGEN ')[1];
-			let additions = attributes.includes('ZUSATZ') ? attributes.split('ZUSATZ ')[1].split(' ALLERGEN')[0] : 'Keine Zusatzstoffe';
+				let mealObject = {
+					meal : meal,
+					allergies : allergies,
+					additions : additions,
+					type : type
+				};
+
+				meals.push(mealObject);
+			});
+
 			let price = element.querySelector('.aw-meal-price').textContent;
 
 			let jsonObject = {
-				meal: meal,
-				allergies: allergies,
-				additions: additions,
-				type: type,
-				price: price
+				meals : meals,
+				price : price
 			};
 
-			listOfMenuForWeek.push(jsonObject);
+			listOfMenuForDay.push(jsonObject);
 		}
-
-		return listOfMenuForWeek;
 	}
+	return listOfMenuForDay;
 }
+
+const getXmlWeekMenu = async () => {
+	let weekDays = ['sonntag', 'montag', 'dienstag', 'mittwoch', 'donnerstag', 'freitag', 'samstag'];
+	let todaysDate = new Date();
+
+	weekDays[todaysDate.getDay()] = 'index';
+
+	weekDays.splice(0, 1);
+	weekDays.splice(5, 1);
+
+	let listOfMenuForWeek = [];
+
+
+	for (const day of weekDays) {
+		const url = `https://www.imensa.de/karlsruhe/mensa-erzbergerstrasse/${day}.html`;
+		listOfMenuForWeek.push(await getXmlDayMenu(url));
+	}
+	console.log(listOfMenuForWeek);
+	return listOfMenuForWeek;
+}
+
+getXmlWeekMenu();
 
 reload(app);
