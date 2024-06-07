@@ -388,10 +388,17 @@ const debounce = (func, delay) => {
 };
 
 const handleKeyPress = (event) => {
-    if (document.querySelector('.food-menu').style.display === 'block' && event.key === 'Escape') {
-        removeMenu();
-    } else if (document.querySelector('.kbshortcuts-popup').style.display === 'block' && event.key === 'Escape') {
-        removeKbShortcuts();
+    if (document.querySelector('.food-menu').style.display === 'block') {
+        if (event.key === 'Escape') {
+            removeMenu();
+        }
+        return;
+
+    } else if (document.querySelector('.kbshortcuts-popup').style.display === 'block') {
+        if (event.key === 'Escape') {
+            removeKbShortcuts();
+        }
+        return;
     }
 
     if (document.querySelector('.popup-background')) {
