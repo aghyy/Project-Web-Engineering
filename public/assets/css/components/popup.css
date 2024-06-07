@@ -206,3 +206,9 @@ h2.day-name {
     height: 100%;
     border: none;
 } */
+
+.kbshortcuts-popup-content table img {
+
+    width: 40px;
+    height: 40px;
+}
