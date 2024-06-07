@@ -153,7 +153,7 @@
     color: var(--primary-text-hover-color);
 }
 
-course-input > *:hover {
+course-input > * {
     color: var(--primary-text-color);
 }
 
