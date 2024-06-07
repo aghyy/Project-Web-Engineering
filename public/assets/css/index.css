@@ -6,6 +6,10 @@ html {
     color: var(--primary-text-color);
     scroll-behavior: smooth;
     overscroll-behavior: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 html {
@@ -23,6 +27,10 @@ html {
 
 body {
     padding-top: 40px;
+}
+
+h2 {
+    cursor: default;
 }
 
 a:link,

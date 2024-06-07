@@ -1,10 +1,6 @@
 .month-view-wrap {
     display: none;
     flex-direction: column;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 .month-view-head {

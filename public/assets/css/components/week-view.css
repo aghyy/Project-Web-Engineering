@@ -36,11 +36,7 @@
 li.day,
 li.time,
 li.corner {
-    background-color: var(--dark-quaternary-color);
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    background-color: var(--dark-quaternary-color); 
     cursor: default;
 }
 

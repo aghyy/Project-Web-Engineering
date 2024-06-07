@@ -153,6 +153,10 @@
     color: var(--primary-text-hover-color);
 }
 
+course-input > *:hover {
+    color: var(--primary-text-color);
+}
+
 .vertical-header-line {
     border-left: .5px solid var(--dark-quinary-color);
     height: 20px;
