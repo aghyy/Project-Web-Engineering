@@ -3,6 +3,7 @@ var weekDates = [];
 var courses = {};
 var selectedCourse;
 var currentRequest = null;
+var keyPressTimeout;
 // setting default values
 const defaultDocumentTitle = 'DHBW Kalender';
 const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
@@ -22,6 +23,30 @@ const isMonthView = () => monthViewWrap.style.display !== 'none';
 const isWeekView = () => weekViewWrap.style.display !== 'none';
 
 // functions
+const insertLoaderBefore = (element) => {
+    const loaderContainer = document.createElement('div');
+    loaderContainer.className = 'loader-container';
+
+    const beatLoader = document.createElement('div');
+    beatLoader.className = 'beat-loader';
+
+    for (let i = 0; i < 3; i++) {
+        const innerDiv = document.createElement('div');
+        beatLoader.appendChild(innerDiv);
+    }
+
+    loaderContainer.appendChild(beatLoader);
+    element.parentNode.insertBefore(loaderContainer, element);
+}
+
+const removeLoader = () => {
+    const loaderContainer = document.querySelector('.loader-container');
+
+    if (loaderContainer) {
+        loaderContainer.parentNode.removeChild(loaderContainer);
+    }
+}
+
 const getDateForPopup = (inputString) => {
     const match = inputString.match(/\d+/);
     return match ? parseInt(match[0]) : null;
@@ -49,12 +74,20 @@ const removeKbShortcuts = () => {
 }
 
 const showMenu = async () => {
+    let foodMenuContent = document.querySelector('.food-menu-content');
+
     document.querySelector('.food-menu').style.display = 'block';
     document.body.style.overflow = 'hidden';
+
+    insertLoaderBefore(document.querySelector('.food-menu-content'));
+    foodMenuContent.style.display = 'none';
 
     let xmlString = await loadMenu();
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+    removeLoader();
+    foodMenuContent.style.display = 'flex';
 
     loadXML(xsltMenu, function (xslt) {
         applyXSLT(xmlDoc, xslt, document.querySelector('.food-menu-content'));
@@ -98,6 +131,7 @@ const createPopup = async (event) => {
     let popup = document.createElement('div');
     let popupContent = document.createElement('div');
     let closeButton = document.createElement('div');
+    let title = document.createElement('h2');
 
     let clickedElement = event.target;
     let unparsedDate;
@@ -124,8 +158,10 @@ const createPopup = async (event) => {
     popup.classList.add('popup');
     popupContent.classList.add('popup-content');
     closeButton.classList.add('popup-close-button');
+    title.classList.add('popup-title');
 
     closeButton.innerHTML = '<ion-icon name="close-outline"></ion-icon>';
+    title.textContent = `Veranstaltungen am ${parsedDate.getDate()}.${parsedDate.getMonth() + 1}.`;
 
     popupBackground.addEventListener('click', removePopup);
     closeButton.addEventListener('click', removePopup);
@@ -133,6 +169,7 @@ const createPopup = async (event) => {
     document.body.style.overflow = 'hidden';
 
     popup.appendChild(closeButton);
+    popup.appendChild(title);
     popup.appendChild(popupContent);
     popupBackground.appendChild(popup);
     body.appendChild(popupBackground);
@@ -293,11 +330,11 @@ const prepareCalendar = () => {
 const toggleBeatLoader = () => {
     let beatLoaderContainer = document.querySelector('.loader-container');
 
-    if (beatLoaderContainer.style.display === 'flex') {
-        beatLoaderContainer.style.display = 'none';
+    if (beatLoaderContainer) {
+        removeLoader();
         monthViewWrap.style.display = 'flex';
     } else {
-        beatLoaderContainer.style.display = 'flex';
+        insertLoaderBefore(document.querySelector('.month-view-wrap'));
         monthViewWrap.style.display = 'none';
     }
 }
@@ -341,13 +378,20 @@ const changeMonth = (months) => {
     updateCalendar();
 }
 
+const debounce = (func, delay) => {
+    return (...args) => {
+        if (keyPressTimeout) clearTimeout(keyPressTimeout);
+        keyPressTimeout = setTimeout(() => {
+            func(...args);
+        }, delay);
+    };
+};
+
 const handleKeyPress = (event) => {
     if (document.querySelector('.food-menu').style.display === 'block' && event.key === 'Escape') {
         removeMenu();
     } else if (document.querySelector('.kbshortcuts-popup').style.display === 'block' && event.key === 'Escape') {
         removeKbShortcuts();
-    // } else if (document.querySelector('.moodle-popup').style.display === 'block' && event.key === 'Escape') {
-    //     removeMoodlePopup();
     }
 
     if (document.querySelector('.popup-background')) {
@@ -380,6 +424,9 @@ const handleKeyPress = (event) => {
     } else if (event.key === 'm') {
         event.preventDefault();
         setView('month');
+    } else if (event.key === 'f') {
+        event.preventDefault();
+        showMenu();
     } else if (event.key === 'c') {
         showDropdown(courseInputElem);
     } else if (event.key === 't') {
@@ -407,7 +454,7 @@ const updateWeekView = async () => {
 
     loadXML(xsltWeekUrl, function (xslt) {
         applyXSLT(xmlDoc, xslt, document.querySelector('.calendar'));
-        
+
         ['mon', 'tue', 'wed', 'thu', 'fri'].forEach((day) => {
             if (dayHasEvents(document.querySelector(`li.${day}`))) {
                 document.querySelector(`li.${day}`).style.cursor = 'pointer';
@@ -601,7 +648,7 @@ const setDateToToday = () => {
 
 // event listeners
 // window.addEventListener('resize', updateWeekDates);
-document.addEventListener('keydown', handleKeyPress);
+document.addEventListener('keydown', debounce(handleKeyPress, 300));
 document.getElementById('date-picker').addEventListener('change', updateCalendar);
 document.querySelector('.food-menu-close-button').addEventListener('click', removeMenu);
 document.querySelector('.kbshortcuts-popup-close-button').addEventListener('click', removeKbShortcuts);

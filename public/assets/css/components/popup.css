@@ -50,7 +50,7 @@
     }
 }
 
-.moodle-popup-close-button,
+/* .moodle-popup-close-button, */
 .kbshortcuts-popup-close-button,
 .food-menu-close-button,
 .popup-close-button {
@@ -63,7 +63,7 @@
     font-weight: bolder;
 }
 
-.moodle-popup-close-button:hover,
+/* .moodle-popup-close-button:hover, */
 .kbshortcuts-popup-close-button:hover,
 .food-menu-close-button:hover,
 .popup-close-button:hover {
@@ -74,7 +74,7 @@
     width: 100%;
     border-collapse: collapse;
     box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    margin: 44px auto 0;
+    margin: 54px auto 0;
 }
 
 .popup-table th, .popup-table td {
@@ -88,7 +88,7 @@
     color: #fff;
 }
 
-.moodle-popup,
+/* .moodle-popup, */
 .kbshortcuts-popup,
 .food-menu {
     position: fixed;
@@ -103,7 +103,7 @@
     display: none;
 }
 
-.moodle-popup-content,
+/* .moodle-popup-content, */
 .kbshortcuts-popup-content,
 .food-menu-content {
     position: fixed;
@@ -188,7 +188,8 @@ h2.day-name {
     font-size: 20px;
 }
 
-.moodle-popup-title,
+.popup-title,
+/* .moodle-popup-title, */
 .kbshortcuts-popup-title,
 .food-menu-title {
     font-size: 24px;
@@ -200,8 +201,8 @@ h2.day-name {
     width: calc(100% - 70px);
 }
 
-.moodle-popup-content iframe {
+/* .moodle-popup-content iframe {
     width: 100%;
     height: 100%;
     border: none;
-}
+} */
