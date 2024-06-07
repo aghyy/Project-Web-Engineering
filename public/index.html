@@ -75,7 +75,7 @@
             </li>
             <div class="vertical-nav-line"></div>
             <li>
-                <a href="javascript:showMenu()">
+                <a href="javascript:createMenuPopup()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
                         <path
                             d="M322 416c0 35.35-20.65 64-56 64H134c-35.35 0-56-28.65-56-64M336 336c17.67 0 32 17.91 32 40h0c0 22.09-14.33 40-32 40H64c-17.67 0-32-17.91-32-40h0c0-22.09 14.33-40 32-40"
@@ -95,9 +95,9 @@
                     <span>Mensaplan</span>
                 </a>
             </li>
-            <!-- <div class="vertical-nav-line"></div>
+            <div class="vertical-nav-line"></div>
             <li>
-                <a href="javascript:showMoodlePopup()">
+                <a href="https://moodle.dhbw.de/" target="_blank">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path
                             style="line-height:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;block-progression:tb;isolation:auto;mix-blend-mode:normal"
@@ -107,10 +107,10 @@
                     </svg>
                     <span>Moodle</span>
                 </a>
-            </li> -->
+            </li>
             <div class="vertical-nav-line"></div>
             <li>
-                <a href="javascript:showKbShortcuts()">
+                <a href="javascript:createKeyboardShortcutsPopup()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
                         <path
                             d="M248 64C146.39 64 64 146.39 64 248s82.39 184 184 184 184-82.39 184-184S349.61 64 248 64z"
@@ -251,20 +251,11 @@
         </div>
     </div>
 
-    <div class="food-menu">
-        <div class="food-menu-content">
-            <div class="food-menu-title">Mensaplan aktuelle Woche</div>
-            <div class="food-menu-close-button">
-                <ion-icon name="close-outline"></ion-icon>
-            </div>
-        </div>
-    </div>
-
-    <div class="kbshortcuts-popup">
-        <div class="kbshortcuts-popup-content">
-            <div class="kbshortcuts-popup-title">Tastenkombinationen</div>
-            <div class="kbshortcuts-popup-close-button">
-                <ion-icon name="close-outline"></ion-icon>
+    <!-- <div class="popup" id="kbshortcuts-popup">
+        <div class="popup-content" id="kbshortcuts-popup-content">
+            <div class="popup-title">Tastenkombinationen</div>
+            <div class="popup-close-button">
+                <ion-icon id="kbshortcuts-close-button" name="close-outline"></ion-icon>
             </div>
 
             <div class="kbinfo">Für mehr Informationen Maus über Tastenkombination halten.</div>
@@ -307,7 +298,8 @@
                                 <img src="assets/img/key-icons/c-key.png" />
                             </div>
                             <div class="kbdescr">Kursauswahl anzeigen
-                                <span class="tooltip">Nicht von allen Browsern unterstützt. (Nur Safari und ältere Chrome-Versionen unterstützen diese Funktion)</span>
+                                <span class="tooltip">Nicht von allen Browsern unterstützt. (Nur Safari und ältere
+                                    Chrome-Versionen unterstützen diese Funktion)</span>
                             </div>
                         </div>
                         <div class="kbshortcut">
@@ -315,7 +307,8 @@
                                 <img src="assets/img/key-icons/t-key.png" />
                             </div>
                             <div class="kbdescr">Gehe zu Heute
-                                <span class="tooltip">Funktioniert sowohl in der Wochen- als auch in der Monatsansicht.</span>
+                                <span class="tooltip">Funktioniert sowohl in der Wochen- als auch in der
+                                    Monatsansicht.</span>
                             </div>
                         </div>
                     </div>
@@ -366,17 +359,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- <div class="moodle-popup">
-        <div class="moodle-popup-content">
-            <div class="moodle-popup-title">Moodle</div>
-            <div class="moodle-popup-close-button">
-                <ion-icon name="close-outline"></ion-icon>
-            </div>
-            <iframe src="" frameborder="0">Es ist ein Fehler beim Laden von Moodle unterlaufen
-                oder iframes werden von Ihrem Browser nicht unterstützt.</iframe>
         </div>
     </div> -->
 

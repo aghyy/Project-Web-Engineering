@@ -1,4 +1,5 @@
-.popup-background {
+/* general popup styling */
+.popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,7 +12,7 @@
     animation: fade-in 0.5s forwards;
 }
 
-.popup {
+.popup-content {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -20,41 +21,21 @@
     border-radius: 10px;
     border: 1px solid var(--dark-quintary-color);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    padding: 20px;
     z-index: 999999999;
-    width: 600px;
-    height: 80vh;
     opacity: 0;
     animation: popup-animation 0.5s forwards;
 }
 
-@keyframes popup-animation {
-    from {
-        transform: translate(-50%, -60%);
-        opacity: 0;
-    }
-
-    to {
-        transform: translate(-50%, -50%);
-        opacity: 1;
-    }
+.popup-title {
+    font-size: 24px;
+    margin: 0;
+    text-align: center;
+    color: var(--primary-text-color);
+    font-weight: bolder;
+    position: absolute;
+    width: calc(100% - 70px);
 }
 
-@keyframes popup-close-animation {
-    from {
-        transform: translate(-50%, -50%);
-        opacity: 1;
-    }
-
-    to {
-        transform: translate(-50%, -60%);
-        opacity: 0;
-    }
-}
-
-/* .moodle-popup-close-button, */
-.kbshortcuts-popup-close-button,
-.food-menu-close-button,
 .popup-close-button {
     position: absolute;
     right: 20px;
@@ -65,150 +46,127 @@
     font-weight: bolder;
 }
 
-/* .moodle-popup-close-button:hover, */
-.kbshortcuts-popup-close-button:hover,
-.food-menu-close-button:hover,
 .popup-close-button:hover {
     color: var(--red);
 }
 
-.popup-table {
+/* calendar day popup */
+#calendar-popup-content {
+    padding: 20px;
+    width: 600px;
+    height: 80vh;
+}
+
+.calendar-popup-table {
     width: 100%;
     border-collapse: collapse;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     margin: 54px auto 0;
 }
 
-.popup-table th,
-.popup-table td {
+.calendar-popup-table th,
+.calendar-popup-table td {
     padding: 12px 15px;
     border: var(--week-grid-border);
     text-align: left;
 }
 
-.popup-table th {
+.calendar-popup-table th {
     background-color: var(--dark-quatenary-color);
     color: #fff;
 }
 
-/* .moodle-popup, */
-.kbshortcuts-popup,
-.food-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    z-index: 9999999;
-    display: none;
-}
-
-/* .moodle-popup-content, */
-.kbshortcuts-popup-content,
-.food-menu-content {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: var(--dark-quaternary-color);
-    border-radius: 10px;
-    border: 1px solid var(--dark-quintary-color);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+/* food menu popup */
+#food-menu-popup-content {
     padding: 20px 35px;
-    z-index: 999999999;
     width: calc(100vw - 200px);
     height: calc(100vh - 200px);
     display: flex;
     overflow: hidden;
+    flex-direction: row;
 }
 
-div.day-wrapper {
-    top: 44px;
+.day-wrapper {
     position: relative;
     border-radius: 8px;
     overflow: hidden;
-    height: calc(100% - 44px);
     flex: 1;
-    margin-right: 10px;
+    margin: 54px 10px 0;
+    display: flex;
+    flex-direction: column;
 }
 
-div.day-wrapper:last-of-type {
+.day-wrapper:last-of-type {
     margin-right: 0;
 }
 
-div.day {
-    overflow: scroll;
-    overscroll-behavior: none;
-    height: calc(100% - 44px);
+.day-name {
+    text-align: center;
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    color: var(--primary-text-color);
+    font-weight: bold;
 }
 
-.meals {
-    border-bottom: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: var(--dark-primary-color);
-    margin-bottom: 15px;
+.day {
+    overflow-y: auto;
+    overscroll-behavior: none;
+    flex: 1;
     padding: 10px;
 }
 
-.meals:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
+.meals {
+    background-color: var(--dark-primary-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    padding: 15px;
+    transition: box-shadow 0.3s;
 }
 
-.meals p {
+.meals:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.meal-name {
+    font-weight: bold;
+    color: var(--primary-text-color);
+    margin-bottom: 5px;
+}
+
+.meal-allergies, .meal-additions, .meal-type, .meal-price {
+    font-size: 0.9em;
     color: #333;
+    margin: 2px 0;
 }
 
-.meals p strong {
+.meal-type {
+    font-style: italic;
+    color: #777;
+}
+
+.meal-price {
+    font-weight: bold;
     color: #000;
+    margin-top: 10px;
 }
 
 .meal {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .meal:last-of-type {
     margin-bottom: 0;
 }
 
-div.day p {
-    font-weight: bold;
-    color: #000;
-    margin: 0;
+/* keyboard shortcuts popup */
+#kbshortcuts-popup-content {
+    padding: 20px 35px;
+    width: calc(100vw - 200px);
+    height: calc(100vh - 200px);
+    display: flex;
+    overflow: hidden;
 }
-
-div.day p:not(.meal-name) {
-    font-size: 80%;
-    font-weight: normal;
-}
-
-h2.day-name {
-    text-align: center;
-    margin: 0 0 10px 0;
-    font-size: 20px;
-}
-
-.popup-title,
-/* .moodle-popup-title, */
-.kbshortcuts-popup-title,
-.food-menu-title {
-    font-size: 24px;
-    margin: 0;
-    text-align: center;
-    color: var(--primary-text-color);
-    font-weight: bolder;
-    position: absolute;
-    width: calc(100% - 70px);
-}
-
-/* .moodle-popup-content iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-} */
 
 .kbcategories {
     display: flex;
@@ -309,6 +267,32 @@ h2.day-name {
     width: calc(100% - 110px);
 }
 
+/* animations */
+@keyframes popup-animation {
+    from {
+        transform: translate(-50%, -60%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+@keyframes popup-close-animation {
+    from {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+
+    to {
+        transform: translate(-50%, -60%);
+        opacity: 0;
+    }
+}
+
+/* responsive design */
 @media only screen and (max-width: 1000px) {}
 
 @media only screen and (max-width: 700px) {

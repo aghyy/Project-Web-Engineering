@@ -4,7 +4,7 @@
     <xsl:output method="html" indent="yes"/>
     
     <xsl:template match="/">
-        <table class="popup-table">
+        <table class="calendar-popup-table">
             <thead>
                 <tr>
                     <th>Zeit</th>

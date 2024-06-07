@@ -32,7 +32,7 @@
             <xsl:attribute name="onclick">
                 <xsl:choose>
                     <xsl:when test="show='true'">
-                        <xsl:text>createPopup(event);</xsl:text>
+                        <xsl:text>createCalendarPopup(event);</xsl:text>
                     </xsl:when>
                 </xsl:choose>
             </xsl:attribute>
