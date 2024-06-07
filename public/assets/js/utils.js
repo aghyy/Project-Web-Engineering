@@ -434,6 +434,9 @@ const handleKeyPress = (event) => {
     } else if (event.key === 'f') {
         event.preventDefault();
         showMenu();
+    } else if (event.key === 'h') {
+        event.preventDefault();
+        showKbShortcuts();
     } else if (event.key === 'c') {
         showDropdown(courseInputElem);
     } else if (event.key === 't') {

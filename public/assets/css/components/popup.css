@@ -33,6 +33,7 @@
         transform: translate(-50%, -60%);
         opacity: 0;
     }
+
     to {
         transform: translate(-50%, -50%);
         opacity: 1;
@@ -44,6 +45,7 @@
         transform: translate(-50%, -50%);
         opacity: 1;
     }
+
     to {
         transform: translate(-50%, -60%);
         opacity: 0;
@@ -73,11 +75,12 @@
 .popup-table {
     width: 100%;
     border-collapse: collapse;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     margin: 54px auto 0;
 }
 
-.popup-table th, .popup-table td {
+.popup-table th,
+.popup-table td {
     padding: 12px 15px;
     border: var(--week-grid-border);
     text-align: left;
@@ -213,7 +216,8 @@ h2.day-name {
     gap: 20px;
     padding: 20px;
     border-radius: 10px;
-    margin: 44px auto 0 auto;
+    margin: 44px auto 15px auto;
+    overflow: scroll;
 }
 
 .kbcategory {
@@ -248,6 +252,7 @@ h2.day-name {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
+    position: relative;
 }
 
 .kbicon {
@@ -272,3 +277,49 @@ h2.day-name {
     color: var(--primary-text-hover-color);
     cursor: pointer;
 }
+
+.tooltip {
+    visibility: hidden;
+    width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    top: 125%;
+    left: 50%;
+    margin-left: -125px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.kbdescr:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.kbinfo {
+    font-size: smaller;
+    font-style: italic;
+    position: absolute;
+    left: 55px;
+    bottom: 15px;
+    width: calc(100% - 110px);
+}
+
+@media only screen and (max-width: 1000px) {}
+
+@media only screen and (max-width: 700px) {
+    .kbinfo {
+        display: none;
+    }
+
+    .kbdescr:hover .tooltip {
+        visibility: hidden;
+        opacity: 0;
+    }
+}
+
+@media only screen and (max-width: 450px) {}
