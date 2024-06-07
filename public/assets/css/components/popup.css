@@ -213,7 +213,7 @@ h2.day-name {
     gap: 20px;
     padding: 20px;
     border-radius: 10px;
-    margin-top: 44px;
+    margin: 44px auto 0 auto;
 }
 
 .kbcategory {
