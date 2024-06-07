@@ -646,12 +646,23 @@ const setDateToToday = () => {
     updateCalendar();
 }
 
+const buttonClick = (direction) => {
+    if (isWeekView()) {
+        changeDate(7 * direction);
+    } else if (isMonthView()) {
+        changeMonth(1 * direction);
+    }
+}
+
 // event listeners
 // window.addEventListener('resize', updateWeekDates);
 document.addEventListener('keydown', debounce(handleKeyPress, 300));
 document.getElementById('date-picker').addEventListener('change', updateCalendar);
 document.querySelector('.food-menu-close-button').addEventListener('click', removeMenu);
 document.querySelector('.kbshortcuts-popup-close-button').addEventListener('click', removeKbShortcuts);
+document.getElementById('prev-btn').addEventListener('click', debounce(() => { buttonClick(-1); }, 300));
+document.getElementById('next-btn').addEventListener('click', debounce(() => { buttonClick(1); }, 300));
+
 // document.querySelector('.moodle-popup-close-button').addEventListener('click', removeMoodlePopup);
 
 // document.querySelector('.moodle-popup').addEventListener('click', (event) => {
@@ -676,21 +687,6 @@ document.querySelectorAll('li.day').forEach((elem) => {
     elem.addEventListener('click', createPopup);
 });
 
-document.getElementById('prev-btn').addEventListener('click', () => {
-    if (isWeekView()) {
-        changeDate(-7);
-    } else if (isMonthView()) {
-        changeMonth(-1);
-    }
-});
-
-document.getElementById('next-btn').addEventListener('click', () => {
-    if (isWeekView()) {
-        changeDate(7);
-    } else if (isMonthView()) {
-        changeMonth(1);
-    }
-});
 
 document.getElementById('today-btn').addEventListener('click', () => {
     setDateToToday();
