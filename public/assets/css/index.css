@@ -33,6 +33,13 @@ h2 {
     cursor: default;
 }
 
+.calendar-wrapper {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    border: .5px solid var(--dark-quinary-color);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
 a:link,
 a:visited,
 a:hover,
