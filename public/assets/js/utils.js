@@ -118,6 +118,84 @@ const createMenuPopup = async () => {
     });
 }
 
+const createSettingsPopup = async () => {
+    // Create the elements dynamically
+    let popup = document.createElement('div');
+    popup.classList.add('popup');
+    popup.id = 'settings-popup';
+    popup.addEventListener('click', removePopup);
+
+    let popupContent = document.createElement('div');
+    popupContent.classList.add('popup-content');
+    popupContent.id = 'settings-popup-content';
+
+    let popupContainer = document.createElement('div');
+    popupContainer.classList.add('popup-container');
+
+    let popupTitle = document.createElement('div');
+    popupTitle.classList.add('popup-title');
+    popupTitle.textContent = 'Einstellungen';
+
+    let closeIcon = document.createElement('div');
+    closeIcon.classList.add('popup-close-button');
+    closeIcon.innerHTML = '<ion-icon name="close-outline"></ion-icon>';
+    closeIcon.addEventListener('click', removePopup);
+
+    let sectionTitle = document.createElement('div');
+    sectionTitle.classList.add('section-title');
+    sectionTitle.textContent = 'Allgemein';
+
+    let checkboxContainer = document.createElement('div');
+    checkboxContainer.classList.add('checkbox-container');
+
+    let checkboxLabel = document.createElement('label');
+    checkboxLabel.classList.add('checkbox-label');
+    checkboxLabel.textContent = 'Kursauswahl speichern';
+
+    let checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.classList.add('checkbox');
+
+    // Retrieve and set the checkbox state from local storage
+    const isCheckboxChecked = localStorage.getItem('isCheckboxChecked') === 'true';
+    checkbox.checked = isCheckboxChecked;
+
+    // Add event listener to save checkbox state to local storage
+    checkbox.addEventListener('change', () => {
+        localStorage.setItem('isCheckboxChecked', checkbox.checked);
+    });
+
+    let localStorageDisplay = document.createElement('div');
+    localStorageDisplay.classList.add('local-storage-display');
+    let previouslySelectedCourse = localStorage.getItem('previouslySelectedCourse') || 'No course selected';
+    localStorageDisplay.textContent = `Previously selected course: ${previouslySelectedCourse}`;
+
+    let clearButton = document.createElement('button');
+    clearButton.classList.add('clear-button');
+    clearButton.textContent = 'Clear';
+    clearButton.addEventListener('click', () => {
+        localStorage.removeItem('previouslySelectedCourse');
+        localStorageDisplay.textContent = 'Previously selected course: No course selected';
+    });
+
+    // Append elements to each other
+    checkboxLabel.appendChild(checkbox);
+    checkboxContainer.appendChild(checkboxLabel);
+    popupContainer.appendChild(sectionTitle);
+    popupContainer.appendChild(checkboxContainer);
+    popupContainer.appendChild(localStorageDisplay);
+    popupContainer.appendChild(clearButton);
+    popupContent.appendChild(popupTitle);
+    popupContent.appendChild(closeIcon);
+    popupContent.appendChild(popupContainer);
+    popup.appendChild(popupContent);
+    document.body.appendChild(popup);
+
+    // Show popup and prevent body scrolling
+    document.getElementById('settings-popup').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+};
+
 const createCalendarPopup = async (event) => {
     if (!dayHasEvents(event.target)) {
         return;
@@ -352,6 +430,9 @@ const setCourse = () => {
     selectedCourse = courseInputElem.value;
     if (selectedCourse && selectedCourse !== 'Kurs auswählen') {
         document.title = `DHBW ${selectedCourse} Kalender`;
+        if (localStorage.getItem('isCheckboxChecked') === 'true') {
+            window.localStorage.setItem('previouslySelectedCourse', selectedCourse);
+        }
     }
     updateCalendar();
 }
@@ -471,7 +552,12 @@ const handleKeyPress = (event) => {
     let foodMenuPopup = document.getElementById('food-menu-popup');
     let kbshortcutsPopup = document.getElementById('kbshortcuts-popup');
     let calendarPopup = document.getElementById('calendar-popup');
-    let activePopup = foodMenuPopup ? foodMenuPopup : kbshortcutsPopup ? kbshortcutsPopup : calendarPopup ? calendarPopup : null;
+    let settingsPopup = document.getElementById('settings-popup');
+
+    let activePopup = foodMenuPopup ? foodMenuPopup :
+        kbshortcutsPopup ? kbshortcutsPopup :
+            calendarPopup ? calendarPopup :
+                settingsPopup ? settingsPopup : null;
 
     if (activePopup) {
         if (event.key === 'Escape') {
@@ -783,13 +869,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         elem.textContent = determineWeekDays(elem);
     });
 
-    createDropdown();
-    document.querySelector('#course-input').selectedIndex = 0;
-
     let currentDate = new Date();
     currentDate.setHours(currentDate.getHours() + 2);
 
     document.getElementById('date-picker').valueAsDate = currentDate;
 
     prepareCalendar();
+    createDropdown();
+
+    let previouslySelectedCourse = window.localStorage.getItem('previouslySelectedCourse');
+    if (previouslySelectedCourse) {
+        courseInputElem.value = previouslySelectedCourse;
+        setCourse();
+    } else {
+        courseInputElem.selectedIndex = 0;
+    }
+
 });
