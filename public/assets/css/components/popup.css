@@ -53,7 +53,7 @@
 /* calendar day popup */
 #calendar-popup-content {
     padding: 20px;
-    width: 600px;
+    width: 700px;
     height: 80vh;
 }
 
@@ -62,13 +62,14 @@
     border-collapse: collapse;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     margin: 54px auto 0;
+    border: var(--week-grid-border);
 }
 
 .calendar-popup-table th,
 .calendar-popup-table td {
     padding: 12px 15px;
-    border: var(--week-grid-border);
     text-align: left;
+    border-bottom: var(--week-grid-border);
 }
 
 .calendar-popup-table th {
@@ -182,7 +183,6 @@
     flex: 1 1 300px;
     background-color: #fafafa;
     border-radius: 10px;
-    overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s, box-shadow 0.3s;
 }
@@ -200,6 +200,8 @@
     text-align: center;
     padding: 10px;
     border-bottom: 1px solid var(--primary-text-hover-color);
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
 }
 
 .kbcategory-content {

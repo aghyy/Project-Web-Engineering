@@ -1,9 +1,11 @@
 // defining global variables
-var weekDates = [];
-var courses = {};
-var selectedCourse;
-var currentRequest = null;
-var keyPressTimeout;
+let weekDates = [];
+let courses = {};
+let selectedCourse;
+let currentRequest = null;
+let keyPressTimeout;
+// defining keyboard shortcuts
+let keyboardShortcuts = {};
 // setting default values
 const defaultDocumentTitle = 'DHBW Kalender';
 const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
@@ -17,84 +19,6 @@ const courseInputElem = document.getElementById('course-input');
 const datePicker = document.getElementById('date-picker');
 const monthViewWrap = document.querySelector('.month-view-wrap');
 const weekViewWrap = document.querySelector('.week-view-wrap');
-// defining keyboard shortcuts
-const keyboardShortcuts = {
-    "title": "Tastenkombinationen",
-    "info": "Für mehr Informationen Maus über Tastenkombination halten.",
-    "categories": [
-        {
-            "title": "Allgemein",
-            "shortcuts": [
-                {
-                    "icon": "assets/img/key-icons/f-key.png",
-                    "description": "Mensaplan anzeigen"
-                },
-                {
-                    "icon": "assets/img/key-icons/h-key.png",
-                    "description": "Tastenkombinationen anzeigen"
-                }
-            ]
-        },
-        {
-            "title": "Kalender",
-            "shortcuts": [
-                {
-                    "icon": "assets/img/key-icons/w-key.png",
-                    "description": "Zur Wochenansicht wechseln"
-                },
-                {
-                    "icon": "assets/img/key-icons/m-key.png",
-                    "description": "Zur Monatsansicht wechseln"
-                },
-                {
-                    "icon": "assets/img/key-icons/c-key.png",
-                    "description": "Kursauswahl anzeigen",
-                    "tooltip": "Nicht von allen Browsern unterstützt. (Nur Safari und ältere Chrome-Versionen unterstützen diese Funktion)"
-                },
-                {
-                    "icon": "assets/img/key-icons/t-key.png",
-                    "description": "Gehe zu Heute",
-                    "tooltip": "Funktioniert sowohl in der Wochen- als auch in der Monatsansicht."
-                }
-            ]
-        },
-        {
-            "title": "Wochenansicht",
-            "shortcuts": [
-                {
-                    "icon": "assets/img/key-icons/arrow-left.png",
-                    "description": "Vorherige Woche anzeigen"
-                },
-                {
-                    "icon": "assets/img/key-icons/arrow-right.png",
-                    "description": "Nächste Woche anzeigen"
-                }
-            ]
-        },
-        {
-            "title": "Monatsansicht",
-            "shortcuts": [
-                {
-                    "icon": "assets/img/key-icons/arrow-left.png",
-                    "description": "Vorherigen Monat anzeigen"
-                },
-                {
-                    "icon": "assets/img/key-icons/arrow-right.png",
-                    "description": "Nächsten Monat auswählen"
-                }
-            ]
-        },
-        {
-            "title": "Popups",
-            "shortcuts": [
-                {
-                    "icon": "assets/img/key-icons/esc-key.png",
-                    "description": "Popup schließen"
-                }
-            ]
-        }
-    ]
-};
 
 // checking views
 const isMonthView = () => monthViewWrap.style.display !== 'none';
@@ -774,6 +698,14 @@ const getAvailableCourses = () => {
     });
 }
 
+const getKeyboardShortcuts = () => {
+    return new Promise((resolve, reject) => {
+        $.getJSON("assets/json/keyboard-shortcuts.json", function (json) {
+            resolve(json);
+        });
+    });
+}
+
 const createDropdown = () => {
     // Initialize variables for checking year
     let currentYear = new Date().getFullYear();
@@ -829,8 +761,8 @@ document.querySelectorAll('li.day').forEach((elem) => {
     elem.addEventListener('click', createCalendarPopup);
 });
 
-
 document.addEventListener('DOMContentLoaded', async () => {
+    keyboardShortcuts = await getKeyboardShortcuts();
     courses = await getAvailableCourses();
 
     for (let i = 0; i < 205; i++) { // per quarter hour 5, per hour 20 li elements
