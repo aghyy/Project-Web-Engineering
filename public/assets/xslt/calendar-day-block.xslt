@@ -7,7 +7,7 @@
         <table class="calendar-popup-table">
             <thead>
                 <tr>
-                    <th>Zeit</th>
+                    <th class="calendar-popup-table-head-time">Zeit</th>
                     <th>Vorlesung</th>
                     <th>Person</th>
                     <th>Raum</th>

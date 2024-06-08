@@ -53,8 +53,12 @@
 /* calendar day popup */
 #calendar-popup-content {
     padding: 20px;
-    width: 700px;
+    width: 650px;
     height: 80vh;
+}
+
+.calendar-popup-table-head-time {
+    width: 100px;
 }
 
 .calendar-popup-table {
