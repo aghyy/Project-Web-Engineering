@@ -36,6 +36,9 @@
     "xml",
     "xslt"
   ],
+  "engines": {
+    "node": "20.10.0"
+  },
   "author": "Andreas",
   "license": "ISC",
   "bugs": {
