@@ -493,13 +493,7 @@ const getXmlDayMenu = async (url) => {
 }
 
 const getXmlWeekMenu = async () => {
-	let weekDays = ['sonntag', 'montag', 'dienstag', 'mittwoch', 'donnerstag', 'freitag', 'samstag'];
-	let todaysDate = new Date();
-
-	weekDays[todaysDate.getDay()] = 'index';
-
-	weekDays.splice(0, 1);
-	weekDays.splice(5, 1);
+	let weekDays = ['montag', 'dienstag', 'mittwoch', 'donnerstag', 'freitag'];
 
 	let promises = weekDays.map(day => {
 		const url = `https://www.imensa.de/karlsruhe/mensa-erzbergerstrasse/${day}.html`;

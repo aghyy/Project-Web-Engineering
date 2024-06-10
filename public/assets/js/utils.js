@@ -92,30 +92,65 @@ const createMenuPopup = async () => {
     closeIcon.innerHTML = '<ion-icon name="close-outline"></ion-icon>';
     closeIcon.addEventListener('click', removePopup);
 
+    let menuBar = document.createElement('div');
+    menuBar.classList.add('menu-bar');
+    menuBar.id = 'menu-bar';
+
+    let dayContent = document.createElement('div');
+    dayContent.classList.add('day-content');
+    dayContent.id = 'day-content';
+
     // Append elements to each other
     popupContent.appendChild(popupTitle);
     popupContent.appendChild(closeIcon);
+    popupContent.appendChild(menuBar);
+    popupContent.appendChild(dayContent);
     popup.appendChild(popupContent);
     document.body.appendChild(popup);
 
-    // Your existing code
-    let foodMenuPopupContent = document.getElementById('food-menu-popup-content');
     document.getElementById('food-menu-popup').style.display = 'block';
     document.body.style.overflow = 'hidden';
 
-    insertLoaderBefore(foodMenuPopupContent);
-    foodMenuPopupContent.style.display = 'none';
+    insertLoaderBefore(dayContent);
+    dayContent.style.display = 'none';
 
     let xmlString = await loadMenu();
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
     removeLoader();
-    foodMenuPopupContent.style.display = 'flex';
+    dayContent.style.display = 'flex';
 
     loadXML(xsltMenu, function (xslt) {
-        applyXSLT(xmlDoc, xslt, foodMenuPopupContent);
+        applyFoodMenuXSLT(xmlDoc, xslt, menuBar, dayContent);
     });
+}
+
+const applyFoodMenuXSLT = (xmlDoc, xslt, menuBar, dayContent) => {
+    let xsltProcessor = new XSLTProcessor();
+    xsltProcessor.importStylesheet(xslt);
+    
+    let days = xmlDoc.getElementsByTagName('day');
+    for (let i = 0; i < days.length; i++) {
+        let dayName = days[i].getElementsByTagName('day-name')[0].textContent;
+
+        let dayButton = document.createElement('button');
+        dayButton.classList.add('day-button');
+        dayButton.textContent = dayName;
+        dayButton.addEventListener('click', (event) => {
+            let fragment = xsltProcessor.transformToFragment(days[i], document);
+            dayContent.innerHTML = '';
+            dayContent.appendChild(fragment);
+
+            document.querySelector('.active-food-menu-day')?.classList.remove('active-food-menu-day');
+            event.target.classList.add('active-food-menu-day');
+        });
+
+        menuBar.appendChild(dayButton);
+    }
+
+    let dayIndex = ((new Date().getDay() + 6) % 7) > 4 ? 0 : (new Date().getDay() + 6) % 7;
+    menuBar.querySelectorAll('.day-button')[dayIndex].click();
 }
 
 const createSettingsPopup = async () => {
