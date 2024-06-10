@@ -75,40 +75,14 @@ const mapWeekDay = (germanDay) => {
 	return dayMapping[germanDay] || null;  // Return null if the input is not a valid key
 }
 
-const isWeekend = (year, month, day) => {
-	const date = new Date(year, month - 1, day);
-	const dayOfWeek = date.getDay();
-	return dayOfWeek === 0 || dayOfWeek === 6; // 0 is Sunday, 6 is Saturday
-}
-
-const getDateOfSpecificDayInWeek = (year, month, randomDay, dayName) => {
-	const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-	const monthIndex = month - 1;
-	const dayIndex = dayNames.indexOf(dayName.toLowerCase());
-	const randomDate = new Date(year, monthIndex, randomDay);
-	const randomDayOfWeek = randomDate.getDay(); // 0 for Sunday, 1 for Monday, etc.
-	let difference = dayIndex - randomDayOfWeek;
-
-	if (difference < 0) {
-		difference += 7;
-	}
-
-	const desiredDate = randomDay + difference;
-
-	return new Date(year, monthIndex, desiredDate);
-}
-
 const getXMLForDay = (xmlString, dayId) => {
-	// Find the <day> element with the specified id
 	const dayRegex = new RegExp(`<day\\s+id=['"]${dayId}['"][^>]*>(.*?)<\/day>`, 's');
 	const match = xmlString.match(dayRegex);
 
 	if (!match) {
-		// If day element with the specified id is not found, return empty string
 		return '';
 	}
 
-	// Construct the full XML string for the day
 	const xmlStringForDay = match[0];
 	const fullXMLForDay = `<?xml version='1.0' encoding='UTF-8'?><calendar>${xmlStringForDay}</calendar>`;
 
@@ -142,7 +116,6 @@ const getWeekDaysOfMonth = (month, year) => {
 		date.setDate(date.getDate() + 1);
 	}
 
-	// Create subarrays using the provided function
 	const result = createSubarrays(weekdays);
 
 	return result;
