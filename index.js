@@ -338,7 +338,7 @@ const getXmlForWeek = async (courseName, day, month, year) => {
 			let type = element.querySelector('a > .tooltip > strong').textContent;
 			let begin = element.querySelector('.week_block a').textContent.slice(0, 5);
 
-			if (type === 'Sonstiger Termin' && begin === '07:00') {
+			if (type === 'Sonstiger Termin' && begin.split(':')[0] <= 7) {
 				continue;
 			}
 
