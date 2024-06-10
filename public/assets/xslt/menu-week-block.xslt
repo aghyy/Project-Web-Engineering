@@ -15,7 +15,7 @@
                             <div class="meal">
                                 <p class="meal-name"><xsl:value-of select="name" /></p>
                                 <xsl:choose>
-                                    <xsl:when test="additions != 'Keine Allergene'">
+                                    <xsl:when test="allergies != 'Keine Allergene'">
                                         <p class="meal-allergies">Allergene: <xsl:value-of select="allergies" /></p>
                                     </xsl:when>
                                     <xsl:otherwise>
