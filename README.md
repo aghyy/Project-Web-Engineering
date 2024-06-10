@@ -14,6 +14,9 @@ Welcome to the improved DHBW Calendar! This project is a modern and feature-rich
 - **Detailed Day View**: Get an in-depth view of your daily schedule.
 - **Additional Features**: Various other minor functions to improve your calendar experience.
 
+## Requirements
+- Node.js must be installed, for this check out https://nodejs.org/en/download/package-manager
+
 ## Installation
 To install and set up the DHBW Calendar, follow these steps:
 
@@ -44,6 +47,3 @@ To install and set up the DHBW Calendar, follow these steps:
 
 - **Accessing Moodle**:
   - Click on the "Moodle" icon at the top to log in and access your courses.
-
-## Requirements
-- Node.js must be installed, for this check out https://nodejs.org/en/download/package-manager
