@@ -111,7 +111,7 @@ const createMenuPopup = async () => {
     document.getElementById('food-menu-popup').style.display = 'block';
     document.body.style.overflow = 'hidden';
 
-    insertLoaderBefore(dayContent);
+    insertLoaderBefore(popupContent);
     dayContent.style.display = 'none';
 
     let xmlString = await loadMenu();

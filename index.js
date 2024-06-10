@@ -75,6 +75,30 @@ const mapWeekDay = (germanDay) => {
 	return dayMapping[germanDay] || null;  // Return null if the input is not a valid key
 }
 
+const foodAdditions = ['Antioxidationsmittel', 'Farbstoff geschwefelt', 'Konservierungsstoffe', 'gewachst', 'Farbstoff geschwärzt'];
+
+const foodAdditionsSplitAndJoin = (str) => {
+    let placeholderMap = new Map();
+    let placeholderIndex = 0;
+
+    foodAdditions.forEach(element => {
+        let placeholder = `__PLACEHOLDER_${placeholderIndex}__`;
+        placeholderMap.set(placeholder, element);
+        str = str.replace(new RegExp(element, 'g'), placeholder);
+        placeholderIndex++;
+    });
+
+    let parts = str.split(' ');
+
+    for (let i = 0; i < parts.length; i++) {
+        if (placeholderMap.has(parts[i])) {
+            parts[i] = placeholderMap.get(parts[i]);
+        }
+    }
+
+    return parts.join(', ');
+}
+
 const getXMLForDay = (xmlString, dayId) => {
 	const dayRegex = new RegExp(`<day\\s+id=['"]${dayId}['"][^>]*>(.*?)<\/day>`, 's');
 	const match = xmlString.match(dayRegex);
@@ -465,8 +489,8 @@ const getXmlDayMenu = async (url) => {
 				let meal = elem.querySelector('.aw-meal-description').textContent;
 				let attributes = elem.querySelector('.aw-meal-attributes > span').innerHTML.replace(/&nbsp;&nbsp;/g, '');
 				let type = attributes.split(' ')[0] !== attributes.split(' ')[0].toUpperCase() ? attributes.split(' ')[0] : '';
-				let allergies = attributes.includes('ALLERGEN') ? attributes.split('ALLERGEN ')[1] : 'Keine Allergene';
-				let additions = attributes.includes('ZUSATZ') ? attributes.split('ZUSATZ ')[1].split(' ALLERGEN')[0] : 'Keine Zusatzstoffe';
+				let allergies = attributes.includes('ALLERGEN') ? attributes.split('ALLERGEN ')[1].split(' ').join(', ') : 'Keine Allergene';
+				let additions = attributes.includes('ZUSATZ') ? foodAdditionsSplitAndJoin(attributes.split('ZUSATZ ')[1].split(' ALLERGEN')[0]) : 'Keine Zusatzstoffe';
 
 				let mealObject = {
 					meal: meal,
