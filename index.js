@@ -304,16 +304,21 @@ const parseXmlMenu = (json) => {
 }
 
 const getXmlMonthData = async (courseName, month, year) => {
-	let fullXml = [];
-	let day = 1;
-	for (let i = 0; i < 6; i++) {
-		const xmlData = await getXmlForMonth(courseName, month, year, day);
-		fullXml.push(xmlData);
+    let fullXml = [];
+    let day = 1;
+    let promises = [];
 
-		day += 7;
-	}
+    for (let i = 0; i < 6; i++) {
+        promises.push(getXmlForMonth(courseName, month, year, day));
+        day += 7;
+    }
 
-	return parseMonthToXml(fullXml, month, year);
+    const results = await Promise.all(promises);
+    fullXml.push(...results);
+
+    const parsedXml = parseMonthToXml(fullXml, month, year);
+
+    return parsedXml;
 }
 
 const getXmlForWeek = async (courseName, day, month, year) => {
