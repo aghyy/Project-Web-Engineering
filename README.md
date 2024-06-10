@@ -42,6 +42,9 @@ To install and set up the DHBW Calendar, follow these steps:
   - Press `W` to switch to the week view.
   - Click on the corresponding day for the detailed day view.
 
+- **Keyboard Navigation**:
+  - Click on the "Keypad" icon at the top to see an overview of all shortcuts.
+
 - **Viewing Food Menu**:
   - Click on the "Food Menu" icon at the top to see the weeks offerings at the DHBW Casino.
 
