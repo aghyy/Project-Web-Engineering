@@ -99,20 +99,20 @@ const getDateOfSpecificDayInWeek = (year, month, randomDay, dayName) => {
 }
 
 const getXMLForDay = (xmlString, dayId) => {
-    // Find the <day> element with the specified id
-    const dayRegex = new RegExp(`<day\\s+id=['"]${dayId}['"][^>]*>(.*?)<\/day>`, 's');
-    const match = xmlString.match(dayRegex);
+	// Find the <day> element with the specified id
+	const dayRegex = new RegExp(`<day\\s+id=['"]${dayId}['"][^>]*>(.*?)<\/day>`, 's');
+	const match = xmlString.match(dayRegex);
 
-    if (!match) {
-        // If day element with the specified id is not found, return empty string
-        return '';
-    }
+	if (!match) {
+		// If day element with the specified id is not found, return empty string
+		return '';
+	}
 
-    // Construct the full XML string for the day
-    const xmlStringForDay = match[0];
-    const fullXMLForDay = `<?xml version='1.0' encoding='UTF-8'?><calendar>${xmlStringForDay}</calendar>`;
-    
-    return fullXMLForDay;
+	// Construct the full XML string for the day
+	const xmlStringForDay = match[0];
+	const fullXMLForDay = `<?xml version='1.0' encoding='UTF-8'?><calendar>${xmlStringForDay}</calendar>`;
+
+	return fullXMLForDay;
 };
 
 const createSubarrays = (array) => {
@@ -272,53 +272,53 @@ const parseXmlMenu = (json) => {
 	let index = 0;
 	let xml = '<menu>';
 
-    json.forEach(dayArray => {
-        xml += '<day>';
+	json.forEach(dayArray => {
+		xml += '<day>';
 
 		xml += `<day-name>${dayNames[index]}</day-name>`;
 
-        dayArray.forEach(dayObject => {
-            let meals = dayObject.jsonObject.meals;
-            xml += '<meals>';
+		dayArray.forEach(dayObject => {
+			let meals = dayObject.jsonObject.meals;
+			xml += '<meals>';
 
-            meals.forEach(meal => {
-                xml += '<meal>';
-                xml += `<name>${meal.meal}</name>`;
-                xml += `<allergies>${meal.allergies}</allergies>`;
-                xml += `<additions>${meal.additions}</additions>`;
-                xml += `<type>${meal.type}</type>`;
-                xml += '</meal>';
+			meals.forEach(meal => {
+				xml += '<meal>';
+				xml += `<name>${meal.meal}</name>`;
+				xml += `<allergies>${meal.allergies}</allergies>`;
+				xml += `<additions>${meal.additions}</additions>`;
+				xml += `<type>${meal.type}</type>`;
+				xml += '</meal>';
 				xml += `<price>${dayObject.jsonObject.price}</price>`;
-            });
-			
-            xml += '</meals>';
-        });
+			});
 
-        xml += '</day>';
+			xml += '</meals>';
+		});
+
+		xml += '</day>';
 
 		index++;
-    });
+	});
 
-    xml += '</menu>';
-    return xml;
+	xml += '</menu>';
+	return xml;
 }
 
 const getXmlMonthData = async (courseName, month, year) => {
-    let fullXml = [];
-    let day = 1;
-    let promises = [];
+	let fullXml = [];
+	let day = 1;
+	let promises = [];
 
-    for (let i = 0; i < 6; i++) {
-        promises.push(getXmlForMonth(courseName, month, year, day));
-        day += 7;
-    }
+	for (let i = 0; i < 6; i++) {
+		promises.push(getXmlForMonth(courseName, month, year, day));
+		day += 7;
+	}
 
-    const results = await Promise.all(promises);
-    fullXml.push(...results);
+	const results = await Promise.all(promises);
+	fullXml.push(...results);
 
-    const parsedXml = parseMonthToXml(fullXml, month, year);
+	const parsedXml = parseMonthToXml(fullXml, month, year);
 
-    return parsedXml;
+	return parsedXml;
 }
 
 const getXmlForWeek = async (courseName, day, month, year) => {
@@ -416,6 +416,7 @@ const getXmlForWeek = async (courseName, day, month, year) => {
 const getXmlForMonth = async (courseName, month, year, day) => {
 	let htmlString;
 	let url = `https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=${users[courseName]}&file=${courseName}&day=${day}&month=${month}&year=${year}`;
+
 	try {
 		htmlString = await scrapeHtml(url);
 	} catch (error) {
@@ -424,62 +425,52 @@ const getXmlForMonth = async (courseName, month, year, day) => {
 
 	let listOfLectureCurrentMonth = [];
 	const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-
 	let html = new jsdom.JSDOM(htmlString.data).window.document;
-	if (html.body.children.length > 0) {
-		let wholeMonth = html.querySelectorAll('.week_block');
 
-		listOfLectureCurrentMonth.push({ "course": courseName });
+	if (html.body.children.length <= 0) {
+		return;
+	}
 
-		for (const element of wholeMonth) {
-			let type = element.querySelector('a > .tooltip > strong').textContent;
-			let begin = element.querySelector('.week_block a').textContent.slice(0, 5);
+	listOfLectureCurrentMonth.push({ "course": courseName });
+	let wholeMonth = html.querySelectorAll('.week_block');
 
-			if (type === 'Sonstiger Termin' && begin === '07:00') {
-				continue;
-			}
+	for (const element of wholeMonth) {
+		let type = element.querySelector('a > .tooltip > strong').textContent;
+		let begin = element.querySelector('.week_block a').textContent.slice(0, 5);
+		let name = element.querySelector('a').innerHTML.split('<br>')[1].split('<span class="tooltip">')[0].replace('</span>', '');
+		let end = element.querySelector('.week_block a').textContent.slice(7, 12);
+		let holiday = begin == '08:00' && end == '18:00';
+		let exam = element.style.backgroundColor == 'rgb(255, 0, 0)';
+		let lecture = type === 'Lehrveranstaltung';
+		let other_event = type === 'Sonstiger Termin';
+		let voluntary = name.toLowerCase().includes('ccna');
+		if (voluntary) exam = lecture = other_event = false;
+		let weekDay = mapWeekDay(element.querySelectorAll('.tooltip div')[1].textContent.slice(0, 2));
 
-			let name = element.querySelector('a').innerHTML.split('<br>')[1].split('<span class="tooltip">')[0].replace('</span>', '');
-
-			let end = element.querySelector('.week_block a').textContent.slice(7, 12);
-			let holiday = begin == '08:00' && end == '18:00';
-			let exam = element.style.backgroundColor == 'rgb(255, 0, 0)';
-			let lecture = type === 'Lehrveranstaltung';
-			let other_event = type === 'Sonstiger Termin';
-			let voluntary = name.toLowerCase().includes('ccna');
-			if (voluntary) exam = lecture = other_event = false;
-
-			let weekDay = mapWeekDay(element.querySelectorAll('.tooltip div')[1].textContent.slice(0, 2));
-
-			if (weekDay === null) {
-				let germanMonths = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-				let missingDay = element.querySelectorAll('.tooltip div')[1].textContent.split(' ')[0].replace('.', '');
-				let monthName = element.querySelectorAll('.tooltip div')[1].textContent.split(' ')[1].split(' ')[0];
-				let monthIndex = germanMonths.indexOf(monthName);
-				let dateOfMissingDay = new Date(year, monthIndex, missingDay);
-				weekDay = daysOfWeek[dateOfMissingDay.getDay()];
-			}
-
-			// let date = getDateOfSpecificDayInWeek(year, month, day, weekDay);
-			// let monthAbbreviation = date.toLocaleString('default', { month: 'short' }).toLowerCase();
-			// let jsonDay = `${date.getDate()}-${monthAbbreviation}`;
-
-			let jsonObject = {
-				name: name,
-				begin: begin.replace(':', '_'),
-				week_day: weekDay,
-				holiday: holiday,
-				exam: exam,
-				lecture: lecture,
-				other_event: other_event,
-				voluntary: voluntary
-			};
-
-			listOfLectureCurrentMonth.push(jsonObject);
+		if (weekDay === null) {
+			let germanMonths = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+			let missingDay = element.querySelectorAll('.tooltip div')[1].textContent.split(' ')[0].replace('.', '');
+			let monthName = element.querySelectorAll('.tooltip div')[1].textContent.split(' ')[1].split(' ')[0];
+			let monthIndex = germanMonths.indexOf(monthName);
+			let dateOfMissingDay = new Date(year, monthIndex, missingDay);
+			weekDay = daysOfWeek[dateOfMissingDay.getDay()];
 		}
 
-		return listOfLectureCurrentMonth;
+		let jsonObject = {
+			name: name,
+			begin: begin.replace(':', '_'),
+			week_day: weekDay,
+			holiday: holiday,
+			exam: exam,
+			lecture: lecture,
+			other_event: other_event,
+			voluntary: voluntary
+		};
+
+		listOfLectureCurrentMonth.push(jsonObject);
 	}
+
+	return listOfLectureCurrentMonth;
 }
 
 const getXmlDayMenu = async (url) => {
@@ -505,10 +496,10 @@ const getXmlDayMenu = async (url) => {
 				let additions = attributes.includes('ZUSATZ') ? attributes.split('ZUSATZ ')[1].split(' ALLERGEN')[0] : 'Keine Zusatzstoffe';
 
 				let mealObject = {
-					meal : meal,
-					allergies : allergies,
-					additions : additions,
-					type : type
+					meal: meal,
+					allergies: allergies,
+					additions: additions,
+					type: type
 				};
 
 				meals.push(mealObject);
@@ -517,11 +508,11 @@ const getXmlDayMenu = async (url) => {
 			let price = element.querySelector('.aw-meal-price').textContent;
 
 			let jsonObject = {
-				meals : meals,
-				price : price
+				meals: meals,
+				price: price
 			};
 
-			listOfMenuForDay.push({jsonObject});
+			listOfMenuForDay.push({ jsonObject });
 		}
 	}
 
@@ -537,13 +528,12 @@ const getXmlWeekMenu = async () => {
 	weekDays.splice(0, 1);
 	weekDays.splice(5, 1);
 
-	let listOfMenuForWeek = [];
-
-
-	for (const day of weekDays) {
+	let promises = weekDays.map(day => {
 		const url = `https://www.imensa.de/karlsruhe/mensa-erzbergerstrasse/${day}.html`;
-		listOfMenuForWeek.push(await getXmlDayMenu(url));
-	}
+		return getXmlDayMenu(url);
+	});
+
+	const listOfMenuForWeek = await Promise.all(promises);
 
 	return parseXmlMenu(listOfMenuForWeek);
 }
