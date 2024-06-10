@@ -283,7 +283,7 @@
 }
 
 .popup-container {
-    margin-top: 54px;
+    /* margin-top: 54px; */
     width: 100%;
 }
 
@@ -295,6 +295,7 @@
     border-bottom: 2px solid #333;
     color: #666;
     letter-spacing: 1.5px;
+    margin-top: 54px;
 }
 
 .checkbox-container {

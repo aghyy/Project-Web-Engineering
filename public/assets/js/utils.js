@@ -119,7 +119,6 @@ const createMenuPopup = async () => {
 }
 
 const createSettingsPopup = async () => {
-    // Create the elements dynamically
     let popup = document.createElement('div');
     popup.classList.add('popup');
     popup.id = 'settings-popup';
@@ -141,6 +140,10 @@ const createSettingsPopup = async () => {
     closeIcon.innerHTML = '<ion-icon name="close-outline"></ion-icon>';
     closeIcon.addEventListener('click', removePopup);
 
+    let eventLegendSectionTitle = document.createElement('div');
+    eventLegendSectionTitle.classList.add('section-title');
+    eventLegendSectionTitle.textContent = 'Event-Legende';
+
     let sectionTitle = document.createElement('div');
     sectionTitle.classList.add('section-title');
     sectionTitle.textContent = 'Allgemein';
@@ -156,11 +159,9 @@ const createSettingsPopup = async () => {
     checkbox.type = 'checkbox';
     checkbox.classList.add('checkbox');
 
-    // Retrieve and set the checkbox state from local storage
     const isCheckboxChecked = localStorage.getItem('isCheckboxChecked') === 'true';
     checkbox.checked = isCheckboxChecked;
 
-    // Add event listener to save checkbox state to local storage
     checkbox.addEventListener('change', () => {
         localStorage.setItem('isCheckboxChecked', checkbox.checked);
     });
@@ -178,20 +179,47 @@ const createSettingsPopup = async () => {
         localStorageDisplay.textContent = 'Previously selected course: No course selected';
     });
 
-    // Append elements to each other
+    let legendContainer = document.createElement('div');
+    legendContainer.classList.add('calendar-legend');
+
+    let legendItems = [
+        { color: 'var(--lecture-event)', label: 'Vorlesung' },
+        { color: 'var(--volunt-event)', label: 'Freiwilliger Termin' },
+        { color: 'var(--red)', label: 'Klausur' },
+        { color: 'var(--green)', label: 'Feiertag' },
+        { color: 'var(--other-event)', label: 'Sonstiger Termin' }
+    ];
+
+    legendItems.forEach(item => {
+        let legendItem = document.createElement('div');
+        legendItem.classList.add('legend-item');
+
+        let legendColor = document.createElement('div');
+        legendColor.classList.add('legend-color');
+        legendColor.style.backgroundColor = item.color;
+
+        let legendLabel = document.createElement('p');
+        legendLabel.textContent = item.label;
+
+        legendItem.appendChild(legendColor);
+        legendItem.appendChild(legendLabel);
+        legendContainer.appendChild(legendItem);
+    });
+
     checkboxLabel.appendChild(checkbox);
     checkboxContainer.appendChild(checkboxLabel);
     popupContainer.appendChild(sectionTitle);
     popupContainer.appendChild(checkboxContainer);
     popupContainer.appendChild(localStorageDisplay);
     popupContainer.appendChild(clearButton);
+    popupContainer.appendChild(eventLegendSectionTitle);
+    popupContainer.appendChild(legendContainer);
     popupContent.appendChild(popupTitle);
     popupContent.appendChild(closeIcon);
     popupContent.appendChild(popupContainer);
     popup.appendChild(popupContent);
     document.body.appendChild(popup);
 
-    // Show popup and prevent body scrolling
     document.getElementById('settings-popup').style.display = 'block';
     document.body.style.overflow = 'hidden';
 };

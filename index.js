@@ -8,7 +8,7 @@ const fs = require("fs");
 const bodyParser = require('body-parser');
 const url = require('url');
 const app = express();
-const PORT = 6059;
+const PORT = process.env.PORT || 6059;
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
