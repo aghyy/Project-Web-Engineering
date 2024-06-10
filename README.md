@@ -37,7 +37,7 @@ To install and set up the DHBW Calendar, follow these steps:
 
 ## Usage
 - **Navigating the Calendar**:
-  - Use arrow keys for quick navigation between the Months/Weeks.
+  - Use arrow keys for quick navigation between the months/weeks.
   - Press `M` to switch to the month view.
   - Press `W` to switch to the week view.
   - Click on the corresponding day for the detailed day view.
