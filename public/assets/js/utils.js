@@ -4,6 +4,7 @@ let courses = {};
 let selectedCourse;
 let currentRequest = null;
 let keyPressTimeout;
+let preloadedMonth = {};
 // defining keyboard shortcuts
 let keyboardShortcuts = {};
 // setting default values
@@ -942,6 +943,7 @@ const updateWeekView = async () => {
     removeWeekCalendar();
 
     let xmlString = await loadWeek(selectedCourse, day, month, year);
+    preloadedMonth = { 'course': selectedCourse, 'month': month, 'year': year, 'month_promise': loadMonth(selectedCourse, month, year) };
 
     // Parse the XML string into an XML document
     let parser = new DOMParser();
@@ -1075,6 +1077,10 @@ const loadWeek = async (course, day, month, year) => {
 }
 
 const loadMonth = async (course, month, year) => {
+    if (preloadedMonth && preloadedMonth.course === course && preloadedMonth.month === month && preloadedMonth.year === year) {
+        return preloadedMonth.month_promise;
+    }
+
     const response = await fetch('http://localhost:6059/api/get_month/', {
         method: 'POST',
         headers: {
