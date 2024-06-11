@@ -201,12 +201,15 @@ const createSettingsPopup = async () => {
 
     checkbox.addEventListener('change', () => {
         localStorage.setItem('isCheckboxChecked', checkbox.checked);
-        if (checkbox.checked) {
-            localStorage.setItem('previouslySelectedCourse', selectedCourse);
-            localStorageDisplay.textContent = `Zuvor gewählter Kurs: ${selectedCourse}`;
-        } else {
-            localStorage.removeItem('previouslySelectedCourse');
-            localStorageDisplay.textContent = 'Zuvor gewählter Kurs: Kein Kurs ausgewählt';
+
+        if (selectedCourse === '') {
+            if (checkbox.checked) {
+                localStorage.setItem('previouslySelectedCourse', selectedCourse);
+                localStorageDisplay.textContent = `Zuvor gewählter Kurs: ${selectedCourse}`;
+            } else {
+                localStorage.removeItem('previouslySelectedCourse');
+                localStorageDisplay.textContent = 'Zuvor gewählter Kurs: Kein Kurs ausgewählt';
+            }
         }
     });
 
