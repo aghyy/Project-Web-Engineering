@@ -205,15 +205,15 @@ const createSettingsPopup = async () => {
 
     let localStorageDisplay = document.createElement('div');
     localStorageDisplay.classList.add('local-storage-display');
-    let previouslySelectedCourse = localStorage.getItem('previouslySelectedCourse') || 'No course selected';
-    localStorageDisplay.textContent = `Previously selected course: ${previouslySelectedCourse}`;
+    let previouslySelectedCourse = localStorage.getItem('previouslySelectedCourse') || 'Kein Kurs ausgewählt';
+    localStorageDisplay.textContent = `Zuvor gewählter Kurs: ${previouslySelectedCourse}`;
 
     let clearButton = document.createElement('button');
     clearButton.classList.add('clear-button');
     clearButton.textContent = 'Clear';
     clearButton.addEventListener('click', () => {
         localStorage.removeItem('previouslySelectedCourse');
-        localStorageDisplay.textContent = 'Previously selected course: No course selected';
+        localStorageDisplay.textContent = 'Zuvor gewählter Kurs: Kein Kurs ausgewählt';
     });
 
     let legendContainer = document.createElement('div');
@@ -495,7 +495,7 @@ const openColorPicker = (text, defaultColor, callback) => {
         colorPicker.value = defaultColor;
 
         var submitButton = document.createElement("button");
-        submitButton.textContent = "Submit";
+        submitButton.textContent = "Auswählen";
         submitButton.onclick = function () {
             var selectedColor = colorPicker.value;
             document.body.removeChild(popup);
