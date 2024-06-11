@@ -336,6 +336,8 @@
 .popup-container {
     /* margin-top: 54px; */
     width: 100%;
+    overflow-y: scroll;
+    overscroll-behavior: none;
 }
 
 .section-title {
