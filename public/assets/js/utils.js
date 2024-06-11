@@ -1211,4 +1211,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         courseInputElem.selectedIndex = 0;
     }
 
+    await loadMonth(courseInputElem, currentDate.getMonth() + 1, currentDate.getFullYear());
+
 });
