@@ -73,7 +73,6 @@ const dayHasEvents = (elem) => {
 };
 
 const createMenuPopup = async () => {
-    // Create the elements dynamically
     let popup = document.createElement('div');
     popup.classList.add('popup');
     popup.id = 'food-menu-popup';
@@ -100,7 +99,6 @@ const createMenuPopup = async () => {
     dayContent.classList.add('day-content');
     dayContent.id = 'day-content';
 
-    // Append elements to each other
     popupContent.appendChild(popupTitle);
     popupContent.appendChild(closeIcon);
     popupContent.appendChild(menuBar);
@@ -254,7 +252,7 @@ const createSettingsPopup = async () => {
 
     let addThemeButton = document.createElement('button');
     addThemeButton.classList.add('add-theme-button');
-    addThemeButton.textContent = 'Add Theme';
+    addThemeButton.textContent = 'Theme hinzufügen';
     addThemeButton.addEventListener('click', addTheme);
 
     let themeSelector = document.createElement('select');
@@ -291,17 +289,17 @@ const createSettingsPopup = async () => {
 
     let editThemeButton = document.createElement('button');
     editThemeButton.classList.add('edit-theme-button');
-    editThemeButton.textContent = 'Edit Theme';
+    editThemeButton.textContent = 'Theme bearbeiten';
     editThemeButton.addEventListener('click', editTheme);
 
     let renameThemeButton = document.createElement('button');
     renameThemeButton.classList.add('rename-theme-button');
-    renameThemeButton.textContent = 'Rename Theme';
+    renameThemeButton.textContent = 'Theme umbenennen';
     renameThemeButton.addEventListener('click', renameTheme);
 
     let deleteThemeButton = document.createElement('button');
     deleteThemeButton.classList.add('delete-theme-button');
-    deleteThemeButton.textContent = 'Delete Theme';
+    deleteThemeButton.textContent = 'Theme löschen';
     deleteThemeButton.addEventListener('click', deleteTheme);
 
 
@@ -355,30 +353,30 @@ const applyTheme = () => {
 };
 
 const addTheme = async () => {
-    const themeName = prompt('Enter theme name:');
+    const themeName = prompt('Theme Namen eingeben:');
     if (!themeName) return;
 
     const themes = JSON.parse(localStorage.getItem('themes')) || {};
 
     if (themes[themeName]) {
-        alert('Theme already exists!');
+        alert('Theme existiert bereits!');
         return;
     }
 
     const newTheme = {};
-    newTheme['--lecture-event'] = await openColorPicker('Enter color for Vorlesung:', '#4682B4');
+    newTheme['--lecture-event'] = await openColorPicker('Farbe für Vorlesung eingeben:', '#4682B4');
     if (newTheme['--lecture-event'] === null) return;
 
-    newTheme['--volunt-event'] = await openColorPicker('Enter color for Freiwilliger Termin:', '#c3a602');
+    newTheme['--volunt-event'] = await openColorPicker('Farbe für Freiwilliger Termin eingeben:', '#c3a602');
     if (newTheme['--volunt-event'] === null) return;
 
-    newTheme['--exam-event'] = await openColorPicker('Enter color for Klausur:', '#FF4500');
+    newTheme['--exam-event'] = await openColorPicker('Farbe für Klausur eingeben:', '#FF4500');
     if (newTheme['--exam-event'] === null) return;
 
-    newTheme['--holiday-event'] = await openColorPicker('Enter color for Feiertag:', '#0f7643');
+    newTheme['--holiday-event'] = await openColorPicker('Farbe für Feiertag eingeben:', '#0f7643');
     if (newTheme['--holiday-event'] === null) return;
 
-    newTheme['--other-event'] = await openColorPicker('Enter color for Sonstiger Termin:', '#191970');
+    newTheme['--other-event'] = await openColorPicker('Farbe für Sonstiger Termin eingeben:', '#191970');
     if (newTheme['--other-event'] === null) return;
 
     themes[themeName] = newTheme;
@@ -400,26 +398,26 @@ const editTheme = async () => {
     const selectedTheme = themeSelector.value;
 
     if (selectedTheme === 'default') {
-        alert('Cannot edit the default theme!');
+        alert('Default Theme kann nicht bearbeitet werden!');
         return;
     }
 
     const themes = JSON.parse(localStorage.getItem('themes'));
 
     const newTheme = {};
-    newTheme['--lecture-event'] = await openColorPicker('Enter color for Vorlesung:', themes[selectedTheme]['--lecture-event']);
+    newTheme['--lecture-event'] = await openColorPicker('Farbe für Vorlesung eingeben:', themes[selectedTheme]['--lecture-event']);
     if (newTheme['--lecture-event'] === null) return;
 
-    newTheme['--volunt-event'] = await openColorPicker('Enter color for Freiwilliger Termin:', themes[selectedTheme]['--volunt-event']);
+    newTheme['--volunt-event'] = await openColorPicker('Farbe für Freiwilliger Termin eingeben:', themes[selectedTheme]['--volunt-event']);
     if (newTheme['--volunt-event'] === null) return;
 
-    newTheme['--exam-event'] = await openColorPicker('Enter color for Klausur:', themes[selectedTheme]['--exam-event']);
+    newTheme['--exam-event'] = await openColorPicker('Farbe für Klausur eingeben:', themes[selectedTheme]['--exam-event']);
     if (newTheme['--exam-event'] === null) return;
 
-    newTheme['--holiday-event'] = await openColorPicker('Enter color for Feiertag:', themes[selectedTheme]['--holiday-event']);
+    newTheme['--holiday-event'] = await openColorPicker('Farbe für Feiertag eingeben:', themes[selectedTheme]['--holiday-event']);
     if (newTheme['--holiday-event'] === null) return;
 
-    newTheme['--other-event'] = await openColorPicker('Enter color for Sonstiger Termin:', themes[selectedTheme]['--other-event']);
+    newTheme['--other-event'] = await openColorPicker('Farbe für Sonstiger Termin eingeben:', themes[selectedTheme]['--other-event']);
     if (newTheme['--other-event'] === null) return;
 
     themes[selectedTheme] = newTheme;
@@ -431,17 +429,17 @@ const renameTheme = () => {
     const themeSelector = document.querySelector('.theme-selector');
     const selectedTheme = themeSelector.value;
     if (selectedTheme === 'default') {
-        alert('Cannot rename the default theme!');
+        alert('Default Theme kann nicht umbenannt werden!');
         return;
     }
 
-    const newThemeName = prompt('Enter new theme name:');
+    const newThemeName = prompt('Neuen Theme Namen eingeben:');
     if (!newThemeName) return;
 
     const themes = JSON.parse(localStorage.getItem('themes'));
 
     if (themes[newThemeName]) {
-        alert('Theme name already exists!');
+        alert('Ein Theme mit diesem Namen existiert bereits!');
         return;
     }
 
@@ -462,7 +460,7 @@ const deleteTheme = () => {
     const themeSelector = document.querySelector('.theme-selector');
     const selectedTheme = themeSelector.value;
     if (selectedTheme === 'default') {
-        alert('Cannot delete the default theme!');
+        alert('Default Theme kann nicht gelöscht werden!');
         return;
     }
 
