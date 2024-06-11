@@ -5,6 +5,9 @@ let selectedCourse;
 let currentRequest = null;
 let keyPressTimeout;
 let preloadedMonth = {};
+let preloadedPreviousMonth = {};
+let preloadedNextMonth = {};
+let preloadedMenu;
 // defining keyboard shortcuts
 let keyboardShortcuts = {};
 // setting default values
@@ -919,7 +922,7 @@ const handleKeyPress = (event) => {
         setView('month');
     } else if (event.key === 'f') {
         event.preventDefault();
-        showMenu();
+        createMenuPopup();
     } else if (event.key === 'h') {
         event.preventDefault();
         createKeyboardShortcutsPopup();
@@ -981,6 +984,10 @@ const makeCancelable = (promise) => {
     };
 }
 
+const formatMonth = (month) => {
+    return month < 10 ? '0' + month : month;
+}
+
 const updateMonthView = async () => {
     if (currentRequest) {
         currentRequest.cancel();
@@ -995,8 +1002,17 @@ const updateMonthView = async () => {
     const loadMonthPromise = makeCancelable(loadMonth(selectedCourse || '', month, year));
     currentRequest = loadMonthPromise;
 
+    if (selectedCourse) {
+        preloadedPreviousMonth = { 'course': selectedCourse, 'month': formatMonth(month - 1), 'year': year, 'month_promise': loadMonth(selectedCourse, formatMonth(month - 1), year) };
+        preloadedNextMonth = { 'course': selectedCourse, 'month': formatMonth(month - 1 + 2), 'year': year, 'month_promise': loadMonth(selectedCourse, formatMonth(month - 1 + 2), year) };
+    }
+
     try {
         let xmlString = await loadMonthPromise.promise;
+
+        if (selectedCourse) {
+            preloadedMonth = { 'course': selectedCourse, 'month': month, 'year': year, 'month_promise': loadMonthPromise.promise };
+        }
 
         // Parse the XML string into an XML document
         let parser = new DOMParser();
@@ -1047,6 +1063,10 @@ const loadDay = async (course, day, month, year) => {
 }
 
 const loadMenu = async () => {
+    if (preloadedMenu) {
+        return preloadedMenu;
+    }
+
     const response = await fetch('http://localhost:6059/api/get_menu/', {
         method: 'POST',
         headers: {
@@ -1079,6 +1099,13 @@ const loadWeek = async (course, day, month, year) => {
 const loadMonth = async (course, month, year) => {
     if (preloadedMonth && preloadedMonth.course === course && preloadedMonth.month === month && preloadedMonth.year === year) {
         return preloadedMonth.month_promise;
+
+    } else if (preloadedPreviousMonth && preloadedPreviousMonth.course === course && preloadedPreviousMonth.month === month && preloadedPreviousMonth.year === year) {
+        return preloadedPreviousMonth.month_promise;
+
+    } else if (preloadedNextMonth && preloadedNextMonth.course === course && preloadedNextMonth.month === month && preloadedNextMonth.year === year) {
+        return preloadedNextMonth.month_promise;
+
     }
 
     const response = await fetch('http://localhost:6059/api/get_month/', {
@@ -1218,5 +1245,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     await loadMonth(courseInputElem, currentDate.getMonth() + 1, currentDate.getFullYear());
+    preloadedMenu = await loadMenu();
 
 });

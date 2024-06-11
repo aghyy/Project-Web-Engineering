@@ -1,6 +1,6 @@
 FROM node:latest
 
-WORKDIR /Users/andreas/projects/dhbw-projects/webengineering/Project-Web-Engineering
+WORKDIR /Users/andreas/projects/dhbw-projects/webengineering/DHBW-Calendar
 
 COPY package*.json ./
 
