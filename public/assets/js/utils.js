@@ -984,8 +984,22 @@ const makeCancelable = (promise) => {
     };
 }
 
-const formatMonth = (month) => {
-    return month < 10 ? '0' + month : month;
+const getMonthDetails = (course, month, year) => {
+    if (month < 1) {
+        month = 12;
+        year -= 1;
+    } else if (month > 12) {
+        month = 1;
+        year = year - 1 + 2;
+    }
+    year = year.toString();
+    const formattedMonth = month < 10 ? '0' + month : '' + month;
+    return {
+        'course': course,
+        'month': formattedMonth,
+        'year': year,
+        'month_promise': loadMonth(course, formattedMonth, year)
+    };
 }
 
 const updateMonthView = async () => {
@@ -1003,8 +1017,8 @@ const updateMonthView = async () => {
     currentRequest = loadMonthPromise;
 
     if (selectedCourse) {
-        preloadedPreviousMonth = { 'course': selectedCourse, 'month': formatMonth(month - 1), 'year': year, 'month_promise': loadMonth(selectedCourse, formatMonth(month - 1), year) };
-        preloadedNextMonth = { 'course': selectedCourse, 'month': formatMonth(month - 1 + 2), 'year': year, 'month_promise': loadMonth(selectedCourse, formatMonth(month - 1 + 2), year) };
+        preloadedPreviousMonth = getMonthDetails(selectedCourse, month - 1, year);
+        preloadedNextMonth = getMonthDetails(selectedCourse, month - 1 + 2, year);
     }
 
     try {
