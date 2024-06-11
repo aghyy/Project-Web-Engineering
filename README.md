@@ -22,11 +22,11 @@ To install and set up the DHBW Calendar, follow these steps:
 
 1. **Clone the Repository**:
     ```bash
-    git clone https://github.com/aghyy/Project-Web-Engineering.git
+    git clone https://github.com/aghyy/DHBW-Calendar.git
     ```
 2. **Install Dependencies**:
     ```bash
-    cd /path-to/Project-Web-Engineering
+    cd /path-to/DHBW-Calendar
     npm install
     ```
 
