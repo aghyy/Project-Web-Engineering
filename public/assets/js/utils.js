@@ -129,7 +129,7 @@ const createMenuPopup = async () => {
 const applyFoodMenuXSLT = (xmlDoc, xslt, menuBar, dayContent) => {
     let xsltProcessor = new XSLTProcessor();
     xsltProcessor.importStylesheet(xslt);
-    
+
     let days = xmlDoc.getElementsByTagName('day');
     for (let i = 0; i < days.length; i++) {
         let dayName = days[i].getElementsByTagName('day-name')[0].textContent;
@@ -152,6 +152,10 @@ const applyFoodMenuXSLT = (xmlDoc, xslt, menuBar, dayContent) => {
     let dayIndex = ((new Date().getDay() + 6) % 7) > 4 ? 0 : (new Date().getDay() + 6) % 7;
     menuBar.querySelectorAll('.day-button')[dayIndex].click();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    applyTheme();
+});
 
 const createSettingsPopup = async () => {
     let popup = document.createElement('div');
@@ -220,8 +224,8 @@ const createSettingsPopup = async () => {
     let legendItems = [
         { color: 'var(--lecture-event)', label: 'Vorlesung' },
         { color: 'var(--volunt-event)', label: 'Freiwilliger Termin' },
-        { color: 'var(--red)', label: 'Klausur' },
-        { color: 'var(--green)', label: 'Feiertag' },
+        { color: 'var(--exam-event)', label: 'Klausur' },
+        { color: 'var(--holiday-event)', label: 'Feiertag' },
         { color: 'var(--other-event)', label: 'Sonstiger Termin' }
     ];
 
@@ -241,23 +245,276 @@ const createSettingsPopup = async () => {
         legendContainer.appendChild(legendItem);
     });
 
+    let themeSectionTitle = document.createElement('div');
+    themeSectionTitle.classList.add('section-title');
+    themeSectionTitle.textContent = 'Themes';
+
+    let themeContainer = document.createElement('div');
+    themeContainer.classList.add('theme-container');
+
+    let addThemeButton = document.createElement('button');
+    addThemeButton.classList.add('add-theme-button');
+    addThemeButton.textContent = 'Add Theme';
+    addThemeButton.addEventListener('click', addTheme);
+
+    let themeSelector = document.createElement('select');
+    themeSelector.classList.add('theme-selector');
+    themeSelector.addEventListener('change', () => {
+        const selectedTheme = themeSelector.value;
+        localStorage.setItem('selectedTheme', selectedTheme);
+        applyTheme();
+    });
+
+    let themes = JSON.parse(localStorage.getItem('themes')) || {
+        default: {
+            '--lecture-event': '#4682B4',
+            '--volunt-event': '#c3a602',
+            '--exam-event': '#FF4500',
+            '--holiday-event': '#0f7643',
+            '--other-event': '#191970'
+        }
+    };
+
+    localStorage.setItem('themes', JSON.stringify(themes));
+
+    Object.keys(themes).forEach(theme => {
+        let option = document.createElement('option');
+        option.value = theme;
+        option.textContent = theme;
+        themeSelector.appendChild(option);
+    });
+
+    themeSelector.value = localStorage.getItem('selectedTheme') || 'default';
+
+    let buttonGroup = document.createElement('div');
+    buttonGroup.classList.add('button-group');
+
+    let editThemeButton = document.createElement('button');
+    editThemeButton.classList.add('edit-theme-button');
+    editThemeButton.textContent = 'Edit Theme';
+    editThemeButton.addEventListener('click', editTheme);
+
+    let renameThemeButton = document.createElement('button');
+    renameThemeButton.classList.add('rename-theme-button');
+    renameThemeButton.textContent = 'Rename Theme';
+    renameThemeButton.addEventListener('click', renameTheme);
+
+    let deleteThemeButton = document.createElement('button');
+    deleteThemeButton.classList.add('delete-theme-button');
+    deleteThemeButton.textContent = 'Delete Theme';
+    deleteThemeButton.addEventListener('click', deleteTheme);
+
+
+    buttonGroup.appendChild(editThemeButton);
+    buttonGroup.appendChild(renameThemeButton);
+    buttonGroup.appendChild(deleteThemeButton);
+
+    themeContainer.appendChild(addThemeButton);
+    themeContainer.appendChild(themeSelector);
+    themeContainer.appendChild(buttonGroup);
+
     checkboxLabel.appendChild(checkbox);
+
     checkboxContainer.appendChild(checkboxLabel);
+
     popupContainer.appendChild(sectionTitle);
     popupContainer.appendChild(checkboxContainer);
     popupContainer.appendChild(localStorageDisplay);
     popupContainer.appendChild(clearButton);
+    popupContainer.appendChild(themeSectionTitle);
+    popupContainer.appendChild(themeContainer);
     popupContainer.appendChild(eventLegendSectionTitle);
     popupContainer.appendChild(legendContainer);
+
     popupContent.appendChild(popupTitle);
     popupContent.appendChild(closeIcon);
     popupContent.appendChild(popupContainer);
+
     popup.appendChild(popupContent);
+
     document.body.appendChild(popup);
 
     document.getElementById('settings-popup').style.display = 'block';
     document.body.style.overflow = 'hidden';
 };
+
+const applyTheme = () => {
+    const selectedTheme = localStorage.getItem('selectedTheme') || 'default';
+    const themes = JSON.parse(localStorage.getItem('themes'));
+
+    if (themes && themes[selectedTheme]) {
+        Object.keys(themes[selectedTheme]).forEach(variable => {
+            document.documentElement.style.setProperty(variable, themes[selectedTheme][variable]);
+        });
+    }
+
+    const themeSelector = document.querySelector('.theme-selector');
+    if (themeSelector) {
+        themeSelector.value = selectedTheme;
+    }
+};
+
+const addTheme = async () => {
+    const themeName = prompt('Enter theme name:');
+    if (!themeName) return;
+
+    const themes = JSON.parse(localStorage.getItem('themes')) || {};
+
+    if (themes[themeName]) {
+        alert('Theme already exists!');
+        return;
+    }
+
+    const newTheme = {};
+    newTheme['--lecture-event'] = await openColorPicker('Enter color for Vorlesung:', '#4682B4');
+    if (newTheme['--lecture-event'] === null) return;
+
+    newTheme['--volunt-event'] = await openColorPicker('Enter color for Freiwilliger Termin:', '#c3a602');
+    if (newTheme['--volunt-event'] === null) return;
+
+    newTheme['--exam-event'] = await openColorPicker('Enter color for Klausur:', '#FF4500');
+    if (newTheme['--exam-event'] === null) return;
+
+    newTheme['--holiday-event'] = await openColorPicker('Enter color for Feiertag:', '#0f7643');
+    if (newTheme['--holiday-event'] === null) return;
+
+    newTheme['--other-event'] = await openColorPicker('Enter color for Sonstiger Termin:', '#191970');
+    if (newTheme['--other-event'] === null) return;
+
+    themes[themeName] = newTheme;
+    localStorage.setItem('themes', JSON.stringify(themes));
+
+    const themeSelector = document.querySelector('.theme-selector');
+    const option = document.createElement('option');
+    option.value = themeName;
+    option.textContent = themeName;
+    themeSelector.appendChild(option);
+
+    themeSelector.value = themeName;
+    localStorage.setItem('selectedTheme', themeName);
+    applyTheme();
+};
+
+const editTheme = async () => {
+    const themeSelector = document.querySelector('.theme-selector');
+    const selectedTheme = themeSelector.value;
+
+    if (selectedTheme === 'default') {
+        alert('Cannot edit the default theme!');
+        return;
+    }
+
+    const themes = JSON.parse(localStorage.getItem('themes'));
+
+    const newTheme = {};
+    newTheme['--lecture-event'] = await openColorPicker('Enter color for Vorlesung:', themes[selectedTheme]['--lecture-event']);
+    if (newTheme['--lecture-event'] === null) return;
+
+    newTheme['--volunt-event'] = await openColorPicker('Enter color for Freiwilliger Termin:', themes[selectedTheme]['--volunt-event']);
+    if (newTheme['--volunt-event'] === null) return;
+
+    newTheme['--exam-event'] = await openColorPicker('Enter color for Klausur:', themes[selectedTheme]['--exam-event']);
+    if (newTheme['--exam-event'] === null) return;
+
+    newTheme['--holiday-event'] = await openColorPicker('Enter color for Feiertag:', themes[selectedTheme]['--holiday-event']);
+    if (newTheme['--holiday-event'] === null) return;
+
+    newTheme['--other-event'] = await openColorPicker('Enter color for Sonstiger Termin:', themes[selectedTheme]['--other-event']);
+    if (newTheme['--other-event'] === null) return;
+
+    themes[selectedTheme] = newTheme;
+    localStorage.setItem('themes', JSON.stringify(themes));
+    applyTheme();
+};
+
+const renameTheme = () => {
+    const themeSelector = document.querySelector('.theme-selector');
+    const selectedTheme = themeSelector.value;
+    if (selectedTheme === 'default') {
+        alert('Cannot rename the default theme!');
+        return;
+    }
+
+    const newThemeName = prompt('Enter new theme name:');
+    if (!newThemeName) return;
+
+    const themes = JSON.parse(localStorage.getItem('themes'));
+
+    if (themes[newThemeName]) {
+        alert('Theme name already exists!');
+        return;
+    }
+
+    themes[newThemeName] = themes[selectedTheme];
+    delete themes[selectedTheme];
+    localStorage.setItem('themes', JSON.stringify(themes));
+
+    const option = themeSelector.querySelector(`option[value="${selectedTheme}"]`);
+    option.value = newThemeName;
+    option.textContent = newThemeName;
+
+    themeSelector.value = newThemeName;
+    localStorage.setItem('selectedTheme', newThemeName);
+    applyTheme();
+};
+
+const deleteTheme = () => {
+    const themeSelector = document.querySelector('.theme-selector');
+    const selectedTheme = themeSelector.value;
+    if (selectedTheme === 'default') {
+        alert('Cannot delete the default theme!');
+        return;
+    }
+
+    const themes = JSON.parse(localStorage.getItem('themes'));
+    delete themes[selectedTheme];
+    localStorage.setItem('themes', JSON.stringify(themes));
+
+    themeSelector.removeChild(themeSelector.querySelector(`option[value="${selectedTheme}"]`));
+    themeSelector.value = 'default';
+    localStorage.setItem('selectedTheme', 'default');
+    applyTheme();
+};
+
+const openColorPicker = (text, defaultColor, callback) => {
+    return new Promise(resolve => {
+        var popup = document.createElement("div");
+        popup.classList.add("color-picker-popup");
+
+        var exitButton = document.createElement("button");
+        exitButton.innerHTML = '<ion-icon name="close-outline"></ion-icon>';
+        exitButton.classList.add("exit-button");
+        exitButton.onclick = function () {
+            document.body.removeChild(popup);
+            resolve(null);
+        };
+
+        var para = document.createElement("p");
+        para.textContent = text;
+
+        var colorPicker = document.createElement("input");
+        colorPicker.type = "color";
+        colorPicker.value = defaultColor;
+
+        var submitButton = document.createElement("button");
+        submitButton.textContent = "Submit";
+        submitButton.onclick = function () {
+            var selectedColor = colorPicker.value;
+            document.body.removeChild(popup);
+            resolve(selectedColor);
+            if (callback) {
+                callback(selectedColor);
+            }
+        };
+
+        popup.appendChild(exitButton);
+        popup.appendChild(para);
+        popup.appendChild(colorPicker);
+        popup.appendChild(submitButton);
+
+        document.body.appendChild(popup);
+    });
+  };
 
 const createCalendarPopup = async (event) => {
     if (!dayHasEvents(event.target)) {
@@ -612,6 +869,10 @@ const debounce = (func, delay) => {
 };
 
 const handleKeyPress = (event) => {
+    if (document.querySelector('.color-picker-popup')) {
+        return;
+    }
+
     let foodMenuPopup = document.getElementById('food-menu-popup');
     let kbshortcutsPopup = document.getElementById('kbshortcuts-popup');
     let calendarPopup = document.getElementById('calendar-popup');
@@ -939,6 +1200,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     prepareCalendar();
     createDropdown();
+
+    const selectedTheme = localStorage.getItem('selectedTheme') || 'default';
+    applyTheme(selectedTheme);
 
     let previouslySelectedCourse = window.localStorage.getItem('previouslySelectedCourse');
     if (previouslySelectedCourse) {

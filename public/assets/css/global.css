@@ -2,6 +2,9 @@
 	/* Colors */
 	--red: #FF4500;
 	--green: #0f7643;
+
+	--exam-event: #FF4500;
+	--holiday-event: #0f7643;
 	--lecture-event: #4682B4;
 	--other-event: #191970;
 	--volunt-event: #c3a602;
@@ -23,6 +26,9 @@
 	
 	--primary-text-color: #fff;
 	--primary-text-hover-color: #007BFF;
+	--secondary-text-hover-color: #0062cb;
+
+	--secondary-text-hover-color-with-opacity: rgba(0, 98, 203, .4);
 
 	--week-grid-border: .5px solid var(--dark-tertiary-color);
 }
