@@ -201,6 +201,13 @@ const createSettingsPopup = async () => {
 
     checkbox.addEventListener('change', () => {
         localStorage.setItem('isCheckboxChecked', checkbox.checked);
+        if (checkbox.checked) {
+            localStorage.setItem('previouslySelectedCourse', selectedCourse);
+            localStorageDisplay.textContent = `Zuvor gewählter Kurs: ${selectedCourse}`;
+        } else {
+            localStorage.removeItem('previouslySelectedCourse');
+            localStorageDisplay.textContent = 'Zuvor gewählter Kurs: Kein Kurs ausgewählt';
+        }
     });
 
     let localStorageDisplay = document.createElement('div');
@@ -512,7 +519,7 @@ const openColorPicker = (text, defaultColor, callback) => {
 
         document.body.appendChild(popup);
     });
-  };
+};
 
 const createCalendarPopup = async (event) => {
     if (!dayHasEvents(event.target)) {
