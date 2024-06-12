@@ -31,10 +31,10 @@
                                     </xsl:otherwise>
                                 </xsl:choose>
                                 <p class="meal-type"><xsl:value-of select="type" /></p>
+                                <p class="meal-price"><xsl:value-of select="price" /></p>
+
                             </div>
                         </xsl:for-each>
-                        <br />
-                        <p class="meal-price"><xsl:value-of select="price" /></p>
                     </div>
                 </xsl:for-each>
             </div>

@@ -284,8 +284,8 @@ const parseXmlMenu = (json) => {
 				xml += `<allergies>${meal.allergies}</allergies>`;
 				xml += `<additions>${meal.additions}</additions>`;
 				xml += `<type>${meal.type}</type>`;
+				xml += `<price>${meal.price}</price>`;
 				xml += '</meal>';
-				xml += `<price>${dayObject.jsonObject.price}</price>`;
 			});
 
 			xml += '</meals>';
@@ -491,22 +491,21 @@ const getXmlDayMenu = async (url) => {
 				let type = attributes.split(' ')[0] !== attributes.split(' ')[0].toUpperCase() ? attributes.split(' ')[0] : '';
 				let allergies = attributes.includes('ALLERGEN') ? attributes.split('ALLERGEN ')[1].split(' ').join(', ') : 'Keine Allergene';
 				let additions = attributes.includes('ZUSATZ') ? foodAdditionsSplitAndJoin(attributes.split('ZUSATZ ')[1].split(' ALLERGEN')[0]) : 'Keine Zusatzstoffe';
+				let price = elem.querySelector('.aw-meal-price').textContent;
 
 				let mealObject = {
 					meal: meal,
 					allergies: allergies,
 					additions: additions,
-					type: type
+					type: type,
+					price: price
 				};
 
 				meals.push(mealObject);
 			});
 
-			let price = element.querySelector('.aw-meal-price').textContent;
-
 			let jsonObject = {
-				meals: meals,
-				price: price
+				meals: meals
 			};
 
 			listOfMenuForDay.push({ jsonObject });
@@ -515,6 +514,8 @@ const getXmlDayMenu = async (url) => {
 
 	return listOfMenuForDay;
 }
+
+getXmlDayMenu("https://www.imensa.de/karlsruhe/mensa-erzbergerstrasse/index.html");
 
 const getXmlWeekMenu = async () => {
 	let weekDays = ['montag', 'dienstag', 'mittwoch', 'donnerstag', 'freitag'];
