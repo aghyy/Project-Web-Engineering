@@ -45,11 +45,6 @@
     transform: translateX(-50%);
 }
 
-.header-right {
-    position: absolute;
-    right: 0;
-}
-
 .ignore-click {
     pointer-events: none;
 }
@@ -89,11 +84,6 @@
     margin-left: auto;
 }
 
-.nav-button:hover,
-.today-button:hover {
-    color: var(--primary-text-hover-color);
-}
-
 .date-wrap {
     display: flex;
     flex-direction: row;
@@ -117,10 +107,6 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
     cursor: pointer;
-}
-
-#date-picker:hover {
-    color: var(--primary-text-hover-color);
 }
 
 #course-input {
@@ -149,10 +135,6 @@
     outline: none;
 }
 
-#course-input:hover {
-    color: var(--primary-text-hover-color);
-}
-
 #course-input option:not(:disabled) {
     color: var(--primary-text-color);
 }
@@ -161,4 +143,47 @@
     border-left: .5px solid var(--dark-quinary-color);
     height: 20px;
     margin: 0 5px;
+}
+
+@media (hover: hover),
+(-ms-high-contrast:none) {
+
+    .nav-button:hover,
+    .today-button:hover {
+        color: var(--primary-text-hover-color);
+    }
+
+    #date-picker:hover {
+        color: var(--primary-text-hover-color);
+    }
+
+    #course-input:hover {
+        color: var(--primary-text-hover-color);
+    }
+}
+
+@media only screen and (max-width: 1000px) {}
+
+@media only screen and (max-width: 700px) {}
+
+@media only screen and (max-width: 450px) {
+    .header-btm {
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+    }
+
+    .header-left {
+        position: static;
+    }
+    
+    .header-center {
+        position: static;
+        transform: unset;
+    }
+
+    #date-picker {
+        height: unset;
+    }
 }

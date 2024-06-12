@@ -46,10 +46,6 @@
     font-weight: bolder;
 }
 
-.popup-close-button:hover {
-    color: var(--red);
-}
-
 /* calendar day popup */
 #calendar-popup-content {
     padding: 20px;
@@ -111,14 +107,6 @@
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-.day-button:hover {
-    background-color: var(--primary-text-hover-color);
-    color: var(--primary-text-color);
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
 .active-food-menu-day {
     background-color: var(--primary-text-hover-color);
     color: var(--primary-text-color);
@@ -169,11 +157,6 @@
     margin-bottom: 15px;
     padding: 15px;
     transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.meals:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .meals:last-of-type {
@@ -242,11 +225,6 @@
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.kbcategory:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
 .kbcategory-title {
     background-color: var(--primary-text-hover-color);
     color: var(--primary-text-color);
@@ -288,11 +266,6 @@
     color: #333333;
 }
 
-.kbdescr:hover {
-    color: var(--primary-text-hover-color);
-    cursor: pointer;
-}
-
 .tooltip {
     visibility: hidden;
     width: 250px;
@@ -308,11 +281,6 @@
     margin-left: -125px;
     opacity: 0;
     transition: opacity 0.3s;
-}
-
-.kbdescr:hover .tooltip {
-    visibility: visible;
-    opacity: 1;
 }
 
 .kbinfo {
@@ -386,10 +354,6 @@
     transition: background-color 0.3s ease;
 }
 
-.clear-button:hover {
-    background-color: #ff3333;
-}
-
 .calendar-legend {
     display: flex;
     flex-direction: column;
@@ -437,15 +401,6 @@
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
-}
-
-.add-theme-button:hover,
-.edit-theme-button:hover,
-.rename-theme-button:hover,
-.delete-theme-button:hover {
-    background-color: var(--secondary-text-hover-color);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px var(--secondary-text-hover-color-with-opacity);
 }
 
 .theme-selector {
@@ -518,10 +473,6 @@
     font-size: 16px;
 }
 
-.color-picker-popup button:hover {
-    background-color: var(--secondary-text-hover-color);
-}
-
 .color-picker-popup .exit-button {
     position: absolute;
     top: 5px;
@@ -535,11 +486,6 @@
     height: 24px;
     font-weight: bolder;
     padding: 0;
-}
-
-.color-picker-popup .exit-button:hover {
-    color: var(--red);
-    background-color: inherit;
 }
 
 /* animations */
@@ -568,16 +514,67 @@
 }
 
 /* responsive design */
+@media (hover: hover),
+(-ms-high-contrast:none) {
+    .day-button:hover {
+        background-color: var(--primary-text-hover-color);
+        color: var(--primary-text-color);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .meals:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .kbcategory:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .kbdescr:hover {
+        color: var(--primary-text-hover-color);
+        cursor: pointer;
+    }
+
+    .kbdescr:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .clear-button:hover {
+        background-color: #ff3333;
+    }
+
+    .add-theme-button:hover,
+    .edit-theme-button:hover,
+    .rename-theme-button:hover,
+    .delete-theme-button:hover {
+        background-color: var(--secondary-text-hover-color);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px var(--secondary-text-hover-color-with-opacity);
+    }
+
+    .color-picker-popup button:hover {
+        background-color: var(--secondary-text-hover-color);
+    }
+
+    .color-picker-popup .exit-button:hover {
+        color: var(--red);
+        background-color: inherit;
+    }
+
+    .popup-close-button:hover {
+        color: var(--red);
+    }
+}
+
 @media only screen and (max-width: 1000px) {}
 
 @media only screen and (max-width: 700px) {
     .kbinfo {
         display: none;
-    }
-
-    .kbdescr:hover .tooltip {
-        visibility: hidden;
-        opacity: 0;
     }
 }
 

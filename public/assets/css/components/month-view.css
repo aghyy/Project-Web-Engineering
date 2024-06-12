@@ -123,6 +123,7 @@
 
     .month-view-wrap {
         font-size: 90%;
+        padding-bottom: 5px;
     }
 
     .month-view-day {
