@@ -844,7 +844,9 @@ const determineWeekDays = (elem) => {
         weekDates = ['Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.'];
     }
 
-    return weekDates[elem.id];
+    let index = elem.id.split('-')[2];
+
+    return weekDates[index];
 }
 
 const showDropdown = (element) => { // not supported by all browsers, technically deprecated (probably just safari)

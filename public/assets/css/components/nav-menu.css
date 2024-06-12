@@ -79,4 +79,5 @@ nav ul li a:hover span {
 .vertical-nav-line {
     border-left: .5px solid var(--dark-quaternary-color);
     height: 20px;
+    position: static;
 }

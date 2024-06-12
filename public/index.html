@@ -1,9 +1,10 @@
-<!DOCTYPE html>
-<html lang="de">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DHBW Kalender</title>
 
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
@@ -55,7 +56,7 @@
                     <span>Monatsansicht</span>
                 </a>
             </li>
-            <div class="vertical-nav-line"></div>
+            <li class="vertical-nav-line"></li>
             <li>
                 <a href="javascript:setView('week')">
                     <svg width="800px" height="800px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +76,7 @@
                     <span>Wochenansicht</span>
                 </a>
             </li>
-            <div class="vertical-nav-line"></div>
+            <li class="vertical-nav-line"></li>
             <li>
                 <a href="javascript:createMenuPopup()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
@@ -97,20 +98,19 @@
                     <span>Mensaplan</span>
                 </a>
             </li>
-            <div class="vertical-nav-line"></div>
+            <li class="vertical-nav-line"></li>
             <li>
                 <a href="https://moodle.dhbw.de/" target="_blank">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path
-                            style="line-height:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;isolation:auto;mix-blend-mode:normal"
+                            style="font-weight:400;font-family:sans-serif;white-space:normal;overflow:visible;line-height:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;isolation:auto;mix-blend-mode:normal"
                             d="M 14 3 L 6 4 L 0 8 L 1 8 L 1 18 L 2 18 L 2 8 L 4.0117188 8 C 4.0095011 8.0674642 4 8.1234456 4 8.1933594 C 4 9.3773594 4.3222656 10.197266 4.3222656 10.197266 L 8.765625 11.261719 L 12.013672 7.5878906 C 12.013672 7.5878906 11.719624 6.3603845 11.048828 5.4589844 L 14 3 z M 18.5 7 C 16.929012 7 15.507649 7.6748712 14.501953 8.7441406 C 14.243588 8.469398 13.961651 8.2154569 13.652344 7.9980469 L 11.632812 10.283203 C 12.440812 10.698203 13 11.531 13 12.5 L 13 20 L 16 20 L 16 12.5 C 16 11.101774 17.101774 10 18.5 10 C 19.898226 10 21 11.101774 21 12.5 L 21 20 L 24 20 L 24 12.5 C 24 9.4802259 21.519774 7 18.5 7 z M 5.0332031 11.910156 C 5.0122031 12.104156 5 12.301 5 12.5 L 5 20 L 8 20 L 8 12.621094 L 5.0332031 11.910156 z"
-                            font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible"
                             fill="currentColor" />
                     </svg>
                     <span>Moodle</span>
                 </a>
             </li>
-            <div class="vertical-nav-line"></div>
+            <li class="vertical-nav-line"></li>
             <li>
                 <a href="javascript:createKeyboardShortcutsPopup()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
@@ -138,7 +138,7 @@
                     <span>Tastenkombinationen</span>
                 </a>
             </li>
-            <div class="vertical-nav-line"></div>
+            <li class="vertical-nav-line"></li>
             <li>
                 <a href="javascript:createSettingsPopup()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
@@ -173,7 +173,7 @@
                     </div>
 
                     <div class="date-wrap header-center">
-                        <input type="date" name="date" id="date-picker" />
+                        <input type="date" name="date" id="date-picker">
                         <div class="vertical-header-line"></div>
                         <button class="today-button" id="today-btn">Heute</button>
                     </div>
@@ -187,11 +187,11 @@
 
         <div class="week-view-wrap">
             <ul class="calendar calendar-grid">
-                <li class="day mon" id="0"></li>
-                <li class="day tue" id="1"></li>
-                <li class="day wed" id="2"></li>
-                <li class="day thu" id="3"></li>
-                <li class="day fri" id="4"></li>
+                <li class="day mon" id="week-day-0"></li>
+                <li class="day tue" id="week-day-1"></li>
+                <li class="day wed" id="week-day-2"></li>
+                <li class="day thu" id="week-day-3"></li>
+                <li class="day fri" id="week-day-4"></li>
 
                 <li class="time h08_00">08:00</li>
                 <li class="time h08_15"></li>
@@ -244,11 +244,11 @@
 
     <div class="month-view-wrap">
         <div class="month-view-head">
-            <div class="month-view-head-day" id="0"></div>
-            <div class="month-view-head-day" id="1"></div>
-            <div class="month-view-head-day" id="2"></div>
-            <div class="month-view-head-day" id="3"></div>
-            <div class="month-view-head-day" id="4"></div>
+            <div class="month-view-head-day" id="month-day-0"></div>
+            <div class="month-view-head-day" id="month-day-1"></div>
+            <div class="month-view-head-day" id="month-day-2"></div>
+            <div class="month-view-head-day" id="month-day-3"></div>
+            <div class="month-view-head-day" id="month-day-4"></div>
         </div>
 
         <div class="month-view-body"></div>
