@@ -78,25 +78,25 @@ const mapWeekDay = (germanDay) => {
 const foodAdditions = ['Antioxidationsmittel', 'Farbstoff geschwefelt', 'Konservierungsstoffe', 'gewachst', 'Farbstoff geschwärzt'];
 
 const foodAdditionsSplitAndJoin = (str) => {
-    let placeholderMap = new Map();
-    let placeholderIndex = 0;
+	let placeholderMap = new Map();
+	let placeholderIndex = 0;
 
-    foodAdditions.forEach(element => {
-        let placeholder = `__PLACEHOLDER_${placeholderIndex}__`;
-        placeholderMap.set(placeholder, element);
-        str = str.replace(new RegExp(element, 'g'), placeholder);
-        placeholderIndex++;
-    });
+	foodAdditions.forEach(element => {
+		let placeholder = `__PLACEHOLDER_${placeholderIndex}__`;
+		placeholderMap.set(placeholder, element);
+		str = str.replace(new RegExp(element, 'g'), placeholder);
+		placeholderIndex++;
+	});
 
-    let parts = str.split(' ');
+	let parts = str.split(' ');
 
-    for (let i = 0; i < parts.length; i++) {
-        if (placeholderMap.has(parts[i])) {
-            parts[i] = placeholderMap.get(parts[i]);
-        }
-    }
+	for (let i = 0; i < parts.length; i++) {
+		if (placeholderMap.has(parts[i])) {
+			parts[i] = placeholderMap.get(parts[i]);
+		}
+	}
 
-    return parts.join(', ');
+	return parts.join(', ');
 }
 
 const getXMLForDay = (xmlString, dayId) => {
@@ -487,10 +487,13 @@ const getXmlDayMenu = async (url) => {
 			let meals = [];
 			element.querySelectorAll('.aw-meal').forEach((elem) => {
 				let meal = elem.querySelector('.aw-meal-description').textContent;
-				let attributes = elem.querySelector('.aw-meal-attributes > span').innerHTML.replace(/&nbsp;&nbsp;/g, '');
-				let type = attributes.split(' ')[0] !== attributes.split(' ')[0].toUpperCase() ? attributes.split(' ')[0] : '';
-				let allergies = attributes.includes('ALLERGEN') ? attributes.split('ALLERGEN ')[1].split(' ').join(', ') : 'Keine Allergene';
-				let additions = attributes.includes('ZUSATZ') ? foodAdditionsSplitAndJoin(attributes.split('ZUSATZ ')[1].split(' ALLERGEN')[0]) : 'Keine Zusatzstoffe';
+				let type, allergies, additions = undefined;
+				if (elem.querySelector('.aw-meal-attributes')) {
+					let attributes = elem.querySelector('.aw-meal-attributes > span').innerHTML.replace(/&nbsp;&nbsp;/g, '');
+					type = attributes.split(' ')[0] !== attributes.split(' ')[0].toUpperCase() ? attributes.split(' ')[0] : '';
+					allergies = attributes.includes('ALLERGEN') ? attributes.split('ALLERGEN ')[1].split(' ').join(', ') : 'Keine Allergene';
+					additions = attributes.includes('ZUSATZ') ? foodAdditionsSplitAndJoin(attributes.split('ZUSATZ ')[1].split(' ALLERGEN')[0]) : 'Keine Zusatzstoffe';
+				}
 				let price = elem.querySelector('.aw-meal-price').textContent;
 
 				let mealObject = {
@@ -514,8 +517,6 @@ const getXmlDayMenu = async (url) => {
 
 	return listOfMenuForDay;
 }
-
-getXmlDayMenu("https://www.imensa.de/karlsruhe/mensa-erzbergerstrasse/index.html");
 
 const getXmlWeekMenu = async () => {
 	let weekDays = ['montag', 'dienstag', 'mittwoch', 'donnerstag', 'freitag'];
