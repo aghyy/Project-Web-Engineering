@@ -6,7 +6,6 @@ const jsdom = require("jsdom");
 const js2xmlparser = require("js2xmlparser");
 const fs = require("fs");
 const bodyParser = require('body-parser');
-const url = require('url');
 const app = express();
 const PORT = process.env.PORT || 6059;
 

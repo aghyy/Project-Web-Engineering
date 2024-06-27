@@ -11,6 +11,7 @@
     "js2xmlparser": "^5.0.0",
     "jsdom": "^24.0.0",
     "nodemon": "^3.1.0",
+    "particles.js": "^2.0.0",
     "postcss-cli": "^11.0.0",
     "xml": "^1.0.1"
   },
