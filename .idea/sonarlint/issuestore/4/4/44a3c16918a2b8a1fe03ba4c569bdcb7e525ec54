@@ -1,0 +1,29 @@
+
+ujavascript:S4138ˆ"LExpected a `for-of` loop instead of a `for` loop with this simple iteration.(“¸Š‘øÿÿÿÿ8Å©º¯2
+kjavascript:S6544"GPromise returned in function argument where a void return was expected.(ÀÛÔ÷8Å©º¯2
+kjavascript:S6544³"GPromise returned in function argument where a void return was expected.(‚·Ïô8Å©º¯2
+„javascript:S6582å"[Prefer using an optional chain expression instead, as it's more concise and easier to read.(Ğõ×³øÿÿÿÿ8Å©º¯2
+Rjavascript:S3504í")Unexpected var, use let or const instead.(¢Àßêşÿÿÿÿ8Å©º¯2
+Rjavascript:S3504ğ")Unexpected var, use let or const instead.(ıˆØÃûÿÿÿÿ8Å©º¯2
+Mjavascript:S3504ø")Unexpected var, use let or const instead.(ò«ÙÛ8Å©º¯2
+Rjavascript:S3504û")Unexpected var, use let or const instead.(öİÙçúÿÿÿÿ8Å©º¯2
+Rjavascript:S3504ÿ")Unexpected var, use let or const instead.(õóÌüÿÿÿÿ8Å©º¯2
+Rjavascript:S3504‚")Unexpected var, use let or const instead.(Ñ„ÂÌúÿÿÿÿ8Å©º¯2
+Wjavascript:S1481¡"4Remove the declaration of the unused 'day' variable.(Áøâ`8Å©º¯2
+Tjavascript:S1854¡"1Remove this useless assignment to variable "day".(Áøâ`8Å©º¯2
+javascript:S1874×"ùThe signature '(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget): void' of 'event.initMouseEvent' is deprecated.(˜•øµ8Å©º¯2
+xjavascript:S3776ì"TRefactor this function to reduce its Cognitive Complexity from 28 to the 15 allowed.(Šõ™½8Å©º¯2
+jjavascript:S6644ö"AUnnecessary use of conditional expression for default assignment.(æ¢›şÿÿÿÿ8Å©º¯2
+ejavascript:S6644÷"AUnnecessary use of conditional expression for default assignment.(è•í«8Å©º¯2
+hjavascript:S3358÷"DExtract this nested ternary operation into an independent statement.(è•í«8Å©º¯2
+jjavascript:S6644ø"AUnnecessary use of conditional expression for default assignment.(‡¼ûøÿÿÿÿ8Å©º¯2
+mjavascript:S3358ø"DExtract this nested ternary operation into an independent statement.(‡¼ûøÿÿÿÿ8Å©º¯2
+ejavascript:S6644ù"AUnnecessary use of conditional expression for default assignment.(Š¤¨8Å©º¯2
+hjavascript:S3358ù"DExtract this nested ternary operation into an independent statement.(Š¤¨8Å©º¯2
+^javascript:S6671Î"5Expected the Promise rejection reason to be an Error.(ôÍÛÁûÿÿÿÿ8Å©º¯2
+Yjavascript:S6671Ñ"5Expected the Promise rejection reason to be an Error.(¥ºæŠ8Å©º¯2
+Xjavascript:S1481õ"4Remove the declaration of the unused 'day' variable.(¤íæ€8Å©º¯2
+Ujavascript:S1854õ"1Remove this useless assignment to variable "day".(¤íæ€8Å©º¯2
+kjavascript:S6544Ã	"GPromise returned in function argument where a void return was expected.(ú¥­ù8Å©º¯2
+pjavascript:S6544Æ	"GPromise returned in function argument where a void return was expected.(àƒ‰şÿÿÿÿ8Å©º¯2
+_javascript:S930å	"7This function expects no arguments, but 1 was provided.(ÅÜÕıÿÿÿÿ8Å©º¯2
