@@ -485,15 +485,19 @@ const getXmlDayMenu = async (url) => {
 		for (const element of meal) {
 			let meals = [];
 			element.querySelectorAll('.aw-meal').forEach((elem) => {
-				let meal = elem.querySelector('.aw-meal-description').textContent;
-				let type, allergies, additions = undefined;
+				let type, allergies, additions, meal, price = undefined;
+				if (elem.querySelector('.aw-meal-description')) {
+					meal = elem.querySelector('.aw-meal-description').textContent;
+				}
 				if (elem.querySelector('.aw-meal-attributes')) {
 					let attributes = elem.querySelector('.aw-meal-attributes > span').innerHTML.replace(/&nbsp;&nbsp;/g, '');
 					type = attributes.split(' ')[0] !== attributes.split(' ')[0].toUpperCase() ? attributes.split(' ')[0] : '';
 					allergies = attributes.includes('ALLERGEN') ? attributes.split('ALLERGEN ')[1].split(' ').join(', ') : 'Keine Allergene';
 					additions = attributes.includes('ZUSATZ') ? foodAdditionsSplitAndJoin(attributes.split('ZUSATZ ')[1].split(' ALLERGEN')[0]) : 'Keine Zusatzstoffe';
 				}
-				let price = elem.querySelector('.aw-meal-price').textContent;
+				if (elem.querySelector('.aw-meal-price')) {
+					price = elem.querySelector('.aw-meal-price').textContent;
+				}
 
 				let mealObject = {
 					meal: meal,

@@ -3,7 +3,7 @@
     
     <!-- Output method -->
     <xsl:output method="html" indent="yes" />
-
+    
     <!-- Template match for each day element -->
     <xsl:template match="day">
         <div class="day-wrapper">
@@ -14,25 +14,26 @@
                         <xsl:for-each select="meal">
                             <div class="meal">
                                 <p class="meal-name"><xsl:value-of select="name" /></p>
-                                <xsl:choose>
-                                    <xsl:when test="allergies != 'Keine Allergene'">
-                                        <p class="meal-allergies">Allergene: <xsl:value-of select="allergies" /></p>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <p class="meal-allergies"><xsl:value-of select="allergies" /></p>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                                <xsl:choose>
-                                    <xsl:when test="additions != 'Keine Zusatzstoffe'">
-                                        <p class="meal-additions">Zusatzstoffe: <xsl:value-of select="additions" /></p>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <p class="meal-additions"><xsl:value-of select="additions" /></p>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                                <p class="meal-type"><xsl:value-of select="type" /></p>
-                                <p class="meal-price"><xsl:value-of select="price" /></p>
-
+                                <xsl:if test="type!='undefined' or price!='undefined' or allergies!='undefined' or additions!='undefined'">
+                                    <xsl:choose>
+                                        <xsl:when test="allergies != 'Keine Allergene'">
+                                            <p class="meal-allergies">Allergene: <xsl:value-of select="allergies" /></p>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <p class="meal-allergies"><xsl:value-of select="allergies" /></p>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                    <xsl:choose>
+                                        <xsl:when test="additions != 'Keine Zusatzstoffe'">
+                                            <p class="meal-additions">Zusatzstoffe: <xsl:value-of select="additions" /></p>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <p class="meal-additions"><xsl:value-of select="additions" /></p>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                    <p class="meal-type"><xsl:value-of select="type" /></p>
+                                    <p class="meal-price"><xsl:value-of select="price" /></p>
+                                </xsl:if>
                             </div>
                         </xsl:for-each>
                     </div>
